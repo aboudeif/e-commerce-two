@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $primaryKey = ['user_id', 'product_id'];
+    protected $fillable = ['user_id', 'product_id'];
+    public $incrementing = false;
+    public $timestamps = false;
     /**
      * Run the migrations.
      *
@@ -13,6 +17,8 @@ return new class extends Migration
      */
     public function up()
     {
+       
+       
         Schema::create('favourites', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreignId('product_id');
@@ -25,6 +31,10 @@ return new class extends Migration
                   ->on('products')
                   ->onDelete('cascade');
         });
+        
+        
+
+
     }
 
     /**

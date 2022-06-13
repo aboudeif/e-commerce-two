@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ProductController::class,'index'])->name('welcome');
-
+Route::get('/', [HomeController::class, 'home'])->name('welcome');
+Route::get('/products',[ProductController::class, 'index'])->name('products.index');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -34,10 +34,6 @@ Route::middleware([
     Route::post('/favourites/{product_id}/store',[FavouriteController::class, 'store'])->name('favourites.store');
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
-    
-
-
-
 
 });
 

@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    /**
+     * home function
+     */
+    public function home(){
+        $user = Auth::user();
+        return redirect('/products');
+        
+    }
     // // redirect to dashboard if user is authenticated
     public function redirect(){
 

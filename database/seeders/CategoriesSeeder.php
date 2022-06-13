@@ -18,21 +18,21 @@ class CategoriesSeeder extends Seeder
         // seeding the categories
         $categories = [];
         $categories[] =[
-            'name' => 'men',
+            'name' => 'الرجال',
             'description' => 'جميع ملابس الرجال',
             'is_deleted' => 0,
             'created_at' => now(),
             'updated_at' => now(),
             ];
         $categories[] =[
-            'name' => 'women',
+            'name' => 'النساء',
             'description' => 'جميع مستلزمات النساء',
             'is_deleted' => 0,
             'created_at' => now(),
             'updated_at' => now(),
             ];
         $categories[] =[
-            'name' => 'kids',
+            'name' => 'الأطفال',
             'description' => 'مستلزمات وملابس الأطفال',
             'is_deleted' => 0,
             'created_at' => now(),

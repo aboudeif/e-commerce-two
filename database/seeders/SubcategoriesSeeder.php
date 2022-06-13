@@ -15,12 +15,12 @@ class SubcategoriesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = \App\Models\category::all();
+        $categories = \App\Models\Category::all();
         $subcategories = [];
         foreach($categories as $category) {
              
             $subcategories[] =[
-            'name' => 'Jackets',
+            'name' => 'معاطف',
             'description' => 'تسوق أغلي وأفخم المعاطف والسترات والبلطو',
             'category_id' => $category->id,
             'created_at' => now(),
@@ -28,7 +28,7 @@ class SubcategoriesSeeder extends Seeder
     
             ];
             $subcategories[] =[
-            'name' => 'Pants',
+            'name' => 'بناطيل',
             'description' => 'أفضل البناطيل لجميع الأزواق والأعمار',
             'category_id' => $category->id,
             'created_at' => now(),
@@ -37,28 +37,28 @@ class SubcategoriesSeeder extends Seeder
             ];
             $subcategories[] =[
         
-            'name' => 'Sweaters & Shirts',
+            'name' => 'بلوزات وقمصان',
             'description' => 'القمصان الشبابية والأنيقة',
             'category_id' => $category->id,
             'created_at' => now(),
             'updated_at' => now(),
             ];
             $subcategories[] =[
-            'name' => 'Shoes',
+            'name' => 'أحذية',
             'description' => 'الأحذية المريحة الرياضية والكلاسيكية والمناسبة لجميع الأعمال',
             'category_id' => $category->id,
             'created_at' => now(),
             'updated_at' => now(),
             ];
             $subcategories[] =[
-            'name' => 'Bags',
+            'name' => 'حقائب',
             'description' => 'الحقائب الجلدية والقماشية ',
             'category_id' => $category->id,
             'created_at' => now(),
             'updated_at' => now(),
             ];
             $subcategories[] =[
-            'name' => 'Accessories',
+            'name' => 'مستلزمات',
             'description' => 'جميع المستلزمات المناسبة في مكان واحد',
             'category_id' => $category->id,
             'created_at' => now(),

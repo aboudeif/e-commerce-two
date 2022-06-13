@@ -48,10 +48,10 @@ class FavouriteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $user = auth()->user();
-        $product = $request->product_id;
-        $favourite = new Favourite;
-        $favourite->insert(['product_id'=> $product, 'user_id'=> $user->id]);
+        Favourite::insert([
+            'product_id'=> $request->product_id,
+            'user_id'=> Auth::user()->id
+        ]);
     }
 
     /**
