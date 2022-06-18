@@ -37,7 +37,7 @@ class SubcategoriesSeeder extends Seeder
             ];
             $subcategories[] =[
         
-            'name' => 'بلوزات وقمصان',
+            'name' => 'بلايز',
             'description' => 'القمصان الشبابية والأنيقة',
             'category_id' => $category->id,
             'created_at' => now(),

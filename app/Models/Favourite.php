@@ -7,9 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favourite extends Model
 {
+    use HasFactory;
     protected $primaryKey = ['user_id', 'product_id'];
     public $incrementing = false;
     protected $fillable = ['user_id', 'product_id'];
     public $timestamps = false;
-    use HasFactory;
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

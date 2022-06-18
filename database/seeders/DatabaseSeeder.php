@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::insert([
             'name' => 'Abdallah Aboudeif',
             'email' => 'comofcom@gmail.com',
-            'profile_photo_path' => 'https://lh3.googleusercontent.com/a-/AOh14Gir895BbzmP30ZPTfHHbrFFKyKvDzWMVsu1VdbSYQ=s96-c-rg-br100',
+            'profile_photo_path' => '',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::insert([
             'name' => 'admin',
             'email' => 'admin@edraakmc.com',
-            'profile_photo_path' => 'https://programs.edraak.org/static/images/logo-light.5df7d56d5214.png',
+            'profile_photo_path' => '',
             'email_verified_at' => now(),
             'usertype' => true,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

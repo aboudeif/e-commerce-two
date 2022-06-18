@@ -4,14 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Product;
 
-class Product_variance extends Model
+class ShippingAddress extends Model
 {
     use HasFactory;
-
-    public function product(){
-        return $this->belongsTo(Product::class);
-    }
-
 }

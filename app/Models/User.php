@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Favourite;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -58,4 +59,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function favourites(){
+        return $this->hasMany(Favourite::class,'user_id');
+    }
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $primaryKey = ['user_id', 'product_id'];
+ //   protected $primaryKey = ['user_id', 'product_id'];
     protected $fillable = ['user_id', 'product_id'];
     public $incrementing = false;
     public $timestamps = false;
@@ -30,6 +30,7 @@ return new class extends Migration
                   ->references('id')
                   ->on('products')
                   ->onDelete('cascade');
+            $table->primary(['user_id', 'product_id']);
         });
         
         

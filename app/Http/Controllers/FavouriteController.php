@@ -16,6 +16,7 @@ class FavouriteController extends Controller
      */
     public function index()
     {
+        
         return view('favourites', ['favourites' => Favourite::where('user_id', Auth::user()->id)->get()]);
         
     }
@@ -48,10 +49,22 @@ class FavouriteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        Favourite::insert([
-            'product_id'=> $request->product_id,
-            'user_id'=> Auth::user()->id
-        ]);
+
+        $user = auth()->user()->id;
+        $product = $request->product_id;
+        $status = Favourite::where('user_id', $user)->where('product_id',$product)->first();
+
+        if($status != true)
+        {
+            Favourite::insert(['user_id'=> $user, 'product_id'=> $product]);
+            return['action' => 'add', 'id' => $product, 'status' => 'success'];
+        }
+
+        elseif($status == true)
+        {
+            Favourite::where('user_id', $user)->where('product_id',$product)->delete();
+            return ['action' => 'remove', 'id' => $product, 'status' => 'success'];
+        }
     }
 
     /**
