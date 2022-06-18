@@ -115,7 +115,9 @@
 {{-- pagination --}}
 @if(isset($products))
 <div class="flex justify-center">
-    {{ $products->links() }}
+    
+    {{ $products->appends(request()->query())->links() }}
+    
 </div>
 @endif
 
