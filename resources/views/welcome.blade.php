@@ -70,7 +70,12 @@
                                     favorite
                                 </span>
    
-                            <img src="{{ $product->product_media->first()->media_url }}" alt="{{ $product->name }}" class="img-fluid"  onmousemove="$(this).css('opacity', '0.8');" onmouseout="$(this).css('opacity', '1');">
+                            <img src="{{ $product->product_media->first()->media_url }}" 
+                            alt="{{ $product->name }}" 
+                            class="img-fluid"  
+                            onmousemove="$(this).css('opacity', '0.8');" 
+                            onmouseout="$(this).css('opacity', '1');">
+
                             <div class="font-bold text-xl my-2 text-right px-3">
                                 <a href="{{ route('products.show', $product->id) }}">
                                     {{ $product->name }}
@@ -79,13 +84,27 @@
                             <span
                                 id="{{ 'C_'.$product->id }}"
                                 onclick="addToCart('{{ $product->id }}');" 
-                                onmousemove="$(this).css('text-shadow', '0 0 10px gray');" 
-                                onmouseout="$(this).css('text-shadow', 'none');" 
-                                class=" {{ $product->cart ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 mr-2 cursor-pointer material-symbols-outlined user-select-none "
+                                onmousemove="$(this).css('opacity', '0.8');" 
+                                onmouseout="$(this).css('opacity', '1');" 
+                                class=" {{ $product->cart ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
                                 style="font-family: 'Material Icons';z-index:99;" 
                                 title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
                                 shopping_cart
                             </span>
+                            {{-- text box with arrows for numbers --}}
+
+                            <span>
+                                <input 
+                                type="number" 
+                                min="0" 
+                                max="100" 
+                                value="0" 
+                                style=" margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
+                                {{-- class="text-center appearance-0 border-0 ml-4 text-gray-700 leading-tight focus:bg-white focus:border-0"  --}}
+                                id="{{ 'N_'.$product->id }}" 
+                                onchange="addToCart('{{ $product->id }}');">
+                            </span>
+                            
                             <div class="text-gray-700 text-right px-3">
                             
                                 {{ $product->product_variances->first()->price . " " . "EGP" }}
@@ -94,10 +113,15 @@
                         </div>
                         <div class="px-6 m-4 inline-block">
                             <span class="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-500 mr-2" dir="rtl">
-                                {{ "#". $product->Subcategory->Category->name }} 
+                    
+                               <a href="{{ route('products.index', ['category'=>$product->Subcategory->category_id]) }}">
+                                 {{ "#". $product->Subcategory->Category->name }} 
+                                </a>
                             </span>
                             <span class=" bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-500 mr-2" dir="rtl">
+                                <a href="{{ route('products.index', ['subcategory'=>$product->Subcategory->name]) }}">
                                 {{ "#".$product->Subcategory->name }} 
+                                </a>
                             </span>
                         </div>
                     </div>
@@ -113,13 +137,16 @@
     @endif
 
 {{-- pagination --}}
-@if(isset($products))
+
 <div class="flex justify-center">
-    
+    {{-- dont show pagination info --}}
+
+    @if($products->total() > 0)
     {{ $products->appends(request()->query())->links() }}
+    @endif
     
 </div>
-@endif
+
 
 </x-app-layout>
   

@@ -38,7 +38,9 @@ class ProductController extends Controller
             });
         })
         ->when($request->has('subcategory'), function ($query) use ($request) {
-            return $query->where('subcategory_id', $request->subcategory);
+            return $query->whereHas('Subcategory', function ($query) use ($request) {
+                return $query->where('name', $request->subcategory);
+            });
         })
         ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
             return $query->where('subcategory_id', $request->subcategory);
