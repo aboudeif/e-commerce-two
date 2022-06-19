@@ -22,6 +22,7 @@ class Product_varianceFactory extends Factory
             'product_id' => $product->id,
             'price' => $this->faker->randomFloat(2, 99, 5000),
             'color' => $this->faker->colorName,
+            'color_code' => $this->faker->hexColor,
             'size' => $size[array_rand($size)],
             'quantity' => $this->faker->numberBetween(1, 1000),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

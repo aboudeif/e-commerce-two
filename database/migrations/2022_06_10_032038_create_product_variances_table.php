@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('quantity');
             $table->string('color');
+            $table->string('color_code');
             $table->string('size');
             $table->boolean('is_deleted')->default(0);
             $table->timestamps();
