@@ -27,7 +27,7 @@ class ProductController extends Controller
         $user_id = (Auth::check()) ? auth()->user()->id : 0;
 
         $products = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
-                                  'Subcategory.Category:id,name','favourites:user_id,product_id')
+                                  'Subcategory.Category:id,name','favourites:user_id,product_id','carts:user_id,product_id')
         ->when($request->has('keyword'), function ($query) use ($request) {
             return $query->where('name', 'like', '%' . $request->keyword . '%');
         })
@@ -45,13 +45,32 @@ class ProductController extends Controller
         ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
             return $query->where('subcategory_id', $request->subcategory);
         })
+        ->when($request->has('price'), function ($query) use ($request) {
+            return $query->whereHas('product_variances', function ($query) use ($request) {
+                return $query->where('price', '<=', $request->price);
+            });
+        })
+        ->when($request->has('price_range'), function ($query) use ($request) {
+            return $query->whereHas('product_variances', function ($query) use ($request) {
+                return $query->whereBetween('price', explode('-', $request->price_range));
+            });
+        })
+        ->when($request->has('sort'), function ($query) use ($request) {
+            return $query->orderBy($request->sort, 'desc');
+        })
+        ->when($request->has('sort') && $request->has('sort_by'), function ($query) use ($request) {
+            return $query->orderBy($request->sort_by, 'desc');
+        })
+        ->when($request->has('sort') && $request->has('sort_by') && $request->has('sort_by_2'), function ($query) use ($request) {
+            return $query->orderBy($request->sort_by_2, 'desc');
+        })
+        
 
         ->whereHas('product_variances')
         ->whereHas('product_media')
     
         ->paginate(15);
-        //dd($products[0]);
-       
+
         return view('welcome', compact('products', 'request'));
  
         }

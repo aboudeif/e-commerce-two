@@ -8,6 +8,7 @@ use App\Models\Product_variance;
 use App\Models\Product_media;
 use App\Models\Subcategory;
 use App\Models\Favourite;
+use App\Models\Cart;
 
 
 class Product extends Model
@@ -31,5 +32,8 @@ class Product extends Model
     }
     public function favourites(){
         return $this->hasMany(Favourite::class,'product_id');
+    }
+    public function carts(){
+        return $this->hasMany(Cart::class,'product_id');
     }
 }

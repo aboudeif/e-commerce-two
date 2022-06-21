@@ -39,25 +39,28 @@
     }
 </style>
 <script>
-    async function getFavourites() {
-        $.ajax({
-            type: 'GET',
-            url: "{{ route('favourites.api') }}",
-            data: {
-                '_token': '{{ csrf_token() }}',
-            },
-            success: function(data) {
-                console.log(data);
-                alert('Product added to favourites');
-            },
-            error: function(data) {
-                console.log(data);
-                alert('Product already added to favourites');
-            }
-        });
-        
-       getFavourites();
-    }
+  
+    //    call the function every 5 seconds
+        // setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('favourites.api') }}",
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#favourites-items').html(data);
+
+                    
+                },
+                error: function(data) {
+                    console.log(data);
+                    
+                }
+            });
+        // }, 0);
+    
 </script>
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
@@ -94,25 +97,15 @@
                     </x-slot>
                   
                         <!-- Favuorites menu -->
-                        <x-slot name="content">
+                        <x-slot name="content" id="favourites-items">
                             <!-- Favuorites Preview -->
                             <!-- foreach ($products as $product) -->
-                            <x-jet-dropdown-link href="{{ route('favourites.index') }}">
-                                {{-- ajax function to get favourite data --}}
-                                @if(isset($favourites))
-                                    @foreach($favourites as $favourite)
-                                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid">
-                                        <b class="font-bold text-xl mb-2 text-right px-3">
-                                            <a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a>
-                                        </b>
-                                        <span class="text-gray-700 text-right px-3">
-                                            {{ $product->price }} EGP
-                                        </span>
-                                    @endforeach
-                                @endif         
+                            {{-- @isset($favourites)
+                            
+                                @endisset          --}}
                                
                             
-                            </x-jet-dropdown-link>
+                            
                             <!-- endforeach -->
                         </x-slot>
                 

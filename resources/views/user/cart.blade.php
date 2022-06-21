@@ -1,0 +1,1 @@
+{{ dd($products ?? 'no products in cart') }}

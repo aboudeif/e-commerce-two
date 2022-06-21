@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Favourite;
+use App\Models\Cart;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -62,5 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function favourites(){
         return $this->hasMany(Favourite::class,'user_id');
+    }
+
+    public function carts(){
+        return $this->hasMany(Cart::class,'user_id');
     }
 }

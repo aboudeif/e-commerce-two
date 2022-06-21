@@ -6,16 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
-    // protected $primaryKey = ['user_id', 'product_id'];
     protected $fillable = [
         'user_id', 
-        'product_id'
+        'product_id', 
+        'product_variance_id', 
+        'price', 
+        'quantity', 
+        'reward',
+        'discount',
+        'shipping_fees'
+
     ];
 
     public $incrementing = false;
     public $timestamps = false;
-
     /**
      * Run the migrations.
      *
@@ -23,10 +27,15 @@ return new class extends Migration
      */
     public function up()
     {
-       
-        Schema::create('favourites', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreignId('product_id');
+            $table->foreignId('product_variance_id');
+            $table->decimal('price', 10, 2);
+            $table->integer('quantity')->default(1);
+            $table->integer('reward')->default(5);
+            $table->decimal('discount', 10, 2)->default(0);
+            $table->decimal('shipping_fees', 10, 2)->default(0);
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
@@ -35,9 +44,12 @@ return new class extends Migration
                   ->references('id')
                   ->on('products')
                   ->onDelete('cascade');
-            $table->primary(['user_id', 'product_id']);
+            $table->foreign('product_variance_id')
+                  ->references('id')
+                  ->on('product_variances')
+                  ->onDelete('cascade');
+            $table->primary(['user_id', 'product_id','product_variance_id']);
         });
-
     }
 
     /**
@@ -47,6 +59,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favourites');
+        Schema::dropIfExists('carts');
     }
 };

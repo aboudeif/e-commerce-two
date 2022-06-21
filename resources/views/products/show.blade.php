@@ -1,18 +1,38 @@
 <x-app-layout>
     {{-- show product --}}
-    {{-- grid to show product elements --}}
+    
     <style>
-        .parent {
+        
+/* show product elements in responsive grid */
+.parent {
 display: grid;
 grid-template-columns: repeat(7, 1fr);
 grid-template-rows: repeat(4, 1fr);
 grid-column-gap: 0px;
 grid-row-gap: 0px;
 }
+/* media small screen */
 
 .div1 { grid-area: 1 / 7 / 5 / 8; }
 .div2 { grid-area: 1 / 4 / 5 / 7; }
 .div3 { grid-area: 1 / 1 / 5 / 4; }
+
+@media screen and (max-width: 800px) 
+{
+    .parent {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: repeat(12, 1fr);
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+}
+
+.div1  { grid-area: 1 / 1 / 2 / 4; display: flexbox;max-width: 100%;}
+.div1 > img {display: inline-block; max-height: 10rem;  } /* max-height: 1rem; */
+.div2 { grid-area: 2 / 1 / 8 / 4; }
+.div3 { grid-area: 8 / 1 / 13 / 4; }
+
+}
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -22,6 +42,7 @@ grid-row-gap: 0px;
   'opsz' 48
 }
 
+
 </style>
 
 <div class="parent">
@@ -30,7 +51,6 @@ grid-row-gap: 0px;
         @foreach($product->product_media as $media)
             <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-fluid">
         @endforeach
-
     </div>
     {{-- product main image --}}
     <div class="div2">
@@ -68,15 +88,15 @@ grid-row-gap: 0px;
         <div class="text-gray-600 text-sm my-2 px-3">
             <div class="flex flex-wrap">
                 @foreach($product->product_variances as $color)
-                    <div class="w-1/4">
-                        <div class="bg-gray-200 rounded-full h-8 w-8" 
+                    {{-- <div class="w-1/4"> --}}
+                    <div class="bg-gray-200 rounded-full h-8 w-8" 
                         style="background-color: {{ $color->color_code }}"
                         onmousemove="this.opacity=0.8"
                         onmouseout="this.opacity=1"
                         onclick="chooseColor('{{ $color->color_code }}')">
                     </div>
                         
-                    </div>
+                    {{-- </div> --}}
                 @endforeach
             </div>
         </div>
@@ -94,6 +114,7 @@ grid-row-gap: 0px;
                 onchange="addToCart('{{ $product->id }}');">
             </span>
         </div>
+    </div>
 </div>
 
 <script>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('color');
             $table->string('color_code');
-            $table->string('size');
+            $table->enum('size',['XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL']);
             $table->boolean('is_deleted')->default(0);
             $table->timestamps();
             $table->foreign('product_id')

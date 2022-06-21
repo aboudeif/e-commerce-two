@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('welcome');
 Route::get('/products',[ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -28,13 +30,15 @@ Route::middleware([
     Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products/{product}/store', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::post('/favourites/{product_id}/store',[FavouriteController::class, 'store'])->name('favourites.store');
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
+    Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
+    Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
+    
 
 });
 

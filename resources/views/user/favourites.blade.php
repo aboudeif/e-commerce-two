@@ -1,5 +1,6 @@
 
-    <script>
+
+<script>
     function addToFavourites(id) {
 
         $.ajax({
@@ -29,37 +30,6 @@
             }
         });
     }
-
-    function addToCart(id) {
-        $.ajax({
-            url: '/cart/'+id+'/store',
-            type: 'POST',
-            data: {
-                '_token': $('meta[name="csrf-token"]').attr('content'),
-                'product_variance_id': id
-            },
-
-            success: function(data) {
-                var item = document.querySelector('#C_'+ data['id']);
-                console.log(data);
-                if(data['action'] == "add"){
-                    item.classList.remove('text-white');
-                    item.classList.add('text-red-500');
-                }
-                else{
-                    item.classList.add('text-white');
-                    item.classList.remove('text-red-500');
-                }
-
-            },
-            error: function(data) {
-                console.log(data);
-                }
-            });
-    }
-
-
-
 
 </script>
 <style>
@@ -119,7 +89,7 @@
 
     {{-- get products from ProductController using pagination in responsive grid product cards --}}
     <div class="flex flex-wrap justify-center">
-        @foreach($products as $product)
+        @foreach($favourites as $product)
             <div style="width:16rem;" class="mx-3 my-3 product" loading="lazy">
                 <div class="flex flex-col break-2">
                     <div class="flex-1 bg-white rounded-lg shadow-lg overflow-hidden border-b border-gray-200">
@@ -147,12 +117,12 @@
                                 </a>
                             </div>
                             <span
-                                id="{{ 'C_'.$product->product_variances->first->price }}"
-                                onclick="addToCart('{{ $product->product_variances->first->price }}');" 
+                                id="{{ 'C_'.$product->id }}"
+                                onclick="addToCart('{{ $product->id }}');" 
                                 onmousemove="$(this).css('opacity', '0.8');" 
-                                onmouseout="$(this).css('opacity', '1');"
-                                class=" {{ $product->carts->first->product_id ? 'text-red-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
-                                style="font-family: 'Material Icons';z-index: 11;" 
+                                onmouseout="$(this).css('opacity', '1');" 
+                                class=" {{ $product->cart ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
+                                style="font-family: 'Material Icons';" 
                                 title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
                                 shopping_cart
                             </span>
@@ -193,7 +163,7 @@
         @endforeach
     </div>
     {{-- pagination --}}
-    @if(isset($products))
+    @if(isset($favourites))
     <div class="flex justify-center">
        
     </div>
@@ -204,8 +174,8 @@
 <div class="flex justify-center">
     {{-- dont show pagination info --}}
 
-    @if($products->total() > 0)
-    {{ $products->appends(request()->query())->links() }}
+    @if($favourites->total() > 0)
+    {{ $favourites->appends(request()->query())->links() }}
     @endif
     
 </div>
@@ -215,5 +185,3 @@
 
 </x-app-layout>
   
-
-    
