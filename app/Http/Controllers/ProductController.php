@@ -70,7 +70,7 @@ class ProductController extends Controller
         ->whereHas('product_media')
     
         ->paginate(15);
-
+        //dd($products[0]->favourites->first()->user_id);
         return view('welcome', compact('products', 'request'));
  
         }

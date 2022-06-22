@@ -38,8 +38,7 @@ Route::middleware([
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
     Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
     Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
-    
-
+    Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
 });
 
 //Route::get('/mypage',[HomeController::class,'redirect'])->middleware('auth','verified');

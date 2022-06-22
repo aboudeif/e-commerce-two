@@ -5,6 +5,7 @@
         $.ajax({
             url: '/favourites/'+id+'/store',
                 type: 'POST',
+                
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'product_id': id
@@ -31,6 +32,7 @@
     }
 
     function addToCart(id) {
+
         $.ajax({
             url: '/cart/'+id+'/store',
             type: 'POST',
@@ -41,7 +43,7 @@
 
             success: function(data) {
                 var item = document.querySelector('#C_'+ data['id']);
-                console.log(data);
+                alert(data);
                 if(data['action'] == "add"){
                     item.classList.remove('text-white');
                     item.classList.add('text-red-500');
@@ -120,6 +122,7 @@
     {{-- get products from ProductController using pagination in responsive grid product cards --}}
     <div class="flex flex-wrap justify-center">
         @foreach($products as $product)
+        {{-- {{ dd(Auth::user()->id) }} --}}
             <div style="width:16rem;" class="mx-3 my-3 product" loading="lazy">
                 <div class="flex flex-col break-2">
                     <div class="flex-1 bg-white rounded-lg shadow-lg overflow-hidden border-b border-gray-200">
@@ -129,7 +132,20 @@
                                     onclick="addToFavourites('{{ $product->id }}');" 
                                     onmousemove="$(this).css('text-shadow', '0 0 15px white');" 
                                     onmouseout="$(this).css('text-shadow', 'none');" 
-                                    class=" {{ $product->favourites->first->product_id ? 'text-red-500' : 'text-white' }} position-absolute mx-4 mr-2 mt-2 cursor-pointer material-symbols-outlined user-select-none "
+                                    {{ $color="text-white" }}
+                                    @auth
+                                        
+                                        @if(isset($product->favourites->first->user_id->user_id) &&
+                                         Auth::user()->id == $product->favourites->first->user_id->user_id)
+                                            {{ $color="text-red-500" }}
+                                        {{-- @if(isset($product->favourites->first) && Auth::user()->id == $product->favourites->first->user_id) --}}
+                                        @endif
+                                            {{-- {{ $color = "text-red-500" }}
+                                        @endif --}}
+                                    @endauth
+
+                                        class="{{ $color}} position-absolute mx-4 mr-2 mt-2 cursor-pointer material-symbols-outlined user-select-none"
+                                
                                     style="font-family: 'Material Icons';z-index:11;" 
                                     title='حفظ المنتج في المفضلة أو حذفه منها'>
                                     favorite
@@ -146,9 +162,10 @@
                                     {{ $product->name }}
                                 </a>
                             </div>
+                          
                             <span
-                                id="{{ 'C_'.$product->product_variances->first->price }}"
-                                onclick="addToCart('{{ $product->product_variances->first->price }}');" 
+                                id="{{ 'C_'.$product->product_variances->first->id->id }}"
+                                onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
                                 onmousemove="$(this).css('opacity', '0.8');" 
                                 onmouseout="$(this).css('opacity', '1');"
                                 class=" {{ $product->carts->first->product_id ? 'text-red-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "

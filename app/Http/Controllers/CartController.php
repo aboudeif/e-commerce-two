@@ -34,67 +34,67 @@ class CartController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function addToCart(Request $request)
-    {
-        //
-        $user = auth()->user()->id;
-        $product = $request->product_id;
-        $product_variance = $request->product_variance_id;
-        $status = Cart::where('user_id', $user)
-                      ->where('product_id',$product)
-                      ->where('product_variance_id',$product_variance)
-                      ->first();
-        if($status != true)
-        {
-            Cart::insert([
-                'user_id'=> $user,
-                'product_id'=> $product,
-                'product_variance_id',$product_variance,
-            ]);
-            return[
-                 'action' => 'add',
-                 'id' => $product,
-                 'product_variance_id'=> $product_variance,
-                  'status' => 'success',
-                ];
-        }
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function addToCart(Request $request)
+    // {
+    //     //
+    //     $user = auth()->user()->id;
+    //     $product = $request->product_id;
+    //     $product_variance = $request->product_variance_id;
+    //     $status = Cart::where('user_id', $user)
+    //                   ->where('product_id',$product)
+    //                   ->where('product_variance_id',$product_variance)
+    //                   ->first();
+    //     if($status != true)
+    //     {
+    //         Cart::insert([
+    //             'user_id'=> $user,
+    //             'product_id'=> $product,
+    //             'product_variance_id',$product_variance,
+    //         ]);
+    //         return[
+    //              'action' => 'add',
+    //              'id' => $product,
+    //              'product_variance_id'=> $product_variance,
+    //               'status' => 'success',
+    //             ];
+    //     }
+    // }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function removeFromCart(Request $request)
-    {
-        //
-        $user = auth()->user()->id;
-        $product = $request->product_id;
-        $product_variance = $request->product_variance_id;
-        $status = Cart::where('user_id', $user)
-                      ->where('product_id',$product)
-                      ->where('product_variance_id',$product_variance)
-                      ->first();
-        if($status == true)
-        {
-            Cart::where('user_id', $user)
-                ->where('product_id',$product)
-                ->where('product_variance_id',$product_variance)
-                ->delete();
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function removeFromCart(Request $request)
+    // {
+    //     //
+    //     $user = auth()->user()->id;
+    //     $product = $request->product_id;
+    //     $product_variance = $request->product_variance_id;
+    //     $status = Cart::where('user_id', $user)
+    //                   ->where('product_id',$product)
+    //                   ->where('product_variance_id',$product_variance)
+    //                   ->first();
+    //     if($status == true)
+    //     {
+    //         Cart::where('user_id', $user)
+    //             ->where('product_id',$product)
+    //             ->where('product_variance_id',$product_variance)
+    //             ->delete();
 
-            return [
-                'action' => 'remove',
-                'id' => $product, 
-                'product_variance_id'=> $product_variance,
-                'status' => 'success',
-            ];
-        }
-    }
+    //         return [
+    //             'action' => 'remove',
+    //             'id' => $product, 
+    //             'product_variance_id'=> $product_variance,
+    //             'status' => 'success',
+    //         ];
+    //     }
+    // }
 
     /**
      * Store a newly created resource in storage.
