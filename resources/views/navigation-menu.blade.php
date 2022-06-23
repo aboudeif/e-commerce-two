@@ -89,27 +89,7 @@
                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative">
                 @auth
-                <!-- Favourites -->
-                <x-jet-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                            <span class="material-symbols-outlined">favorite</span>
-                    </x-slot>
-                  
-                        <!-- Favuorites menu -->
-                        <x-slot name="content" id="favourites-items">
-                            <!-- Favuorites Preview -->
-                            <!-- foreach ($products as $product) -->
-                            {{-- @isset($favourites)
-                            
-                                @endisset          --}}
-                               
-                            
-                            
-                            <!-- endforeach -->
-                        </x-slot>
                 
-                </x-jet-dropdown>
 
                                 <!--  -->
                     <x-jet-dropdown align="right" width="48">
@@ -157,37 +137,56 @@
                         </x-slot>
                     
                     </x-jet-dropdown>
-                @else
-                     <!-- Favourites -->
-                     <x-jet-dropdown align="right" width="48">
+
+                    <!-- Favourites -->
+                <x-jet-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                            <span class="material-symbols-outlined">favorite</span>
+                        <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:opacity-0.8 transition">
+                            <div class="material-symbols-outlined">favorite</div>
+                        </button>
                     </x-slot>
-                    <x-slot name="content">
+                  
                         <!-- Favuorites menu -->
-                        <div class="header__user-modal" dir="rtl">
-                            <div class="header__user-modal-title">
-                                
-                                المفضلة ❤️
-                                
-                            </div>
-                            <div class="header__user-modal-desc">
+                        <x-slot name="content" id="favourites-items">
+                            <!-- Favuorites Preview -->
+                            <!-- foreach ($products as $product) -->
+                            {{-- @isset($favourites)
+                            
+                                @endisset          --}}
+                               
+                            
+                            
+                            <!-- endforeach -->
+                        </x-slot>
+                        {{-- js ajax to show favourites in #favourites-items --}}
+                        <script>
+                            //    call the function every 5 seconds
+                                // setInterval(function(){
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: "{{ route('favourites.api') }}",
+                                        data: {
+                                            '_token': '{{ csrf_token() }}',
+                                        },
+                                        success: function(data) {
+                                            console.log(data);
+                                            $('#favourites-items').html(data);
 
-                                إستخدم قائمة المنتجات المفضلة لتتبع منتجاتك 
+                                            
+                                        },
+                                        error: function(data) {
+                                            console.log(data);
+                                            
+                                        }
+                                    });
 
-                            </div>
-                            
-                            <a href="/login" class="header__user-modal-link">تسجيل الدخول</a>
-                            
-                            
-                            <a href="/register" class="header__user-modal-link">حساب جديد</a>
-                            
-                            </div>
-                        </div>
-                        
-                    </x-slot>
-                    </x-jet-dropdown>
+                                // }, 0);
+                        </script>
+
+                
+                </x-jet-dropdown>
+                @else
+                     
                     <!-- login -->
                     <x-jet-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -221,6 +220,38 @@
                 @endauth
                 </div>
             </div>
+
+            <!-- Favourites -->
+            <x-jet-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </x-slot>
+                <x-slot name="content">
+                    <!-- Favuorites menu -->
+                    <div class="header__user-modal" dir="rtl">
+                        <div class="header__user-modal-title">
+                            
+                            المفضلة ❤️
+                            
+                        </div>
+                        <div class="header__user-modal-desc">
+
+                            إستخدم قائمة المنتجات المفضلة لتتبع منتجاتك 
+
+                        </div>
+                        
+                        <a href="/login" class="header__user-modal-link">تسجيل الدخول</a>
+                        
+                        
+                        <a href="/register" class="header__user-modal-link">حساب جديد</a>
+                        
+                        </div>
+                    </div>
+                    
+                </x-slot>
+                </x-jet-dropdown>
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">

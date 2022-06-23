@@ -74,6 +74,59 @@ class ProductController extends Controller
         return view('welcome', compact('products', 'request'));
  
         }
+
+    /**
+     * index for admin
+     * @return \Illuminate\Http\Response
+     */
+    public function admin_index()
+    {
+        //
+        $request = request();
+
+        $products = Product::with('product_variances:id,product_id,price,size,quantity,color,color_code,created_at,updated_at','product_media:id,product_id,media_url',
+                                  'Subcategory.Category:id,name')
+        ->when($request->has('keyword'), function ($query) use ($request) {
+            return $query->where('name', 'like', '%' . $request->keyword . '%');
+        })
+        ->when($request->has('category'), function ($query) use ($request) {
+            return $query->whereHas('Subcategory', function ($query) use ($request) {
+                return $query->where('category_id', $request->category);
+            });
+        })
+        ->when($request->has('subcategory'), function ($query) use ($request) {
+            return $query->whereHas('Subcategory', function ($query) use ($request) {
+                return $query->where('name', $request->subcategory);
+            });
+        })
+        ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
+            return $query->where('subcategory_id', $request->subcategory);
+        })
+        ->when($request->has('price'), function ($query) use ($request) {
+            return $query->whereHas('product_variances', function ($query) use ($request) {
+                return $query->where('price', '<=', $request->price);
+            });
+        })
+        ->when($request->has('price_range'), function ($query) use ($request) {
+            return $query->whereHas('product_variances', function ($query) use ($request) {
+                return $query->whereBetween('price', explode('-', $request->price_range));
+            });
+        })
+        ->when($request->has('sort'), function ($query) use ($request) {
+            return $query->orderBy($request->sort, 'desc');
+        })
+
+
+        ->whereHas('product_variances')
+        ->whereHas('product_media')
+
+        ->paginate(50);
+
+        return view('admin.products.index', compact('products', 'request'));
+      
+
+
+    }
     
     /**
      * Show the form for creating a new resource.

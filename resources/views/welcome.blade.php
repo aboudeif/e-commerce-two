@@ -5,7 +5,6 @@
         $.ajax({
             url: '/favourites/'+id+'/store',
                 type: 'POST',
-                
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'product_id': id
@@ -13,7 +12,6 @@
 
             success: function(data) {
                 var item = document.querySelector('#v_'+ data['id']);
-                console.log(data);
                 if(data['action'] == "add"){
                     item.classList.remove('text-white');
                     item.classList.add('text-red-500');
@@ -31,34 +29,33 @@
         });
     }
 
-    function addToCart(id) {
+    // function addToCart(id) {
 
-        $.ajax({
-            url: '/cart/'+id+'/store',
-            type: 'POST',
-            data: {
-                '_token': $('meta[name="csrf-token"]').attr('content'),
-                'product_variance_id': id
-            },
+    //     $.ajax({
+    //         url: '/cart/'+id+'/store',
+    //             type: 'POST',
+    //             data: {
+    //             '_token': $('meta[name="csrf-token"]').attr('content'),
+    //             'product_variance_id': id
+    //             },
 
-            success: function(data) {
-                var item = document.querySelector('#C_'+ data['id']);
-                alert(data);
-                if(data['action'] == "add"){
-                    item.classList.remove('text-white');
-                    item.classList.add('text-red-500');
-                }
-                else{
-                    item.classList.add('text-white');
-                    item.classList.remove('text-red-500');
-                }
+    //         success: function(data) {
+    //             var item = document.querySelector('#C_'+ data['id']);
+    //             if(data['action'] == "add"){
+    //                 item.classList.remove('text-gray-500');
+    //                 item.classList.add('text-green-500');
+    //             }
+    //             else{
+    //                 item.classList.add('text-gray-500');
+    //                 item.classList.remove('text-green-500');
+    //             }
 
-            },
-            error: function(data) {
-                console.log(data);
-                }
-            });
-    }
+    //         },
+    //         error: function(data) {
+    //             console.log(data);
+    //             }
+    //         });
+    // }
 
 
 
@@ -133,15 +130,14 @@
                                     onmousemove="$(this).css('text-shadow', '0 0 15px white');" 
                                     onmouseout="$(this).css('text-shadow', 'none');" 
                                     {{ $color="text-white" }}
+
                                     @auth
                                         
                                         @if(isset($product->favourites->first->user_id->user_id) &&
                                          Auth::user()->id == $product->favourites->first->user_id->user_id)
                                             {{ $color="text-red-500" }}
-                                        {{-- @if(isset($product->favourites->first) && Auth::user()->id == $product->favourites->first->user_id) --}}
                                         @endif
-                                            {{-- {{ $color = "text-red-500" }}
-                                        @endif --}}
+                                   
                                     @endauth
 
                                         class="{{ $color}} position-absolute mx-4 mr-2 mt-2 cursor-pointer material-symbols-outlined user-select-none"
@@ -163,12 +159,12 @@
                                 </a>
                             </div>
                           
-                            <span
+                            {{-- <span
                                 id="{{ 'C_'.$product->product_variances->first->id->id }}"
                                 onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
                                 onmousemove="$(this).css('opacity', '0.8');" 
                                 onmouseout="$(this).css('opacity', '1');"
-                                class=" {{ $product->carts->first->product_id ? 'text-red-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
+                                class=" {{ $product->carts->first->product_id ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
                                 style="font-family: 'Material Icons';z-index: 11;" 
                                 title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
                                 shopping_cart
@@ -183,7 +179,7 @@
                                 style="margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
                                 id="{{ 'N_'.$product->id }}" 
                                 onchange="addToCart('{{ $product->id }}');">
-                            </span>
+                            </span> --}}
                             
                             <div class="text-gray-700 text-right px-3">
                             
@@ -226,9 +222,6 @@
     @endif
     
 </div>
-
-
-
 
 </x-app-layout>
   

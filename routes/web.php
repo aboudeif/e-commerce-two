@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,10 +37,47 @@ Route::middleware([
     Route::post('/favourites/{product_id}/store',[FavouriteController::class, 'store'])->name('favourites.store');
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
-    Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
+    //Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
     Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
-    Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
+    // user views
+    Route::get('/user/bill',function(){
+        return view('user.bill');
+    })->name('user.bill');
+    Route::get('/user/bayment',function(){
+        return view('user.bayment');
+    })->name('user.bayment');
+    Route::get('/user/shipping',function(){
+        return view('user.shipping');
+    })->name('user.shipping');
+    Route::get('/user/success',function(){
+        return view('user.success');
+    })->name('user.success');
+  
+    //Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
+    // Route::post('/cart/{product_variance_id}/update',[CartController::class, 'update'])->name('cart.update');
+    // Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
+    // Route::get('/cart/{product_variance_id}/checkout',[CartController::class, 'checkout'])->name('cart.checkout');
+    // Route::get('/cart/{product_variance_id}/checkout/{user_id}',[CartController::class, 'checkout'])->name('cart.checkout');
+    // if (Auth::user()->usertype == '1') {
+    //     Route::get('/admin', [HomeController::class, 'admin'])->name('admin');
+       
+    // }
+    // add middleware to protect admin routes
+    
+
+  
 });
+
+Route::middleware(Admin::class, 
+    config('jetstream.auth_session'),
+    'verified')->group(function () {
+        // Route::get('/admin', [HomeController::class, 'admin'])->name('admin');
+        Route::get('/admin/products', [ProductController::class, 'admin_index'])->name('admin.products');
+        // Route::get('/admin/products/{product}/edit', [ProductController::class, 'adminEdit'])->name('admin.products.edit');
+        // Route::post('/admin/products/{product}/update', [ProductController::class, 'adminUpdate'])->name('admin.products.update');
+        
+    });
+
 
 //Route::get('/mypage',[HomeController::class,'redirect'])->middleware('auth','verified');
 // Route::get('/redirect',function(){

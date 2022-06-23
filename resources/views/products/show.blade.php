@@ -80,20 +80,23 @@ grid-row-gap: 0px;
                     {{-- <option value="{{ $size->size }}" class="material-symbols-outlined">
                         production_quantity_limits <i class="text-base">{{ $size->size }}</i>
                     </option> --}}
-                    <option> <i class='fa fa-calculator' aria-hidden='true'></i>Option2</option>
+                    {{-- <option> </i>{{ $size->size }}</option> --}}
+                    <option value="{{ $size->size }}">{{ $size->size }}</option>
                 @endforeach
             </select>
         </div>
         {{-- product colors selectable div preview --}}
         <div class="text-gray-600 text-sm my-2 px-3">
             <div class="flex flex-wrap">
+                <input type="hidden" name="color" id="color" value="{{ $product->product_variances->first()->color }}">
                 @foreach($product->product_variances as $color)
                     {{-- <div class="w-1/4"> --}}
                     <div class="bg-gray-200 rounded-full h-8 w-8" 
                         style="background-color: {{ $color->color_code }}"
                         onmousemove="this.opacity=0.8"
                         onmouseout="this.opacity=1"
-                        onclick="chooseColor('{{ $color->color_code }}')">
+                        onclick="chooseColor(this);">
+                        
                     </div>
                         
                     {{-- </div> --}}
@@ -103,14 +106,26 @@ grid-row-gap: 0px;
         
         {{-- share product and add to cart --}}
         <div>
+            <span
+                id="{{ 'C_'.$product->product_variances->first->id->id }}"
+                onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
+                onmousemove="$(this).css('opacity', '0.8');" 
+                onmouseout="$(this).css('opacity', '1');"
+                class=" {{ $product->carts->first->product_id ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
+                style="font-family: 'Material Icons';z-index: 11;" 
+                title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
+                shopping_cart
+            </span>
+
             <span>
                 <input 
-                type="number" 
+                type="number"
+                name="quantity"
                 min="0" 
                 max="100" 
                 value="0" 
-                style=" margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
-                id="{{ 'N_'.$product->id }}" 
+                style="margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
+                id="quantity" 
                 onchange="addToCart('{{ $product->id }}');">
             </span>
         </div>
@@ -118,12 +133,108 @@ grid-row-gap: 0px;
 </div>
 
 <script>
+    function addToCart(id) {
+        var quantity = $('#quantity').val();
+        var color = $('#color').val();
+        var size = $('#size').val();
+        $.ajax({
+            url: '/cart/'+id+'/store',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_variance_id: id,
+                quantity: quantity,
+                color: color,
+                size: size
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    $('#C_'+id).removeClass('text-gray-500');
+                    $('#C_'+id).addClass('text-green-500');
+                    $('#C_'+id).attr('onclick', 'removeFromCart('+id+')');
+                    $('#C_'+id).attr('title', 'حذف المنتج من سلة المشتريات');
+                    
+                    
+                }
+            },
+
+            error: function(data) {
+                    alert(data.message);
+                }  
+            });
+    }
+
+    function removeFromCart(id) {
+        $.ajax({
+            url: '/cart/'+id+'/destroy',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_variance_id: id
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    $('#quantity').val(0);
+                    $('#C_'+id).removeClass('text-green-500');
+                    $('#C_'+id).addClass('text-gray-500');
+                    $('#C_'+id).attr('onclick', 'addToCart('+id+')');
+                    $('#C_'+id).attr('title', 'إضافة المنتج  إلي سلة المشتريات');
+                    $('#C_'+id).html('shopping_cart');
+                }
+            },
+
+            error: function(data) {
+                    alert(data.message);
+                }  
+            });
+    }
+
+</script>
+<script>
+    function chooseColor(color) {
+        var color_code = $(color).css('background-color');
+        $('#color').childList.forEach(element => {
+            $(element).css('border', 'none');
+        });
+        $(color).css('border', '1px solid gray');
+        $('#color').val(color_code);
+    }
+
     function showImage(id, url) {
         document.getElementById(id).src = url;
     }
+    
     function chooseColor(color) {
         document.getElementById('color').value = color;
     }
+
+//     function addenToCart(id) {
+
+// $.ajax({
+//     url: '/cart/'+id+'/store',
+//         type: 'POST',
+//         data: {
+//         '_token': $('meta[name="csrf-token"]').attr('content'),
+//         'product_variance_id': id
+//         },
+
+//     success: function(data) {
+//         var item = document.querySelector('#C_'+ data['id']);
+//         if(data['action'] == "add"){
+//             item.classList.remove('text-gray-500');
+//             item.classList.add('text-green-500');
+//         }
+//         else{
+//             item.classList.add('text-gray-500');
+//             item.classList.remove('text-green-500');
+//         }
+
+//     },
+//     error: function(data) {
+//         console.log(data);
+//         }
+//     });
+// }
 </script>
 
                     

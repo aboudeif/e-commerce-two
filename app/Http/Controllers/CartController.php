@@ -104,28 +104,45 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        
         //
         $user = auth()->user()->id;
         $product_variance = $request->product_variance_id;
+        $info = Product_variance::where('id', $product_variance)
+                                    ->first();
         $status = Cart::where('user_id', $user)
+                      ->where('product_id',$info->product_id)
                       ->where('product_variance_id',$product_variance)
                       ->first();
         if($status != true)
         {
-            $info = Product_variance::where('product_variance_id',$product_variance)
-                                    ->get();
+            
             Cart::insert([
                 'user_id'=> $user,
-                'product_variance_id',$product_variance,
-                'product_id'=> $info->product_variance_id,
+                'product_variance_id'=>$product_variance,
+                'product_id'=> $info->product_id,
                 'price' => $info->price,
 
             ]);
             return[
                  'action' => 'add',
                  'id' =>  $product_variance,
-                  'status' => 'success',
+                 'status' => 'success',
                 ];
+        }
+
+        elseif($status == true)
+        {
+            Cart::where('user_id', $user)
+                ->where('product_id',$info->product_id)
+                ->where('product_variance_id',$product_variance)
+                ->delete();
+
+            return [
+                'action' => 'remove',
+                'id' => $product_variance, 
+                'status' => 'success',
+            ];
         }
     }
 

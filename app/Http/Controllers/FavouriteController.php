@@ -75,7 +75,29 @@ class FavouriteController extends Controller
     //  // return data as a JSON response
     // return response()->json($products);
     
+    // api/favourites
+    /**
+     * api/favourites
+     */
+    public function indexApi()
+    {
+        //
+    $request = request();
+    $user_id = auth()->user()->id;
 
+    $favourites = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
+                                'Subcategory.Category:id,name','favourites:user_id,product_id')
+    ->whereHas('favourites', function ($query) use ($user_id) {
+        return $query->where('user_id', $user_id);
+        })
+
+    ->whereHas('product_variances')
+    ->whereHas('product_media')
+
+    ->paginate(15);
+
+    return response()->json($favourites);
+    }
 
         
     // }
