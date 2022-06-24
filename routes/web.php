@@ -7,6 +7,7 @@ use App\Http\Controllers\FavouriteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::middleware([
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
     //Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
     Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
+    
     // user views
     Route::get('/user/bill',function(){
         return view('user.bill');
@@ -52,6 +54,13 @@ Route::middleware([
     Route::get('/user/success',function(){
         return view('user.success');
     })->name('user.success');
+    Route::get('/user/invoice',function(){
+        return view('user.invoice');
+    })->name('user.invoice'); 
+    Route::get('/user/payment',function(){
+        return view('user.payment');
+    })->name('user.payment');
+    Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
   
     //Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
     // Route::post('/cart/{product_variance_id}/update',[CartController::class, 'update'])->name('cart.update');

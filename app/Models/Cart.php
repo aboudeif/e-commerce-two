@@ -40,6 +40,6 @@ class Cart extends Model
         return $this->belongsTo(Product_variance::class);
     }
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 }

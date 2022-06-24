@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
     .parent {
 display: grid;
 grid-template-columns: repeat(4, 1fr);
@@ -16,7 +16,7 @@ grid-row-gap: 0px;
 .div6 { grid-area: 4 / 1 / 5 / 5; }
 .div7 { grid-area: 5 / 1 / 6 / 5; }
 .div8 { grid-area: 6 / 1 / 7 / 5; }
-</style>
+</style> --}}
 <x-app-layout>
     {{-- php dummy values for each variable in page --}}
     <?php $customer = (object)[
@@ -85,6 +85,34 @@ grid-row-gap: 0px;
     <div class="flex justify-center">
         <div class="w-full max-w-lg">
             <div class="parent bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" dir="rtl">
+                <div class="div2 flex flex-fill  -mx-3 mb-6">
+                    <div class=" px-3">
+                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            {{ __('رقم الفاتورة') }}
+                        </label>
+                        <input
+                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="grid-first-name"
+                            type="text"
+                            placeholder="{{ __('رقم الفاتورة') }}"
+                            value="{{ $customer->bill_number }}"
+                            readonly
+                        >
+                    </div>
+                    <div class=" px-3">
+                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            {{ __('تاريخ الفاتورة') }}
+                        </label>
+                        <input
+                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="grid-first-name"
+                            type="text"
+                            placeholder="{{ __('تاريخ الفاتورة') }}"
+                            value="{{ $customer->bill_date }}"
+                            readonly
+                        >
+                    </div>
+                </div>
                 <div class="div5 flex flex-fill align-content-start -mx-3 mb-6">
                     <div class="px-3">
                         <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
@@ -114,6 +142,19 @@ grid-row-gap: 0px;
                             readonly
                         >
                     </div>
+                    <div class=" px-3">
+                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                            {{ __('البريد الإلكتروني') }}
+                        </label>
+                        <input
+                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="grid-first-name"
+                            type="text"
+                            placeholder="{{ __('البريد الإلكتروني') }}"
+                            value="{{ $customer->email }}"
+                            readonly
+                        >
+                    </div>
                 </div>
                 <div class="div6 flex flex-fill  -mx-3 mb-6">
                     <div class=" px-3">
@@ -130,51 +171,9 @@ grid-row-gap: 0px;
                         >
                     </div>
                 </div>
-                <div class="div4 flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('البريد الإلكتروني') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('البريد الإلكتروني') }}"
-                            value="{{ $customer->email }}"
-                            readonly
-                        >
-                    </div>
-                </div>
-                <div class="div1 flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('تاريخ الفاتورة') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('تاريخ الفاتورة') }}"
-                            value="{{ $customer->bill_date }}"
-                            readonly
-                        >
-                    </div>
-                </div>
-                <div class="div2 flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('رقم الفاتورة') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('رقم الفاتورة') }}"
-                            value="{{ $customer->bill_number }}"
-                            readonly
-                        >
-                    </div>
-                </div>
+                
+                
+                
                 {{-- <div class="flex flex-fill  -mx-3 mb-6">
                     <div class=" px-3">
                         <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">

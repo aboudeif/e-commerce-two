@@ -8,6 +8,19 @@
                         <h3 class="card-title">Choose Payment Method</h3>
                     </div>
                     <div class="card-body">
+                        <form action="" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="payment-method">Payment Method</label>
+                                <select class="form-control" id="payment-method" name="payment_method">
+                                    <option value="online">Online</option>
+                                    <option value="cash">Cash</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">
@@ -15,7 +28,7 @@
                                         <h3 class="card-title">Credit Card</h3>
                                     </div>
                                     <div class="card-body">
-                                        <form action="{{ route('user.payment.store') }}" method="POST">
+                                        <form action="" method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <label for="card-number">Card Number</label>
@@ -47,7 +60,7 @@
                                         <h3 class="card-title">Paypal</h3>
                                     </div>
                                     <div class="card-body">
-                                        <form action="{{ route('user.payment.store') }}" method="POST">
+                                        <form action="" method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <label for="card-number">Card Number</label>

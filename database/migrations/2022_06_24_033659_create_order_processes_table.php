@@ -13,18 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_addresses', function (Blueprint $table) {
+        Schema::create('order_processes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('name');
-            $table->string('address');
-            $table->string('city');
-            $table->string('zip');
-            $table->string('phone');
+            $table->foreignId('order_id');
+            $table->enum('order_process', ['review', 'place_order', 'shipping', 'deliverey', 'return'])->default('review');
+            $table->string('comment')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')
+            $table->foreign('order_id')
                   ->references('id')
-                  ->on('users')
+                  ->on('orders')
                   ->onDelete('cascade');
         });
     }
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipping_addresses');
+        Schema::dropIfExists('order_processes');
     }
 };

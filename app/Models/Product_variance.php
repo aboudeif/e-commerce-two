@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\OrderItem;
 
 class Product_variance extends Model
 {
@@ -16,6 +17,9 @@ class Product_variance extends Model
     }
     public function carts(){
         return $this->hasMany(Cart::class,'product_variance_id');
+    }
+    public function orderItems(){
+        return $this->hasMany(OrderItem::class,'product_variance_id');
     }
 
 }

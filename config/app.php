@@ -143,6 +143,15 @@ return [
         // 'store'  => 'redis',
     ],
 
+    // 'providers' => [
+        
+    //     Barryvdh\DomPDF\ServiceProvider::class,
+    // ],
+    // 'aliases' => [
+        
+    //     'PDF' => Barryvdh\DomPDF\Facade::class,
+    // ],
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -215,3 +224,4 @@ return [
     ])->toArray(),
 
 ];
+
