@@ -14,7 +14,10 @@ class ShippingAddressController extends Controller
      */
     public function index()
     {
-        //
+        //index shipping addresses
+        $shipping_addresses = ShippingAddress::with('user')
+            ->get();
+        return response()->json($shipping_addresses);
     }
 
     /**
@@ -24,7 +27,9 @@ class ShippingAddressController extends Controller
      */
     public function create()
     {
-        //
+        //create shipping address
+        return view('user.shipping');
+
     }
 
     /**
@@ -35,7 +40,9 @@ class ShippingAddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //store shipping address
+        $shipping_address = ShippingAddress::create(request()->all());
+        return response()->json($shipping_address);
     }
 
     /**
@@ -46,7 +53,8 @@ class ShippingAddressController extends Controller
      */
     public function show(ShippingAddress $shippingAddress)
     {
-        //
+        //show shipping address
+        return view('user.shipping', ['shippingAddress' => $shippingAddress]);
     }
 
     /**

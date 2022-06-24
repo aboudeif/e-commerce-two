@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade as PDF;
+
 
 
 class OrderController extends Controller
@@ -58,12 +58,11 @@ class OrderController extends Controller
     {
         // create new order
         $user_id = (Auth::check()) ? auth()->user()->id : 0;
-        $products = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
-                                  'Subcategory.Category:id,name','favourites:user_id,product_id','carts:user_id,product_id')
+        $orders = Order::with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
+        ->where('user_id', $user_id)
         ->get();
-        return view('orders.create', compact('products'));
-
-
+        //return orders in json format
+        return response()->json($orders);
 
     }
 

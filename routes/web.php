@@ -60,6 +60,8 @@ Route::middleware([
     Route::get('/user/payment',function(){
         return view('user.payment');
     })->name('user.payment');
+    Route::get('/user/order',[OrderController::class, 'show'])->name('order.show');
+    
     Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
   
     //Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
