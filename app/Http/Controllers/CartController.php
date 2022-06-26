@@ -124,11 +124,11 @@ class CartController extends Controller
                 'price' => $info->price,
 
             ]);
-            return[
-                 'action' => 'add',
-                 'id' =>  $product_variance,
-                 'status' => 'success',
-                ];
+            // return[
+            //      'action' => 'add',
+            //      'id' =>  $product_variance,
+            //      'status' => 'success',
+            //     ];
         }
 
         elseif($status == true)
@@ -188,6 +188,9 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        //delete cart
+        $user = auth()->user()->id;
+        Cart::where('user_id', $user)
+            ->delete();
     }
 }

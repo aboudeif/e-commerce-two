@@ -38,9 +38,9 @@ Route::middleware([
     Route::post('/favourites/{product_id}/store',[FavouriteController::class, 'store'])->name('favourites.store');
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
-    //Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
+    Route::get('/cart',[FavouriteController::class, 'index'])->name('cart.index');
     Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
-    
+    Route::post('/cart/check',[CartController::class, 'is_in_cart'])->name('cart.check');
     // user views
     Route::get('/user/bill',function(){
         return view('user.bill');
@@ -63,6 +63,7 @@ Route::middleware([
     Route::get('/user/order',[OrderController::class, 'show'])->name('order.show');
     
     Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
+    
   
     //Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
     // Route::post('/cart/{product_variance_id}/update',[CartController::class, 'update'])->name('cart.update');

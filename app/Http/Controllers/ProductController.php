@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Favourite;
@@ -126,6 +127,25 @@ class ProductController extends Controller
       
 
 
+    }
+
+    /**
+     * check if product is in cart
+     */
+    public function is_in_cart($product_id)
+    {
+        //
+        
+        $user_id = (Auth::check()) ? auth()->user()->id : 0;
+        $cart = Cart::where('user_id', $user_id)->where('product_id', $product_id)->first();
+        if($cart)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     /**

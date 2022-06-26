@@ -107,7 +107,7 @@ grid-row-gap: 0px;
         {{-- share product and add to cart --}}
         <div>
             <span
-                id="{{ 'C_'.$product->product_variances->first->id->id }}"
+                id="{{ 'cart' }}"
                 onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
                 onmousemove="$(this).css('opacity', '0.8');" 
                 onmouseout="$(this).css('opacity', '1');"
@@ -133,6 +133,48 @@ grid-row-gap: 0px;
 </div>
 
 <script>
+    ajax function to check if product is in cart
+    function addToCart(product_id) {
+        $.ajax({
+            url: '{{ route('cart.check') }}',
+            type: 'POST',
+            data: {
+                product_id: product_id,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    $('#cart).addClass('text-green-500');
+                    $('#cart).removeClass('text-gray-500');
+                } else {
+                    $('#cart).addClass('text-gray-500');
+                    $('#cart).removeClass('text-green-500');
+                }
+            }
+        });
+    }
+    // ajax function to add product to cart
+    // function addToCart(product_id) {
+    //     $.ajax({
+    //         url: '{ route('cart.add') }',
+    //         type: 'POST',
+    //         data: {
+    //             product_id: product_id,
+    //             quantity: $('#quantity').val(),
+    //             color: $('#color').val(),
+    //             size: $('#size').val()
+    //         },
+    //         success: function(data) {
+    //             if(data.status == 'success') {
+    //                 $('#C_'+product_id).addClass('text-green-500');
+    //                 $('#C_'+product_id).removeClass('text-gray-500');
+    //             } else {
+    //                 $('#C_'+product_id).addClass('text-gray-500');
+    //                 $('#C_'+product_id).removeClass('text-green-500');
+    //             }
+    //         }});
+
+            // }
     function addToCart(id) {
         var quantity = $('#quantity').val();
         var color = $('#color').val();
@@ -149,12 +191,15 @@ grid-row-gap: 0px;
             },
             success: function(data) {
                 if(data.status == 'success') {
-                    $('#C_'+id).removeClass('text-gray-500');
-                    $('#C_'+id).addClass('text-green-500');
-                    $('#C_'+id).attr('onclick', 'removeFromCart('+id+')');
-                    $('#C_'+id).attr('title', 'حذف المنتج من سلة المشتريات');
+                    if($('#quantity').val(0)) 
+                        $('#quantity').val(1);
                     
+                    $('#cart').removeClass('text-gray-500');
+                    $('#cart').addClass('text-green-500');
+                    $('#cart').attr('onclick', 'removeFromCart('+id+')');
+                    $('#cart').attr('title', 'حذف المنتج من سلة المشتريات');
                     
+                
                 }
             },
 
@@ -175,22 +220,50 @@ grid-row-gap: 0px;
             success: function(data) {
                 if(data.status == 'success') {
                     $('#quantity').val(0);
-                    $('#C_'+id).removeClass('text-green-500');
-                    $('#C_'+id).addClass('text-gray-500');
-                    $('#C_'+id).attr('onclick', 'addToCart('+id+')');
-                    $('#C_'+id).attr('title', 'إضافة المنتج  إلي سلة المشتريات');
-                    $('#C_'+id).html('shopping_cart');
+                    $('#cart').removeClass('text-green-500');
+                    $('#cart').addClass('text-gray-500');
+                    $('#cart').attr('onclick', 'addToCart('+id+')');
+                    $('#cart').attr('title', 'إضافة المنتج  إلي سلة المشتريات');
+                  
                 }
             },
 
             error: function(data) {
-                    alert(data.message);
+                    alert('error');
+                }  
+            });
+    }
+    // when user change size, reload avilable color of selected size and price
+    function changeSize(id) {
+        $.ajax({
+            url: '/product/'+id+'/changeSize',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                size: $('#size').val()
+            },
+            success: function(data) {
+                if(data.status == 'success') {
+                    // load colors of selected size using for each loop
+                    $('#color').html('');
+                    $('#color').append('<option value="">اللون</option>');
+                    $.each(data.colors, function(key, value) {
+                        $('#color').append('<option value="'+value.id+'">'+value.name+'</option>');
+                    });
+
+                    // $('#color').html(data.colors);
+                    // load price of selected size
+                    $('#price').html(data.price);
+                }
+            },
+
+            error: function(data) {
+                    alert('error');
                 }  
             });
     }
 
-</script>
-<script>
+
     function chooseColor(color) {
         var color_code = $(color).css('background-color');
         $('#color').childList.forEach(element => {
