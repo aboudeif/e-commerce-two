@@ -43,9 +43,9 @@ class ProductController extends Controller
                 return $query->where('name', $request->subcategory);
             });
         })
-        ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
-            return $query->where('subcategory_id', $request->subcategory);
-        })
+        // ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
+        //     return $query->where('subcategory_id', $request->subcategory);
+        // })
         ->when($request->has('price'), function ($query) use ($request) {
             return $query->whereHas('product_variances', function ($query) use ($request) {
                 return $query->where('price', '<=', $request->price);

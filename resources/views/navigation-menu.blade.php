@@ -689,10 +689,29 @@
     {{-- <x-slot name="header"> --}}
         <!-- Navigation Links -->
         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex my-2 mx-5">
-            <x-jet-nav-link href="{{ route('welcome') }}" :active="request()->routeIs('welcome')">
+            <x-jet-nav-link href="{{ route('welcome') }}" class="mx-3" :active="request()->routeIs('welcome')">
                 كل المنتجات
             </x-jet-nav-link>
+           
+            @foreach (App\Models\Category::all() as $category)
+                <x-jet-dropdown class="mx-3" align="right" width="48">
+                    <x-slot name="trigger">
+                        <x-jet-nav-link class="mx-1 cursor-pointer">
+                        {{ $category->name }}
+                        </x-jet-nav-link>
+                    </x-slot>
+                    <x-slot name="content">
+                        @foreach (App\Models\Subcategory::where('category_id',$category->id)->get() as $subcategory)
+                            <x-jet-dropdown-link href="?category={{ $category->id }}&subcategory={{ $subcategory->name }}">
+                                {{ $subcategory->name }}
+                            </x-jet-dropdown-link>
+                        @endforeach
+                    </x-slot>
+                </x-jet-dropdown>
+            @endforeach
+
         </div>
+
     {{-- </x-slot> --}}
     <!-- / Navigation Links -->
 </nav>
