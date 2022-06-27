@@ -48,7 +48,15 @@
 </style>
 
 <script>
-    
+    // show filter form
+    function open_filter(){
+       filter_form = document.getElementById('filter-form');
+       if(filter_form.display == 'none')
+           filter_form.style.display = 'block';
+        else
+              filter_form.style.display = 'none';
+    }
+
     function search() {
         const value = $('#search').val();
         if (value == '') {
@@ -367,7 +375,7 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+           
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('welcome') }}">
@@ -380,10 +388,10 @@
                 
 
                 <!-- search -->
-                <div class="flex items-center space-x-4 sm:ml-10">
+               
                     <!-- full width searchbox with price range filter -->
-                    <div class="w-full flex-1 flex items-center justify-center">
-                        <div class="relative w-auto">
+                    <div class="w-full flex-1 flex items-center">
+ 
                             <input type="text" 
                             class="w-full bg-white-200 text-gray-600 placeholder-gray-500 border border-gray-200 rounded-lg py-2 px-4 appearance-none leading-normal focus:outline-none focus:bg-white focus:border-gray-500" 
                             placeholder="بحث"
@@ -393,20 +401,35 @@
                             @keydown.enter="search"
                             
                             >
-                            
-                        </div>
                     </div>
-                </div>
-            </div>
+                    {{-- serach button --}}
+                    <button class="material-symbols-outlined btn"
+                     style="color: darkblue;height:max-content;padding:4px;text-align:center;margin:5px;margin-top:15px;border-radius:5px;opacity:0.7;"
+                     wire:model="search"
+                    @click.enter="search"
+
+                    >
+                        {{ __('search') }}
+                    </button>
+                    {{-- filter button --}}
+                    <button class="material-symbols-outlined btn"
+                    style="color: darkblue;height:max-content;padding:4px;text-align:center;margin:5px;margin-top:15px;border-radius:5px;opacity:0.7;"
+                    wire:model="open_filter"
+                    @click.enter="open_filter"
+
+                    >
+                        {{ __('filter_list') }}
+                   </button>
+               
+            
                 <!-- advanced search popup -->
                 
+              
+        {{-- <div class=" flex items-center md:ml-0 bg-green-100 mx-3 height-max rounded-md"> --}}
+                        
                 
 
-                
-            
-            
-
-            <div class="hidden sm:flex sm:items-center sm:ml-6" dir="rtl">
+            <div class="hidden sm:flex sm:items-center sm:ml-6 mx-3" dir="rtl">
                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative flex right">
 
