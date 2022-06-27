@@ -1,4 +1,5 @@
 <!-- login css -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
     * {
         font-family: 'Tajawal', sans-serif;
@@ -74,10 +75,18 @@
 
 <!-- -----------------------login form------------------------ -->
 <style>
+    .login-form {
+        width: 70%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
 
     
     /* Full-width input fields */
     input.login[type=text], input.login[type=password] {
+      z-index: 999;
+      position: absolute;
       width: 100%;
       padding: 12px 20px;
       margin: 8px 0;
@@ -88,6 +97,8 @@
     
     /* Set a style for all buttons */
     button.login {
+      z-index: 999;
+      position: absolute;
       background-color: #04AA6D;
       color: white;
       padding: 14px 20px;
@@ -102,23 +113,13 @@
     }
     
     /* Extra styles for the cancel button */
-    .cancelbtn {
+    .cancelbtnlogin {
+        z-index: 999;
       width: auto;
       padding: 10px 18px;
       background-color: #f44336;
     }
     
-    /* Center the image and position the close button */
-    .imgcontainerlogin {
-      text-align: center;
-      margin: 24px 0 12px 0;
-      position: relative;
-    }
-    
-    img.avatar {
-      width: 40%;
-      border-radius: 50%;
-    }
     
     .containerlogin {
       padding: 16px;
@@ -131,6 +132,7 @@
     
     /* The Modal (background) */
     .modallogin {
+        z-index: 999;
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
       z-index: 1; /* Sit on top */
@@ -139,13 +141,14 @@
       width: 100%; /* Full width */
       height: 100%; /* Full height */
       overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      background-color: #fff; /* Fallback color */
+      background-color: rgba(255,255,255,0.8); /* Black w/ opacity */
       padding-top: 60px;
     }
     
     /* Modal Content/Box */
     .modal-contentlogin {
+      z-index: 999;
       background-color: #fefefe;
       margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
       border: 1px solid #888;
@@ -154,6 +157,7 @@
     
     /* The Close Button (x) */
     .closelogin {
+        z-index: 999;
       position: absolute;
       right: 25px;
       top: 0;
@@ -195,50 +199,168 @@
       }
     }
     </style>
-
-    <body>
     
-    <div id="id01" class="modal">
-      
-      <form class="modal-content animate" action="/action_page.php" method="post">
-        <div class="imgcontainer">
-          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-          <img src="img_avatar2.png" alt="Avatar" class="avatar">
-        </div>
-    
-        <div class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required>
-    
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
+<!-- -----------------------login form------------------------ -->
+<div id="id01" class="modallogin login-form" dir="rtl">
+    <x-guest-layout>
+        {{-- <x-jet-authentication-card> --}}
             
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
+            <div class="mx-3 my-3">
+                {{ __('تسجيل الدخول') }}
+            </div>
+            <x-jet-validation-errors class="mb-4" id="loginerror" />
+       
+            @if (session('status'))
+                <div class="mb-4 font-medium text-sm text-green-600">
+                    {{ session('status') }}
+                </div>
+            @endif
     
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
-        </div>
-      </form>
-    </div>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
     
-    <script>
-    // Get the modal
-    var modal = document.getElementById('id01');
+                <div>
+                    <x-jet-label for="email" value="{{ __('البريد الإلكتروني') }}" />
+                    <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                </div>
     
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+                <div class="mt-4">
+                    <x-jet-label for="password" value="{{ __('كلمة المرور') }}" />
+                    <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                </div>
+    
+                <div class="block mt-4">
+                    <label for="remember_me" class="flex items-center">
+                        <x-jet-checkbox id="remember_me" name="remember" />
+                        <span class="ml-2 text-sm text-gray-600">{{ __('تذكر معلومات الدخول') }}</span>
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-end mt-4">
+                <x-jet-button class="ml-4">
+                    {{ __('الدخول') }}
+                </x-jet-button>
+
+                <x-jet-button class="ml-4"  onclick="document.getElementById('id01').style.display='none';window.localStorage.setItem('form','');">
+                    {{ __('إغلاق') }}
+                </x-jet-button>
+
+                
+                    @if (Route::has('password.request'))
+                        <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                            {{ __('هل نسيت كلمة المرور؟') }}
+                        </a>
+                    @endif
+
+                </div>
+            </form>
+         {{-- </x-jet-authentication-card> --}}
+    </x-guest-layout>
+    
+</div>
+<script>
+
+    const login_form = document.getElementById('id01');
+    const logintext = document.getElementById('loginerror').innerHTML;
+    //alert(document.getElementById('loginerror').innerHTML);
+    // if there a div has the word "Whoops" in the login_form, then show the login_form
+    // if session('_status_') == 'login', then show the login_form
+    
+    if (logintext && window.localStorage.getItem('form') == "login") {
+        login_form.style.display = "block";
     }
-    </script>
+    
+</script>
     
 <!-- /-----------------------login form------------------------ -->
+<!-- -----------------------register form------------------------ -->
+<div id="id02" class="modallogin login-form" dir="rtl">
+<x-guest-layout>
+    {{-- <x-jet-authentication-card> --}}
+        
+        <div class="mx-3 my-3">
+            {{ __('إنشاء حساب جديد') }}
+        </div>
+
+        <x-jet-validation-errors class="mb-4" id="regerror" />
+        
+        @if (session('status'))
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ session('status') }}
+            </div>
+        @endif
+
+
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+
+            <div>
+                <x-jet-label for="name" value="{{ __('الاسم') }}" />
+                <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            </div>
+
+            <div class="mt-4">
+                <x-jet-label for="email" value="{{ __('البريد الإلكتروني') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
+
+            <div class="mt-4">
+                <x-jet-label for="password" value="{{ __('كلمة المرور') }}" />
+                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            </div>
+
+            <div class="mt-4">
+                <x-jet-label for="password_confirmation" value="{{ __('تأكيد كلمة المرور') }}" />
+                <x-jet-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+            </div>
+
+            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+                <div class="mt-4">
+                    <x-jet-label for="terms">
+                        <div class="flex items-center">
+                            <x-jet-checkbox name="terms" id="terms"/>
+
+                            <div class="ml-2">
+                                {!! __('أوافق علي :terms_of_service and :privacy_policy', [
+                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('الشروط والأحكام').'</a>',
+                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('سياسة الخصوصية').'</a>',
+                                ]) !!}
+                            </div>
+                        </div>
+                    </x-jet-label>
+                </div>
+            @endif
+
+            <div class="flex items-center justify-end mt-4">
+            <x-jet-button class="ml-4">
+                {{ __('التسجيل') }}
+            </x-jet-button>
+
+            <x-jet-button class="ml-4"  onclick="document.getElementById('id02').style.display='none';window.localStorage.setItem('form','');">
+                {{ __('إغلاق') }}
+            </x-jet-button>
+
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" onclick="document.getElementById('id02').style.display='none';document.getElementById('id01').style.display='block';">
+                    {{ __('لديك حساب بالفعل؟') }}
+                </a>
+
+            </div>
+        </form>
+    {{-- </x-jet-authentication-card> --}}
+</x-guest-layout>
+    
+</div>
+<script>
+    // Get the modal
+    let reg_form = document.getElementById('id02');
+    let regtext = document.getElementById('regerror').innerHTML;
+    
+    // if there a div has the word "Whoops!" in the modal, then show the modal
+    if (regtext && window.localStorage.getItem('form') == "reg") {
+        reg_form.style.display = "block";
+    }
+    </script>
+    <!-- /-----------------------register form------------------------ -->
 
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100" dir="rtl">
@@ -263,7 +385,7 @@
                     <div class="w-full flex-1 flex items-center justify-center">
                         <div class="relative w-auto">
                             <input type="text" 
-                            class="w-full bg-gray-200 text-gray-600 placeholder-gray-500 border border-gray-200 rounded-lg py-2 px-4 appearance-none leading-normal focus:outline-none focus:bg-white focus:border-gray-500" 
+                            class="w-full bg-white-200 text-gray-600 placeholder-gray-500 border border-gray-200 rounded-lg py-2 px-4 appearance-none leading-normal focus:outline-none focus:bg-white focus:border-gray-500" 
                             placeholder="بحث"
                             id="search"
                             value="{{ request()->input('keyword') ?? '' }}"
@@ -354,8 +476,8 @@
                                         سجل الدخول أو أنشئ حسابك للإستمتاع بعروض صنعت لك خصيصاً
                                     </div>
                                     <div>
-                                        <a href="/login" class="header__user-modal-link">تسجيل الدخول</a>
-                                        <a href="/register" class="header__user-modal-link">حساب جديد</a>
+                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');" class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');" class="header__user-modal-link cursor-pointer">حساب جديد</a>
                                     </div>
                                 </div>
                             </x-slot>
@@ -395,8 +517,8 @@
                                         إستخدم قائمة المنتجات المفضلة لتتبع منتجاتك
                                     </div>
                                     <div>
-                                        <a href="/login" class="header__user-modal-link">تسجيل الدخول</a>
-                                        <a href="/register" class="header__user-modal-link">حساب جديد</a>
+                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');" class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');" class="header__user-modal-link cursor-pointer">حساب جديد</a>
                                     </div>
                                 </div>
                             </x-slot>
@@ -435,8 +557,8 @@
                                         أضف المنتجات إلي سلة المشتريات وأحصل علي خصومات فورية
                                     </div>
                                     <div>
-                                        <a href="/login" class="header__user-modal-link">تسجيل الدخول</a>
-                                        <a href="/register" class="header__user-modal-link">حساب جديد</a>
+                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');" class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');" class="header__user-modal-link cursor-pointer">حساب جديد</a>
                                     </div>
                                 </div>
                             </x-slot>

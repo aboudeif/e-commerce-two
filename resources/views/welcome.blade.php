@@ -124,6 +124,7 @@
                 <div class="flex flex-col break-2">
                     <div class="flex-1 bg-white rounded-lg shadow-lg overflow-hidden border-b border-gray-200">
                         <div style="height:350px;">
+                            @auth
                                 <span 
                                     id="{{ 'v_'.$product->id }}"
                                     onclick="addToFavourites('{{ $product->id }}');" 
@@ -131,14 +132,12 @@
                                     onmouseout="$(this).css('text-shadow', 'none');" 
                                     {{ $color="text-white" }}
 
-                                    @auth
+                                    
                                         
                                         @if(isset($product->favourites->first->user_id->user_id) &&
                                          Auth::user()->id == $product->favourites->first->user_id->user_id)
                                             {{ $color="text-red-500" }}
                                         @endif
-                                   
-                                    @endauth
 
                                         class="{{ $color}} position-absolute mx-4 mr-2 mt-2 cursor-pointer material-symbols-outlined user-select-none"
                                 
@@ -146,6 +145,7 @@
                                     title='حفظ المنتج في المفضلة أو حذفه منها'>
                                     favorite
                                 </span>
+                            @endauth
    
                             <img class="product-image" src="https://lcw.akinoncdn.com/products/2022/02/28/3229144/a24a1f92-db10-4a6a-9bdc-4af4fd842ee5_size265x353_cropCenter.jpg" 
                             {{-- src="{{ $product->product_media->first()->media_url }}"  --}}
