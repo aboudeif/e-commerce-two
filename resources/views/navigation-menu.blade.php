@@ -50,14 +50,14 @@
 <script>
     // show filter form
     function open_filter(){
-       filter_form = document.getElementById('filter-form');
-       if(filter_form.display == 'none')
-           filter_form.style.display = 'block';
+       filter_form = document.getElementById("filter-form");
+       if(filter_form.style.display == "none")
+           filter_form.style.display = "block";
         else
-              filter_form.style.display = 'none';
+              filter_form.style.display = "none";
     }
 
-    function search() {
+    function filter() {
         const value = $('#search').val();
         if (value == '') {
             // remove keyword from request then go to search page with request
@@ -79,10 +79,18 @@
             window.location.href = newRequest;
         }
         }
+
 </script>
 
 <!-- -----------------------login form------------------------ -->
 <style>
+    nav
+    {
+        border-radius: 10px;
+        z-index: 9999;
+        position: fixed;
+        width: 100%;
+    }
     .login-form {
         width: 70%;
         max-width: 330px;
@@ -90,10 +98,10 @@
         margin: auto;
     }
 
+
     
     /* Full-width input fields */
     input.login[type=text], input.login[type=password] {
-      z-index: 999;
       position: absolute;
       width: 100%;
       padding: 12px 20px;
@@ -105,7 +113,6 @@
     
     /* Set a style for all buttons */
     button.login {
-      z-index: 999;
       position: absolute;
       background-color: #04AA6D;
       color: white;
@@ -122,7 +129,6 @@
     
     /* Extra styles for the cancel button */
     .cancelbtnlogin {
-        z-index: 999;
       width: auto;
       padding: 10px 18px;
       background-color: #f44336;
@@ -140,7 +146,6 @@
     
     /* The Modal (background) */
     .modallogin {
-        z-index: 999;
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
       z-index: 1; /* Sit on top */
@@ -154,9 +159,34 @@
       padding-top: 60px;
     }
     
+    :root
+    {
+        --nav-height: 620px;
+    }
+    </style>
+    <script>
+        document.getElementById("navbar").offsetHeight
+        document.documentElement.style.setProperty('--nav-height', document.getElementById("navbar").offsetHeight + 'px');
+    </script>
+    <style>
+    .modalfilter {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 999; /* Sit on top */
+      left: 15%;
+      /* form top is  after navbar in all screens */
+      top:  calc(100vh - var(--nav-height));
+      width: 70%; /* Full width */
+      height: max-content; /* Full height */
+      align-content: center;
+      overflow: auto; /* Enable scroll if needed */
+      background-color: #fff; /* Fallback color */
+      background-color: rgba(255,255,255,0.8); /* Black w/ opacity */
+      padding: 20px;
+    }
+    
     /* Modal Content/Box */
     .modal-contentlogin {
-      z-index: 999;
       background-color: #fefefe;
       margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
       border: 1px solid #888;
@@ -165,7 +195,6 @@
     
     /* The Close Button (x) */
     .closelogin {
-        z-index: 999;
       position: absolute;
       right: 25px;
       top: 0;
@@ -369,9 +398,185 @@
     }
     </script>
     <!-- /-----------------------register form------------------------ -->
+<!-- -----------------------filter form------------------------ -->
+<div id="filter-form" class="modalfilter filter-form" dir="rtl">
+    <x-guest-layout>
+            
+            <form method="GET" action="" class="text-right flex flex-wrap" id="filter">
+                
+                <div class="flex shrink-0 mr-3 my-2">
+                    <x-jet-label for="to" value="{{ __('الحد الأقصي للسعر') }}"  class="inline mx-2 my-2"/>
+                    <x-jet-dropdown class="mx-1 inline">
+                        <x-slot name="trigger">
+                            <x-jet-button form="" class=" ml-2 " wire:model="choose_color" @click.enter="choose_color">
+                                {{-- <x-jet-input type="text" id="color" name="color" form="filter" class="inline" disabled /> --}}
+                                <span class="material-symbols-outlined">
+                                    payments
+                                    </span>
+                            </x-jet-button>
+                        </x-slot>
+                        <x-slot name="content">
+                            @foreach (App\Models\Product_variance::orderBy('price','DESC')->get()->unique('price') as $price)
+                                <x-jet-dropdown-link class="cursor-pointer"
+                                onclick="document.getElementById('to').value ='{{ __($price->price) }}';">
+                                    <span class="mx-1 inline-block"> 
+                                    {{ __($price->price) }} ج.م
+                                    </span>
+                                </x-jet-dropdown-link>
+                            @endforeach
+                        </x-slot>
+                    </x-jet-dropdown>
+                    <x-jet-input id="to" name="to" form="filter" type="number" min="100.00" max="9999.99" step="0.01" class="inline mx-1" autofocus />
+                </div>
+                
+                <div class="flex shrink-0 mr-3 my-2">
+                    <x-jet-label for="from" value="{{ __('الحد الأدني للسعر') }}" class="inline mx-2 my-2" />
+                    <x-jet-dropdown class="mx-1 inline">
+                        <x-slot name="trigger">
+                            <x-jet-button form="" class=" mx-2 " wire:model="choose_color" @click.enter="choose_color">
+                                {{-- <x-jet-input type="text" id="color" name="color" form="filter" class="inline" disabled /> --}}
+                                <span class="material-symbols-outlined">
+                                    payments
+                                    </span>
+                            </x-jet-button>
+                        </x-slot>
+                        <x-slot name="content">
+                            @foreach (App\Models\Product_variance::orderBy('price','ASC')->get()->unique('price') as $price)
+                                <x-jet-dropdown-link class="cursor-pointer"
+                                onclick="document.getElementById('from').value ='{{ __($price->price) }}';">
+                                    <span class="mx-1 inline-block"> 
+                                    {{ __($price->price) }} ج.م
+                                    </span>
+                                </x-jet-dropdown-link>
+                            @endforeach
+                        </x-slot>
+                    </x-jet-dropdown>
+                    <x-jet-input id="from" name="from" form="filter" type="number" min="0.00" max="9999.99" step="0.01" class="inline mx-1" autofocus />
+                </div>
+                
+                
+                <div class="flex shrink-0 mr-3 my-2">
+                  
+                        <div class="inline-block mt-2">
+                            {{ __('اللون') }}
+                        </div>
+                        <x-jet-dropdown class="mx-1 inline">
+                            <x-slot name="trigger">
+                                <x-jet-button form="" class=" mx-2 " wire:model="choose_color" @click.enter="choose_color">
+                                    {{-- <x-jet-input type="text" id="color" name="color" form="filter" class="inline" disabled /> --}}
+                                    <span class="material-symbols-outlined">
+                                        gradient
+                                        </span>
+                                </x-jet-button>
+                            </x-slot>
+                            <x-slot name="content">
+                                @foreach (App\Models\Product_variance::all()->unique('color','color_code') as $color)
+                                    <x-jet-dropdown-link class="cursor-pointer" 
+                                    onclick="document.getElementById('color').value ='{{ __($color->color) }}';">
+                                        <span style="width: 1rem;height:1rem;background-color:{{ $color->color_code }};margin-left:1rem;display:inline-block;"></span>
+                                        <span class="mx-1 inline-block"> {{ __($color->color) }} </span>
+                                    </x-jet-dropdown-link>
+                                @endforeach
+                            </x-slot>
+                        </x-jet-dropdown>
+                        <x-jet-input id="color" name="color" form="filter" type="text" class="inline mx-1" autofocus />
+                  
+                </div>
+                    {{-- color preview --}}
+                    <div class="flex shrink-0 mr-3 my-2">
+                 
+                        <div class="inline-block mt-2">
+                            {{ __('المقاس') }}
+                        </div>
+                        <x-jet-dropdown class="inline">
+                            <x-slot name="trigger">
+                                <x-jet-button form="" class="mx-2" wire:model="choose_size" @click.enter="choose_size">
+                                    {{-- <x-jet-input type="text" id="size" name="size" form="filter" class="inline" disabled /> --}}
+                                    <span class="material-symbols-outlined">
+                                        straighten
+                                        </span>
+                                </x-jet-button>
+                            </x-slot>
+                            <x-slot name="content">
+                                @foreach (App\Models\Product_variance::all()->unique('size') as $size)
+                                    <x-jet-dropdown-link class="cursor-pointer"
+                                    onclick="document.getElementById('size').value ='{{ __($size->size) }}';">
+                                        <span class="mx-1 inline-block"> {{ __($size->size) }} </span>
+                                    </x-jet-dropdown-link>
+                                @endforeach
+                            </x-slot>
+                        </x-jet-dropdown>
+                        <x-jet-input id="size" name="size" form="filter" type="text" class="inline mx-1" autofocus />
+                    </div>
+                    
 
+                    {{-- sort by create date --}}
+                    <div class="flex shrink-0 mr-3 my-2">
+                 
+                        <div class="inline-block mt-2">
+                     
+                        {{ __('الترتيب') }}
+                        </div>
+                        <x-jet-dropdown class="inline">
+                            <x-slot name="trigger">
+                                <x-jet-button form="" class="mx-2" wire:model="choose_sort" @click.enter="choose_sort">
+                                    {{-- <x-jet-input type="text" id="sort_by" name="sort_by" form="filter" class="inline" disabled /> --}}
+                                    <span class="material-symbols-outlined">
+                                        sort
+                                        </span>
+                                </x-jet-button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-jet-dropdown-link class="cursor-pointer"
+                                onclick="document.getElementById('order').value ='{{ __('ASC') }}';">
+                                    <span class="mx-1 inline-block"> {{ __('الأحدث إلى الأقدم') }} </span>
+                                </x-jet-dropdown-link>
+                                <x-jet-dropdown-link class="cursor-pointer"
+                                onclick="document.getElementById('order').value ='{{ __('DESC') }}';">
+                                    <span class="mx-1 inline-block"> {{ __('الأقدم إلى الأحدث') }} </span>
+                                </x-jet-dropdown-link>
+                            </x-slot>
+                        </x-jet-dropdown>
+                        
+                        <x-jet-input id="order" name="order" form="filter" type="text" class="inline mx-1" autofocus />
+                    {{-- sort by create date --}}
+                </div>
+        
+                
+                <div class="flex shrink-0 mx-3 my-3 left">
+                <x-jet-button class="ml-4">
+                    {{ __('فلترة المنتجات') }}
+                </x-jet-button>
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100" dir="rtl">
+                <x-jet-button class="ml-4"  onclick="document.getElementById('id01').style.display='none';window.localStorage.setItem('form','');">
+                    {{ __('إغلاق') }}
+                </x-jet-button>
+                </div>
+
+        
+
+                </div>
+            </form>
+         {{-- </x-jet-authentication-card> --}}
+    </x-guest-layout>
+</div>
+<script>
+
+    const login_form = document.getElementById('id01');
+    const logintext = document.getElementById('loginerror').innerHTML;
+    //alert(document.getElementById('loginerror').innerHTML);
+    // if there a div has the word "Whoops" in the login_form, then show the login_form
+    // if session('_status_') == 'login', then show the login_form
+    
+    if (logintext && window.localStorage.getItem('form') == "login") {
+        login_form.style.display = "block";
+    }
+    
+</script>
+    
+<!-- /-----------------------filter form------------------------ -->
+
+<nav id="navbar" x-data="{ open: false }" class="bg-white border-b border-gray-100" dir="rtl">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -734,8 +939,5 @@
             @endforeach
 
         </div>
-
-    {{-- </x-slot> --}}
-    <!-- / Navigation Links -->
 </nav>
 
