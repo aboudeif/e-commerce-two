@@ -22,7 +22,7 @@ class FavouriteController extends Controller
     $request = request();
     $user_id = auth()->user()->id;
 
-    $favourites = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
+    $favourites = Product::with('product_variances:id,product_id','product_media:id,product_id,media_url',
                                 'Subcategory.Category:id,name','favourites:user_id,product_id')
     ->whereHas('favourites', function ($query) use ($user_id) {
         return $query->where('user_id', $user_id);

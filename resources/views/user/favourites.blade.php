@@ -140,7 +140,7 @@
                             
                             <div class="text-gray-700 text-right px-3">
                             
-                                {{ $product->product_variances->first()->price . " " . "EGP" }}
+                                {{ $product->price . " " . "EGP" }}
 
                             </div>
                             <div class="px-6 m-4 inline-block w-full">

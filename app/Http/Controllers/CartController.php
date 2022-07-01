@@ -21,7 +21,7 @@ class CartController extends Controller
     $user_id = auth()->user()->id;
 
     $products = Product::with(
-        'product_variances:id,product_id,price',
+        'product_variances:id,product_id',
         'product_media:id,product_id,media_url',
             )
     ->whereHas('carts', function ($query) use ($user_id) {
@@ -30,7 +30,7 @@ class CartController extends Controller
 
     ->whereHas('product_variances')
     ->whereHas('product_media');
-    return view('user.cart',['products' => $products]);
+    return view('user.cart',['cart' => $products]);
 
     }
 
@@ -108,7 +108,8 @@ class CartController extends Controller
         //
         $user = auth()->user()->id;
         $product_variance = $request->product_variance_id;
-        $info = Product_variance::where('id', $product_variance)
+        $info = Product_variance::with('product:id,name,price,discount')
+                                    ->where('id', $product_variance)
                                     ->first();
         $status = Cart::where('user_id', $user)
                       ->where('product_id',$info->product_id)
