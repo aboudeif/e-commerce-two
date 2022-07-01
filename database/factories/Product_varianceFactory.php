@@ -20,7 +20,6 @@ class Product_varianceFactory extends Factory
         $size = ['S', 'M', 'L', 'XL', 'XXL'];
         return [
             'product_id' => $product->id,
-            'price' => $this->faker->randomFloat(2, 99, 5000),
             'color' => $this->faker->colorName,
             'color_code' => $this->faker->hexColor,
             'size' => $size[array_rand($size)],

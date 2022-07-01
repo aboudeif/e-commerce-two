@@ -88,7 +88,9 @@
     {
         border-radius: 10px;
         z-index: 9999;
-        position: fixed;
+        position: sticky;
+        top: 0;
+
         width: 100%;
     }
     .login-form {
@@ -150,7 +152,7 @@
       position: fixed; /* Stay in place */
       z-index: 1; /* Sit on top */
       left: 0;
-      top: 0;
+      top:  calc(100vh - var(--nav-height));
       width: 100%; /* Full width */
       height: 100%; /* Full height */
       overflow: auto; /* Enable scroll if needed */
@@ -161,7 +163,7 @@
     
     :root
     {
-        --nav-height: 620px;
+        --nav-height: 590px;
     }
     </style>
     <script>
@@ -416,7 +418,7 @@
                             </x-jet-button>
                         </x-slot>
                         <x-slot name="content">
-                            @foreach (App\Models\Product_variance::orderBy('price','DESC')->get()->unique('price') as $price)
+                            @foreach (App\Models\Product::orderBy('price','DESC')->get()->unique('price') as $price)
                                 <x-jet-dropdown-link class="cursor-pointer"
                                 onclick="document.getElementById('to').value ='{{ __($price->price) }}';">
                                     <span class="mx-1 inline-block"> 
@@ -441,7 +443,7 @@
                             </x-jet-button>
                         </x-slot>
                         <x-slot name="content">
-                            @foreach (App\Models\Product_variance::orderBy('price','ASC')->get()->unique('price') as $price)
+                            @foreach (App\Models\Product::orderBy('price','ASC')->get()->unique('price') as $price)
                                 <x-jet-dropdown-link class="cursor-pointer"
                                 onclick="document.getElementById('from').value ='{{ __($price->price) }}';">
                                     <span class="mx-1 inline-block"> 
@@ -578,7 +580,7 @@
 
 <nav id="navbar" x-data="{ open: false }" class="bg-white border-b border-gray-100" dir="rtl">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto my-4 px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
            
                 <!-- Logo -->

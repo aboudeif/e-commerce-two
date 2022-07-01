@@ -25,20 +25,22 @@ class ProductController extends Controller
     {
         //
   
-        foreach($request->query as $item){
-            if($item === null){
-                unset($item);
+        foreach($request->query as $item => $value){
+            if($value === null){
+                unset($request[$item]);
         }}
 
         $user_id = (Auth::check()) ? auth()->user()->id : 0;
 
         if($request->from !== null && $request->to != null){
-            $request->query->price_range = [$request->from, $request->to];
+            $request->query->price_range = [$request->to,$request->from];
             unset($request['from']);
             unset($request['to']);
         }
-        dd($request);
-        $products = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
+        //dd($request);
+        
+        //dd(implode('-',$request->query->price_range));
+        $products = Product::with('product_variances:id,product_id','product_media:id,product_id,media_url',
                                   'Subcategory.Category:id,name','favourites:user_id,product_id','carts:user_id,product_id')
         ->when($request->has('keyword'), function ($query) use ($request) {
             return $query->where('name', 'like', '%' . $request->keyword . '%');
@@ -67,14 +69,15 @@ class ProductController extends Controller
                 return $query->where('price', '>=', $request->from);
             });
         })
-        ->when($request->has('price_range'), function ($query) use ($request) {
+        
+        ->when($request->query->has('price_range'), function ($query) use ($request) {
             return $query->whereHas('product_variances', function ($query) use ($request) {
-                return $query->whereBetween('price', explode('-', $request->price_range));
+                return $query->whereBetween('price', $request->query->price_range);
             });
         })
 
-        ->when($request->has('sort_by'), function ($query) use ($request) {
-            return $query->orderBy('create_date', $request->sort_by);
+        ->when($request->has('order'), function ($query) use ($request) {
+            return $query->orderBy('updated_at', $request->order);
         })
         // filter by color
         ->when($request->has('color'), function ($query) use ($request) {
@@ -88,6 +91,11 @@ class ProductController extends Controller
                 return $query->where('size', $request->size);
             });
         })
+
+        // // filter by updated_at sort
+        // ->when($request->has('order'), function ($query) use ($request) {
+        //     return $query->order('updated_at', $request->order);
+        // })
         
 
         ->whereHas('product_variances')

@@ -16,10 +16,8 @@ return new class extends Migration
         Schema::create('product_variances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
-            $table->decimal('price', 10, 2);
             $table->integer('quantity');
             $table->integer('points')->default(0);
-            $table->decimal('discount', 10, 2)->default(0);
             $table->string('color');
             $table->string('color_code');
             $table->enum('size',['XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL']);

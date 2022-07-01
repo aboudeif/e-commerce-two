@@ -3,7 +3,7 @@
     
     <style>
         
-/* show product elements in responsive grid */
+/* show product elements in responsive grid*/
 .parent {
 display: grid;
 grid-template-columns: repeat(7, 1fr);
@@ -32,7 +32,7 @@ grid-row-gap: 0px;
 .div2 { grid-area: 2 / 1 / 8 / 4; }
 .div3 { grid-area: 8 / 1 / 13 / 4; }
 
-}
+} 
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -47,7 +47,9 @@ grid-row-gap: 0px;
 
 <div class="parent">
     {{-- all product images --}}
+    
     <div class="div1">
+        
         @foreach($product->product_media as $media)
             <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-fluid">
         @endforeach
@@ -70,7 +72,7 @@ grid-row-gap: 0px;
      
         {{-- product price - large font - blue color --}}
         <div class="text-green-700 text-xl font-bold my-2 py-3 text-right px-3">
-            {{ $product->product_variances->first()->price }} EGP
+            {{ $product->price }} EGP
         </div>
        
         {{-- product size menu --}}

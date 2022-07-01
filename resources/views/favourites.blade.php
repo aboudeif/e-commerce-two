@@ -31,7 +31,8 @@
     <x-slot name="header">
     </x-slot>
     {{-- get products from ProductController using pagination in responsive grid product cards --}}
-    <div class="flex flex-wrap justify-center">
+    <div class="flex flex-wrap justify-center my-20">
+
         @foreach ($products as $product)
             <div style="width: 20rem" class="mx-3 my-3">
                 <div class="flex flex-col break-2">

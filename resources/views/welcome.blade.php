@@ -117,7 +117,8 @@
     </x-slot>
 
     {{-- get products from ProductController using pagination in responsive grid product cards --}}
-    <div class="flex flex-wrap justify-center">
+    <div class="flex flex-wrap justify-center mb-20">
+        
         @foreach($products as $product)
         {{-- {{ dd(Auth::user()->id) }} --}}
             <div style="width:16rem;" class="mx-3 my-3 product" loading="lazy">
@@ -183,7 +184,7 @@
                             
                             <div class="text-gray-700 text-right px-3">
                             
-                                {{ $product->product_variances->first()->price . " " . "EGP" }}
+                                {{ $product->price . " " . "EGP" }}
 
                             </div>
                             <div class="px-6 m-4 inline-block w-full">
