@@ -161,23 +161,18 @@
       padding-top: 60px;
     }
     
-    :root
+    /* :root
     {
         --nav-height: 590px;
-    }
-    </style>
-    <script>
-        document.getElementById("navbar").offsetHeight
-        document.documentElement.style.setProperty('--nav-height', document.getElementById("navbar").offsetHeight + 'px');
-    </script>
-    <style>
+    } */
+  
     .modalfilter {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
       z-index: 999; /* Sit on top */
       left: 15%;
       /* form top is  after navbar in all screens */
-      top:  calc(100vh - var(--nav-height));
+      /* top:  calc(100vh - var(--nav-height)); */
       width: 70%; /* Full width */
       height: max-content; /* Full height */
       align-content: center;
@@ -404,7 +399,7 @@
 <div id="filter-form" class="modalfilter filter-form" dir="rtl">
     <x-guest-layout>
             
-            <form method="GET" action="" class="text-right flex flex-wrap" id="filter">
+            <form method="GET" action="/products".$_GET() class="text-right flex flex-wrap" id="filter">
                 
                 <div class="flex shrink-0 mr-3 my-2">
                     <x-jet-label for="to" value="{{ __('الحد الأقصي للسعر') }}"  class="inline mx-2 my-2"/>
@@ -578,7 +573,7 @@
     
 <!-- /-----------------------filter form------------------------ -->
 
-<nav id="navbar" x-data="{ open: false }" class="bg-white border-b border-gray-100" dir="rtl">
+<nav id="navbar" x-data="{ open: false }" class="bg-white border-b border-gray-100" style="height: max-content" dir="rtl">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto my-4 px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -943,3 +938,12 @@
         </div>
 </nav>
 
+<script>
+//top of filter-form after navbar
+$(document).ready(function(){
+    $('#filter-form').css('top',$('#navbar').height()+'px');
+});
+
+
+
+</script>
