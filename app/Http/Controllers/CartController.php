@@ -33,68 +33,22 @@ class CartController extends Controller
     return view('user.cart',['cart' => $products]);
 
     }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function addToCart(Request $request)
-    // {
-    //     //
-    //     $user = auth()->user()->id;
-    //     $product = $request->product_id;
-    //     $product_variance = $request->product_variance_id;
-    //     $status = Cart::where('user_id', $user)
-    //                   ->where('product_id',$product)
-    //                   ->where('product_variance_id',$product_variance)
-    //                   ->first();
-    //     if($status != true)
-    //     {
-    //         Cart::insert([
-    //             'user_id'=> $user,
-    //             'product_id'=> $product,
-    //             'product_variance_id',$product_variance,
-    //         ]);
-    //         return[
-    //              'action' => 'add',
-    //              'id' => $product,
-    //              'product_variance_id'=> $product_variance,
-    //               'status' => 'success',
-    //             ];
-    //     }
-    // }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function removeFromCart(Request $request)
-    // {
-    //     //
-    //     $user = auth()->user()->id;
-    //     $product = $request->product_id;
-    //     $product_variance = $request->product_variance_id;
-    //     $status = Cart::where('user_id', $user)
-    //                   ->where('product_id',$product)
-    //                   ->where('product_variance_id',$product_variance)
-    //                   ->first();
-    //     if($status == true)
-    //     {
-    //         Cart::where('user_id', $user)
-    //             ->where('product_id',$product)
-    //             ->where('product_variance_id',$product_variance)
-    //             ->delete();
-
-    //         return [
-    //             'action' => 'remove',
-    //             'id' => $product, 
-    //             'product_variance_id'=> $product_variance,
-    //             'status' => 'success',
-    //         ];
-    //     }
-    // }
+    public function is_in_cart()
+    {
+        $request = request();
+        $user_id = auth()->user()->id;
+        $product_id = $request->product_id;
+        $product_variance_id = $request->product_variance_id;
+        $cart = Cart::where('user_id', $user_id)
+            ->where('product_id', $product_id)
+            ->where('product_variance_id', $product_variance_id)
+            ->first();
+        if ($cart) {
+            return response()->json(['status' => 'success', 'message' => 'Product is in cart']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Product is not in cart']);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -107,43 +61,47 @@ class CartController extends Controller
         
         //
         $user = auth()->user()->id;
-        $product_variance = $request->product_variance_id;
-        $info = Product_variance::with('product:id,name,price,discount')
-                                    ->where('id', $product_variance)
-                                    ->first();
+        $product_variance = Product_variance::where('color', $request->color)
+                                            ->where('size', $request->size)
+                                            ->first();
+        $product = Product::find($product_variance->product_id);
         $status = Cart::where('user_id', $user)
-                      ->where('product_id',$info->product_id)
-                      ->where('product_variance_id',$product_variance)
+                      ->where('product_id',$product->id)
+                      ->where('product_variance_id',$product_variance->id)
                       ->first();
         if($status != true)
         {
             
             Cart::insert([
                 'user_id'=> $user,
-                'product_variance_id'=>$product_variance,
-                'product_id'=> $info->product_id,
-                'price' => $info->price,
+                'product_variance_id'=>$product_variance->id,
+                'product_id'=> $product->id,
+                'quantity'=> $request->quantity,
+                'price' => $product->price,
 
             ]);
-            // return[
-            //      'action' => 'add',
-            //      'id' =>  $product_variance,
-            //      'status' => 'success',
-            //     ];
+            return response()->json([
+                'action' => 'add',
+                'id' => $product->id,
+                'product_variance_id'=> $product_variance->id,
+                'status' => 'success',
+            ]);
+            
         }
 
         elseif($status == true)
         {
             Cart::where('user_id', $user)
-                ->where('product_id',$info->product_id)
-                ->where('product_variance_id',$product_variance)
+                ->where('product_id',$product->id)
+                ->where('product_variance_id',$product_variance->id)
                 ->delete();
 
-            return [
+            return response()->json([
                 'action' => 'remove',
-                'id' => $product_variance, 
+                'id' => $product->id, 
+                'product_variance_id'=> $product_variance->id,
                 'status' => 'success',
-            ];
+            ]);
         }
     }
 

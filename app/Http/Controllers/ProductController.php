@@ -212,6 +212,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         // show a product
+        $product->color = $product->product_variances->pluck('color','color_code')->unique();
         return view('products.show', ['product' => $product]);
     }
 

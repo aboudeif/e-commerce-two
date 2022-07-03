@@ -159,29 +159,7 @@
                                     {{ $product->name }}
                                 </a>
                             </div>
-                          
-                            {{-- <span
-                                id="{{ 'C_'.$product->product_variances->first->id->id }}"
-                                onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
-                                onmousemove="$(this).css('opacity', '0.8');" 
-                                onmouseout="$(this).css('opacity', '1');"
-                                class=" {{ $product->carts->first->product_id ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
-                                style="font-family: 'Material Icons';z-index: 11;" 
-                                title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
-                                shopping_cart
-                            </span>
 
-                            <span>
-                                <input 
-                                type="number" 
-                                min="0" 
-                                max="100" 
-                                value="0" 
-                                style="margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
-                                id="{{ 'N_'.$product->id }}" 
-                                onchange="addToCart('{{ $product->id }}');">
-                            </span> --}}
-                            
                             <div class="text-gray-700 text-right px-3">
                             
                                 {{ $product->price . " " . "EGP" }}

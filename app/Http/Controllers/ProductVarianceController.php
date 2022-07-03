@@ -24,6 +24,25 @@ class ProductVarianceController extends Controller
     }
 
     /**
+     * return all sizes of the product variance have a color
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getSize(Request $request)
+    {
+        $product_id = request('product_id');
+        $color = request('color');
+        $product_variance = Product_variance::where('product_id',$product_id)
+            ->where('color', $color)
+            ->get();
+        if($product_variance->count() > 0){
+            $sizes = $product_variance->pluck('size')->unique();
+            return response()->json($sizes);
+        }
+        return response()->json([]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

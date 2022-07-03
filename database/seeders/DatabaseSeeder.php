@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'comofcom@gmail.com',
             'profile_photo_path' => '',
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'usertype' => false,
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
         ]);
         \App\Models\User::insert([
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'profile_photo_path' => '',
             'email_verified_at' => now(),
             'usertype' => true,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('edraakMC_admin'),
             'remember_token' => Str::random(10),
         ]);
 

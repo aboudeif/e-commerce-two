@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
+use App\Http\Controllers\ProductVarianceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -39,8 +40,9 @@ Route::middleware([
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
     Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/{product_variance_id}/store',[CartController::class, 'store'])->name('cart.store');
+    Route::post('/cart/store',[CartController::class, 'store'])->name('carts.store');
     Route::post('/cart/check',[CartController::class, 'is_in_cart'])->name('cart.check');
+    Route::post('/variances/size',[ProductVarianceController::class, 'getSize'])->name('variances.size');
     // user views
     Route::get('/user/bill',function(){
         return view('user.bill');

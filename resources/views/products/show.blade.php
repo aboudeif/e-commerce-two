@@ -21,16 +21,16 @@ grid-row-gap: 0px;
 {
     .parent {
 display: grid;
-grid-template-columns: repeat(3, 1fr);
-grid-template-rows: repeat(12, 1fr);
+grid-template-columns: repeat(1, 1fr);
+grid-template-rows: 0.5fr 1fr 1.5fr;
 grid-column-gap: 0px;
 grid-row-gap: 0px;
 }
 
-.div1  { grid-area: 1 / 1 / 2 / 4; display: flexbox;max-width: 100%;}
+.div1  { grid-area: 1 / 1 / 2 / 4; display: flexbox;max-width: fit-content;}
 .div1 > img {display: inline-block; max-height: 10rem;  } /* max-height: 1rem; */
-.div2 { grid-area: 2 / 1 / 8 / 4; }
-.div3 { grid-area: 8 / 1 / 13 / 4; }
+.div2 { grid-area: 2 / 1 / 3 / 2; width: fit-content; height: fit-content; }
+.div3 { grid-area: 3 / 1 / 4 / 2; width: fit-content; height: fit-content; }
 
 } 
 
@@ -44,6 +44,8 @@ grid-row-gap: 0px;
 
 
 </style>
+
+
 
 <div class="parent">
     {{-- all product images --}}
@@ -59,7 +61,7 @@ grid-row-gap: 0px;
         <img src="{{ $product->product_media->first()->media_url }}" alt="{{ $product->name }}" class="img-fluid">
     </div>
     {{-- product name --}}
-    <div class="div3">
+    <div class="div3" dir="rtl">
         <div class="font-bold text-xl my-2 text-right px-3  py-3">
             <a href="{{ route('products.show', $product->id) }}">
                 {{ $product->name }}
@@ -77,43 +79,78 @@ grid-row-gap: 0px;
        
         {{-- product size menu --}}
         <div class="text-gray-600 text-sm my-2 text-right px-3">
-            <select class="selectpicker w-full" name="size" id="size">
-                @foreach($product->product_variances as $size)
-                    {{-- <option value="{{ $size->size }}" class="material-symbols-outlined">
-                        production_quantity_limits <i class="text-base">{{ $size->size }}</i>
-                    </option> --}}
-                    {{-- <option> </i>{{ $size->size }}</option> --}}
-                    <option value="{{ $size->size }}">{{ $size->size }}</option>
-                @endforeach
+            <select class="selectpicker w-full" name="selected_size" id="selected_size">
+               
             </select>
         </div>
+        
         {{-- product colors selectable div preview --}}
         <div class="text-gray-600 text-sm my-2 px-3">
             <div class="flex flex-wrap">
-                <input type="hidden" name="color" id="color" value="{{ $product->product_variances->first()->color }}">
-                @foreach($product->product_variances as $color)
-                    {{-- <div class="w-1/4"> --}}
-                    <div class="bg-gray-200 rounded-full h-8 w-8" 
-                        style="background-color: {{ $color->color_code }}"
-                        onmousemove="this.opacity=0.8"
-                        onmouseout="this.opacity=1"
-                        onclick="chooseColor(this);">
+                <input id="selected_color" name="selected_color" type="text"/>
+              
+                @foreach($product->color as $color_code => $color_name)
+                    
+                    <div class="rounded-full h-8 w-8" 
+                        style="background-color: {{ $color_code }};"
+                        onmousemove="$(this).css('opacity','0.8');"
+                        onmouseout="$(this).css('opacity','1');"
                         
+                        onclick="chooseColor('{{ $color_name }}', '{{ $product->id }}');">
+
                     </div>
-                        
                     {{-- </div> --}}
                 @endforeach
             </div>
         </div>
         
+        <script>
+            function chooseColor(color,id) {
+                
+                $.ajax({
+                    url: "{{ route('variances.size') }}",
+                    type: 'POST',
+
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        color: color,
+                        product_id: id
+                    },
+                //success and fail
+                success: function(data) {
+                    console.log(data);
+                    
+                    // add sizes from data to selectpicker #size
+                    //clear selectpicker #size
+                    $('#selected_size').empty();
+                    
+                    data.forEach(element => {
+                        //add every size to selectpicker
+                        $('#selected_size').append('<option value="'+element+'">'+element+'</option>');
+                        
+                       
+                    });
+                    
+                    // refresh #size
+                    
+                    
+                    $('#selected_color').val(color);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+                });
+            }
+        </script>
+
         {{-- share product and add to cart --}}
         <div>
             <span
-                id="{{ 'cart' }}"
-                onclick="addToCart('{{ $product->product_variances->first->id->id }}');" 
+                id="cart"
+                onclick="addToCart();"
                 onmousemove="$(this).css('opacity', '0.8');" 
                 onmouseout="$(this).css('opacity', '1');"
-                class=" {{ $product->carts->first->product_id ? 'text-green-500' : 'text-gray-500' }} position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
+                class= "text-gray-500 position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
                 style="font-family: 'Material Icons';z-index: 11;" 
                 title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
                 shopping_cart
@@ -128,113 +165,98 @@ grid-row-gap: 0px;
                 value="0" 
                 style="margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
                 id="quantity" 
-                onchange="addToCart('{{ $product->id }}');">
+                onchange="">
             </span>
         </div>
     </div>
 </div>
 
 <script>
-    ajax function to check if product is in cart
-    function addToCart(product_id) {
-        $.ajax({
-            url: '{{ route('cart.check') }}',
-            type: 'POST',
-            data: {
-                product_id: product_id,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(data) {
-                if(data.status == 'success') {
-                    $('#cart).addClass('text-green-500');
-                    $('#cart).removeClass('text-gray-500');
-                } else {
-                    $('#cart).addClass('text-gray-500');
-                    $('#cart).removeClass('text-green-500');
-                }
-            }
-        });
-    }
-    // ajax function to add product to cart
-    // function addToCart(product_id) {
-    //     $.ajax({
-    //         url: '{ route('cart.add') }',
-    //         type: 'POST',
-    //         data: {
-    //             product_id: product_id,
-    //             quantity: $('#quantity').val(),
-    //             color: $('#color').val(),
-    //             size: $('#size').val()
-    //         },
-    //         success: function(data) {
-    //             if(data.status == 'success') {
-    //                 $('#C_'+product_id).addClass('text-green-500');
-    //                 $('#C_'+product_id).removeClass('text-gray-500');
-    //             } else {
-    //                 $('#C_'+product_id).addClass('text-gray-500');
-    //                 $('#C_'+product_id).removeClass('text-green-500');
-    //             }
-    //         }});
 
-            // }
-    function addToCart(id) {
-        var quantity = $('#quantity').val();
-        var color = $('#color').val();
-        var size = $('#size').val();
+    function addToCart() {
+
+        const quantity = $('#quantity').val()
+        if(quantity == 0) {
+            alert('الرجاء تحديد الكمية قبل الشراء');
+            return;
+        }
+        const color = $('#selected_color').val();
+        const size = $('#selected_size').val();
         $.ajax({
-            url: '/cart/'+id+'/store',
+            url: "{{ route('carts.store') }}",
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                product_variance_id: id,
                 quantity: quantity,
                 color: color,
                 size: size
             },
             success: function(data) {
-                if(data.status == 'success') {
-                    if($('#quantity').val(0)) 
-                        $('#quantity').val(1);
-                    
+
+                console.log(data);
                     $('#cart').removeClass('text-gray-500');
                     $('#cart').addClass('text-green-500');
-                    $('#cart').attr('onclick', 'removeFromCart('+id+')');
+                    // $('#cart').attr('onclick', removeFromCart());
                     $('#cart').attr('title', 'حذف المنتج من سلة المشتريات');
                     
                 
-                }
-            },
-
+                },
             error: function(data) {
-                    alert(data.message);
+                    console.log(data);
                 }  
             });
     }
-
-    function removeFromCart(id) {
+    // function is_in_cart
+    function is_in_cart() {
+        const color = $('#selected_color').val();
+        const size = $('#selected_size').val();
         $.ajax({
-            url: '/cart/'+id+'/destroy',
+            url: "{{ route('cart.check') }}",
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                product_variance_id: id
+                color: color,
+                size: size
             },
             success: function(data) {
-                if(data.status == 'success') {
-                    $('#quantity').val(0);
-                    $('#cart').removeClass('text-green-500');
-                    $('#cart').addClass('text-gray-500');
-                    $('#cart').attr('onclick', 'addToCart('+id+')');
-                    $('#cart').attr('title', 'إضافة المنتج  إلي سلة المشتريات');
-                  
+                console.log(data);
+                if(data.is_in_cart) {
+                    $('#cart').removeClass('text-gray-500');
+                    $('#cart').addClass('text-green-500');
+                    $('#cart').attr('onclick', removeFromCart());
+                    $('#cart').attr('title', 'حذف المنتج من سلة المشتريات');
                 }
-            },
-
+                },
             error: function(data) {
-                    alert('error');
+                    console.log(data);
                 }  
             });
     }
+
+    // function removeFromCart() {
+    //     $.ajax({
+    //         url: '/cart/'+id+'/destroy',
+    //         type: 'POST',
+    //         data: {
+    //             _token: '{{ csrf_token() }}',
+    //             product_variance_id: id
+    //         },
+    //         success: function(data) {
+    //             if(data.status == 'success') {
+    //                 $('#quantity').val(0);
+    //                 $('#cart').removeClass('text-green-500');
+    //                 $('#cart').addClass('text-gray-500');
+    //                 $('#cart').attr('onclick', addToCart());
+    //                 $('#cart').attr('title', 'إضافة المنتج  إلي سلة المشتريات');
+                  
+    //             }
+    //         },
+
+    //         error: function(data) {
+    //                 alert('error');
+    //             }  
+    //         });
+    // }
     // when user change size, reload avilable color of selected size and price
     function changeSize(id) {
         $.ajax({
@@ -265,23 +287,23 @@ grid-row-gap: 0px;
             });
     }
 
-
-    function chooseColor(color) {
-        var color_code = $(color).css('background-color');
-        $('#color').childList.forEach(element => {
-            $(element).css('border', 'none');
-        });
-        $(color).css('border', '1px solid gray');
-        $('#color').val(color_code);
-    }
-
     function showImage(id, url) {
         document.getElementById(id).src = url;
     }
+</script>
     
-    function chooseColor(color) {
-        document.getElementById('color').value = color;
-    }
+    {{--
+        // function chooseColor(color) {
+    //     var color_code = $(color).css('background-color');
+    //     $('#color').childList.forEach(element => {
+    //         $(element).css('border', 'none');
+    //     });
+    //     $(color).css('border', '1px solid gray');
+    //     $('#color').val(color_code);
+    // }
+    // function chooseColor(color) {
+    //     document.getElementById('color').value = color;
+    // }
 
 //     function addenToCart(id) {
 
@@ -309,8 +331,8 @@ grid-row-gap: 0px;
 //         console.log(data);
 //         }
 //     });
-// }
-</script>
+// } --}}
+
 
                     
 </x-app-layout>
