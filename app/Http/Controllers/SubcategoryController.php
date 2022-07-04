@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
@@ -16,11 +17,10 @@ class SubcategoryController extends Controller
     public function index(Request $request)
     {
         //
-        $subcategories = Subcategory::where('category_id', $request->id)
-                                    ->orderBy('created_at', 'desc')
+        $subcategories = Subcategory::orderBy('created_at', 'desc')
                                     ->paginate(15);
                             
-        return view('admin.subcategories.index', ['subcategories' => $subcategories, 'category' => Category::find($request->id)]);
+        return view('admin.subcategories.index', ['subcategories' => $subcategories]);
     }
 
     /**
@@ -64,8 +64,10 @@ class SubcategoryController extends Controller
     {
         //show subcategory
         $subcategory = Subcategory::find($id);
+        $subcategory->products = Product::where('subcategory_id', $id)
+                                        ->where('is_deleted', 0)
+                                        ->get();
         return view('admin.subcategories.show', ['subcategory' => $subcategory]);
-
     }
 
     /**
@@ -74,12 +76,10 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Subcategory $subcategory)
     {
         //edit subcategory and pass category id to view
-        $subcategory = Subcategory::find($id);
-        $categories = Category::all();
-        return view('admin.subcategories.edit', ['subcategory' => $subcategory, 'categories' => $categories]);
+        return view('admin.subcategories.edit', ['subcategory' => $subcategory]);
         
     }
 
@@ -90,14 +90,16 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //update subcategory and pass category id to view
-        $subcategory = Subcategory::find($id);
+        $subcategory = Subcategory::find($request->subcatId);
         $subcategory->name = $request->subcatName;
-        $subcategory->category_id = $request->category_id;
+        $subcategory->description = $request->subcatDescription;
+        $subcategory->category_id = $request->subcatCat;
+        $subcategory->is_deleted = $request->subcatIs_deleted;
         $subcategory->save();
-        return redirect('/admin/subcategories?id='.$request->category_id);
+        return redirect('/admin/subcategories?id='.$subcategory->category_id);
 
     }
 
@@ -107,13 +109,20 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subcategory $subcategory)
     {
         //delete subcategory
-        $subcategory = Subcategory::find($id);
+        if($subcategory->is_deleted == 1 && !Product::where('subcategory_id', $subcategory->id)->exists())
+        {
+        $subcategory->delete();
+        return redirect('/admin/subcategories?is_deleted=1');
+        }
+        else
+        {
         $subcategory->is_deleted = 1;
         $subcategory->save();
-        return redirect('/admin/subcategories?id='.$subcategory->category_id);
-        
+        return redirect('/admin/subcategories?is_deleted=0');
+        }
+
     }
 }

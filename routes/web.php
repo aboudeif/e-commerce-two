@@ -92,17 +92,21 @@ Route::middleware(Admin::class,
         // Route::get('/admin/products/{product}/edit', [ProductController::class, 'adminEdit'])->name('admin.products.edit');
         // Route::post('/admin/products/{product}/update', [ProductController::class, 'adminUpdate'])->name('admin.products.update');
         Route::get('/admin/categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('/admin/categories/api', [CategoryController::class, 'indexJson'])->name('categories.api');
         Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('categories.create');
         Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('categories.store');
         Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::post('/admin/categories/{category}/update', [CategoryController::class, 'update'])->name('categories.update');
+        Route::post('/admin/categories/update', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/admin/categories/{category}/delete', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::get('/admin/categories/show', [CategoryController::class, 'show'])->name('categories.show');
         
+        
+        Route::get('/admin/subcategories/show', [SubcategoryController::class, 'show'])->name('subcategories.show');
         Route::get('/admin/subcategories', [SubcategoryController::class, 'index'])->name('subcategories.index');
         Route::get('/admin/subcategories/create', [SubcategoryController::class, 'create'])->name('subcategories.create');
         Route::post('/admin/subcategories/store', [SubcategoryController::class, 'store'])->name('subcategories.store');
         Route::get('/admin/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('subcategories.edit');
-        Route::post('/admin/subcategories/{subcategory}/update', [SubcategoryController::class, 'update'])->name('subcategories.update');
+        Route::post('/admin/subcategories/update', [SubcategoryController::class, 'update'])->name('subcategories.update');
         Route::delete('/admin/subcategories/{subcategory}/delete', [SubcategoryController::class, 'destroy'])->name('subcategories.destroy');
 
         

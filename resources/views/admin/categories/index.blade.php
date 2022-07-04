@@ -23,7 +23,7 @@
                                     <th>الحالة</th>
                                     <th>تاريخ الإنشاء</th>
                                     <th>تاريخ التعديل</th>
-                                    <th>الأقسام الفرعية</th>
+                                    <th>عرض</th>
                                     <th>تعديل</th>
                                     <th>حذف</th>
                                 </tr>
@@ -34,10 +34,10 @@
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->description ?? '' }}</td>
-                                    <td>{{ $category->is_deleted ? "محذوف" : "نشط" }}</td>
+                                    <td>{{ $category->is_deleted ? "ملغي" : "نشط" }}</td>
                                     <td>{{ $category->created_at }}</td>
                                     <td>{{ $category->updated_at }}</td>
-                                    <td><a href="{{ route('subcategories.index',['id'=>$category->id]) }}">
+                                    <td><a href="{{ route('categories.show',['id'=>$category->id]) }}">
                                         <x-jet-button style="background-color: rgb(0, 83, 139);">عرض</x-jet-button>
                                         </a>
                                     </td>
@@ -50,7 +50,7 @@
                                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <x-jet-button style="background-color: rgb(255, 0, 0);">حذف</x-jet-button> 
+                                        <x-jet-button style="background-color: rgb(255, 0, 0);">{{ $categories->first()->is_deleted ? 'حذف' : 'إلغاء'; }}</x-jet-button> 
                                         </form>
                                     </td>
                                 </tr>

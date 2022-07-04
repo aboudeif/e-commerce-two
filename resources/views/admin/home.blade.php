@@ -134,11 +134,11 @@
     {{-- card header and close card using js --}}
     <div class="card-header pt-2">
         <span class="card-title bg-success text-white py-1 px-2 absolute right-0">التصنيفات</span>
-        <a href="{{ route('categories.index',['is_deleted'=>false]) }}">
-            <x-jet-button class="card-title mt-5">النشطة</x-jet-button>
+        <a href="{{ route('categories.index') }}">
+            <x-jet-button class="card-title mt-5">التصنيفات الرئيسية</x-jet-button>
         </a>
-        <a href="{{ route('categories.index',['is_deleted'=>true]) }}">
-            <x-jet-button class="card-title">المحذوفة</x-jet-button>
+        <a href="{{ route('subcategories.index') }}">
+            <x-jet-button class="card-title">التصنيفات الفرعية</x-jet-button>
         </a>
 
     

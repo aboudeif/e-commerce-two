@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,14 +17,27 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         //show all categories
-        $categories = Category::where('is_deleted', $request->is_deleted)
-                              ->orderBy('created_at', 'desc')
+        $categories = Category::orderBy('created_at', 'desc')
                               ->paginate(15);
        
         return view('admin.categories.index', ['categories' => $categories]);
 
     }
 
+    /**
+     * index for subcategories as json
+     * 
+     * @return json
+     */
+    public function indexJson()
+    {
+        //show all categories
+        $categories = Category::orderBy('created_at', 'desc')
+                              ->get();
+       
+        return response()->json($categories);
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -46,6 +60,7 @@ class CategoryController extends Controller
         //store new category
         $category = new Category;
         $category->name = $request->catName;
+        $category->description = $request->catDescription;
         $category->is_deleted = 0;
         $category->save();
         return redirect('/admin/categories?is_deleted=0');
@@ -57,9 +72,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Request $request)
     {
+   
         //show category
+        $category = Category::find($request->id);
+        $category->subcategories = Subcategory::where('category_id', $request->id)
+                                              ->where('is_deleted', false)
+                                              ->get();
         return view('admin.categories.show', ['category' => $category]);
     }
 
@@ -83,14 +103,20 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
         //update category
-        $category->name = $request->name;
+        // 
+
+        $category = Category::find($request->catId);
+        $category->name = $request->catName;
+        $category->description = $request->catDescription;
+        $category->is_deleted = $request->catIs_deleted;
         $category->save();
         return redirect('/admin/categories?is_deleted=0');
     }
 
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -100,8 +126,17 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //delete category
+
+        if($category->is_deleted == 1 && !Subcategory::where('category_id', $category->id)->exists())
+        {
+        $category->delete();
+        return redirect('/admin/categories?is_deleted=1');
+        }
+        else
+        {
         $category->is_deleted = 1;
         $category->save();
         return redirect('/admin/categories?is_deleted=0');
+        }
     }
 }
