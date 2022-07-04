@@ -9,6 +9,7 @@
         {{-- card header and close card using js --}}
         <div class="card-header pt-2">
             <span class="card-title bg-success text-white py-1 px-2 absolute right-0">الطلبات</span>
+            
             <x-jet-button class="card-title mt-5">الحالية</x-jet-button>
             <x-jet-button class="card-title">قيد الإنتظار</x-jet-button>
             <x-jet-button class="card-title">قيد الشحن</x-jet-button>
@@ -133,9 +134,12 @@
     {{-- card header and close card using js --}}
     <div class="card-header pt-2">
         <span class="card-title bg-success text-white py-1 px-2 absolute right-0">التصنيفات</span>
-        
-        <x-jet-button class="card-title mt-5">النشطة</x-jet-button>
-        <x-jet-button class="card-title">المحذوفة</x-jet-button>
+        <a href="{{ route('categories.index',['is_deleted'=>false]) }}">
+            <x-jet-button class="card-title mt-5">النشطة</x-jet-button>
+        </a>
+        <a href="{{ route('categories.index',['is_deleted'=>true]) }}">
+            <x-jet-button class="card-title">المحذوفة</x-jet-button>
+        </a>
 
     
     {{-- /.card-body --}}

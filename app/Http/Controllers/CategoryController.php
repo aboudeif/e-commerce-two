@@ -13,9 +13,15 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     //protected $uniqueKey =  ['Category_id', 'name'] ;
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //show all categories
+        $categories = Category::where('is_deleted', $request->is_deleted)
+                              ->orderBy('created_at', 'desc')
+                              ->paginate(15);
+       
+        return view('admin.categories.index', ['categories' => $categories]);
+
     }
 
     /**
@@ -25,7 +31,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        //create new category
+        return view('admin.categories.create');
     }
 
     /**
@@ -36,7 +43,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //store new category
+        $category = new Category;
+        $category->name = $request->catName;
+        $category->is_deleted = 0;
+        $category->save();
+        return redirect('/admin/categories?is_deleted=0');
     }
 
     /**
@@ -47,7 +59,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        //show category
+        return view('admin.categories.show', ['category' => $category]);
     }
 
     /**
@@ -58,7 +71,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        //edit category
+        return view('admin.categories.edit', ['category' => $category]);
+
     }
 
     /**
@@ -70,7 +85,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        //update category
+        $category->name = $request->name;
+        $category->save();
+        return redirect('/admin/categories?is_deleted=0');
     }
 
     /**
@@ -81,6 +99,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        //delete category
+        $category->is_deleted = 1;
+        $category->save();
+        return redirect('/admin/categories?is_deleted=0');
     }
 }

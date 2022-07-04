@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
@@ -89,6 +91,20 @@ Route::middleware(Admin::class,
         Route::get('/admin/products', [ProductController::class, 'admin_index'])->name('admin.products');
         // Route::get('/admin/products/{product}/edit', [ProductController::class, 'adminEdit'])->name('admin.products.edit');
         // Route::post('/admin/products/{product}/update', [ProductController::class, 'adminUpdate'])->name('admin.products.update');
+        Route::get('/admin/categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+        Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('categories.store');
+        Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+        Route::post('/admin/categories/{category}/update', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/admin/categories/{category}/delete', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        
+        Route::get('/admin/subcategories', [SubcategoryController::class, 'index'])->name('subcategories.index');
+        Route::get('/admin/subcategories/create', [SubcategoryController::class, 'create'])->name('subcategories.create');
+        Route::post('/admin/subcategories/store', [SubcategoryController::class, 'store'])->name('subcategories.store');
+        Route::get('/admin/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('subcategories.edit');
+        Route::post('/admin/subcategories/{subcategory}/update', [SubcategoryController::class, 'update'])->name('subcategories.update');
+        Route::delete('/admin/subcategories/{subcategory}/delete', [SubcategoryController::class, 'destroy'])->name('subcategories.destroy');
+
         
     });
 

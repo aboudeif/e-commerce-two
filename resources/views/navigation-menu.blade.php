@@ -446,7 +446,7 @@
                     <x-slot name="trigger">
                         <x-jet-button form="" class=" ml-2 " wire:model="choose_color"
                             @click.enter="choose_color">
-                            
+
                             <span class="material-symbols-outlined">
                                 payments
                             </span>
@@ -474,7 +474,7 @@
                     <x-slot name="trigger">
                         <x-jet-button form="" class=" mx-2 " wire:model="choose_color"
                             @click.enter="choose_color">
-                            
+
                             <span class="material-symbols-outlined">
                                 payments
                             </span>
@@ -506,7 +506,7 @@
                     <x-slot name="trigger">
                         <x-jet-button form="" class=" mx-2 " wire:model="choose_color"
                             @click.enter="choose_color">
-                            
+
                             <span class="material-symbols-outlined">
                                 gradient
                             </span>
@@ -603,24 +603,11 @@
                 </x-jet-button>
             </div>
 
-
-
 </div>
 </form>
-{{-- </x-jet-authentication-card> --}}
+
 </x-guest-layout>
 </div>
-{{-- <script>
-    const login_form = document.getElementById('id01');
-    const logintext = document.getElementById('loginerror');
-    //alert(document.getElementById('loginerror').innerHTML);
-    // if there a div has the word "Whoops" in the login_form, then show the login_form
-    // if session('_status_') == 'login', then show the login_form
-
-    if (logintext && window.localStorage.getItem('form') == "login") {
-        login_form.style.display = "block";
-    }
-</script> --}}
 
 <!-- /-----------------------filter form------------------------ -->
 
@@ -629,21 +616,6 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto my-4 px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-
-            {{-- <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-right p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition mt-3">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div> --}}
-
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('welcome') }}">
@@ -652,8 +624,6 @@
                     </div>
                 </a>
             </div>
-
-
 
             <!-- search -->
 
@@ -681,188 +651,176 @@
 
             <!-- advanced search popup -->
 
-
-            {{-- <div class=" flex items-center md:ml-0 bg-green-100 mx-3 height-max rounded-md"> --}}
-
-
-
-            {{-- <div class=" sm:flex sm:items-center sm:ml-6 mx-3" dir="rtl">
-                <!-- Settings Dropdown -->
-                <div class="ml-3 relative flex right"> --}}
-
-                    <!-- login -->
-                    <x-jet-dropdown align="right" width="48">
-                        @auth
-                            <x-slot name="trigger">
-                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                    <button
-                                        class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
-                                        <img class="h-8 w-8 rounded-full object-cover"
-                                            src="{{ Auth::user()->profile_photo_url }}"
-                                            alt="{{ Auth::user()->name }}" />
-                                    </button>
-                                @else
-                                    <span class="inline-flex rounded-md">
-                                        <button type="button"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition mt-3">
-                                            {{ Auth::user()->name }}
-
-                                            <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </span>
-                                @endif
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <!-- Account Management -->
-                                <x-jet-dropdown-link href="{{ route('home') }}">
-                                    {{ __('العمليات') }}
-                                </x-jet-dropdown-link>
-
-                                <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                    {{ __('حسابي') }}
-                                </x-jet-dropdown-link>
-
-                                <div class="border-t border-gray-100"></div>
-
-                                <!-- Authentication -->
-                                <form method="POST" action="{{ route('logout') }}" x-data>
-                                    @csrf
-
-                                    <x-jet-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
-                                        {{ __('تسجيل الخروج') }}
-                                    </x-jet-dropdown-link>
-                                </form>
-                            </x-slot>
+            <!-- login -->
+            <x-jet-dropdown align="right" width="48">
+                @auth
+                    <x-slot name="trigger">
+                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                            <button
+                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
+                                <img class="h-8 w-8 rounded-full object-cover"
+                                    src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                            </button>
                         @else
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
-                                    <span class="material-symbols-outlined">person</span>
-                                </button>
-                            </x-slot>
-                            <!-- login menu -->
-                            <x-slot name="content">
-                                <div class="header__user-modal" dir="rtl">
-                                    <div class="header__user-modal-title">
-                                        مرحباً 👋
-                                    </div>
-                                    <div class="header__user-modal-desc">
-                                        سجل الدخول أو أنشئ حسابك للإستمتاع بعروض صنعت لك خصيصاً
-                                    </div>
-                                    <div>
-                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
-                                            class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
-                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
-                                            class="header__user-modal-link cursor-pointer">حساب جديد</a>
-                                    </div>
-                                </div>
-                            </x-slot>
-                        @endauth
-                    </x-jet-dropdown>
+                            <span class="inline-flex rounded-md">
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition mt-3">
+                                    {{ Auth::user()->name }}
 
-                    <!-- Favourites -->
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </span>
+                        @endif
+                    </x-slot>
 
-                    <x-jet-dropdown align="right" href="{{ route('favourites.index') }}" :active="request()->routeIs('favourites.index')"
-                        width="48">
-                        @auth
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:opacity-0.8 transition mt-3">
-                                    <div class="material-symbols-outlined">favorite</div>
-                                </button>
-                            </x-slot>
-                            <x-slot name="content">
-                                <x-jet-dropdown-link href="{{ route('favourites.index') }}">
-                                    {{ __('المفضلة') }}
-                                </x-jet-dropdown-link>
-                            </x-slot>
-                        @else
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
-                                    <span class="material-symbols-outlined">favorite</span>
-                                </button>
-                            </x-slot>
-                            <x-slot name="content">
-                                <!-- Favuorites menu -->
-                                <div class="header__user-modal" dir="rtl">
-                                    <div class="header__user-modal-title">
-                                        المفضلة ❤️
-                                    </div>
-                                    <div class="header__user-modal-desc">
-                                        إستخدم قائمة المنتجات المفضلة لتتبع منتجاتك
-                                    </div>
-                                    <div>
-                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
-                                            class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
-                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
-                                            class="header__user-modal-link cursor-pointer">حساب جديد</a>
-                                    </div>
-                                </div>
-                            </x-slot>
-                        @endauth
-                    </x-jet-dropdown>
+                    <x-slot name="content">
+                        <!-- Account Management -->
+                        <x-jet-dropdown-link href="{{ route('home') }}">
+                            {{ __('العمليات') }}
+                        </x-jet-dropdown-link>
 
-                    <!-- cart -->
-                    <x-jet-dropdown align="right" width="48">
-                        @auth
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:opacity-0.8 transition mt-3">
-                                    <div class="material-symbols-outlined">shopping_cart</div>
-                                </button>
-                            </x-slot>
-                            <x-slot name="content">
-                                <x-jet-dropdown-link href="{{ route('cart.index') }}">
-                                    {{ __('سلة الشراء') }}
-                                </x-jet-dropdown-link>
-                            </x-slot>
-                        @else
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
-                                    <span class="material-symbols-outlined">shopping_cart</span>
-                                </button>
-                            </x-slot>
+                        <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                            {{ __('حسابي') }}
+                        </x-jet-dropdown-link>
 
-                            <!-- Cart menu -->
-                            <x-slot name="content">
-                                <div class="header__user-modal" dir="rtl">
-                                    <div class="header__user-modal-title">
-                                        سلة المشتريات 🛒
-                                    </div>
-                                    <div class="header__user-modal-desc">
-                                        أضف المنتجات إلي سلة المشتريات وأحصل علي خصومات فورية
-                                    </div>
-                                    <div>
-                                        <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
-                                            class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
-                                        <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
-                                            class="header__user-modal-link cursor-pointer">حساب جديد</a>
-                                    </div>
-                                </div>
-                            </x-slot>
-                        @endauth
-                    </x-jet-dropdown>
+                        <div class="border-t border-gray-100"></div>
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}" x-data>
+                            @csrf
+
+                            <x-jet-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                {{ __('تسجيل الخروج') }}
+                            </x-jet-dropdown-link>
+                        </form>
+                    </x-slot>
+                @else
+                    <x-slot name="trigger">
+                        <button
+                            class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
+                            <span class="material-symbols-outlined">person</span>
+                        </button>
+                    </x-slot>
+                    <!-- login menu -->
+                    <x-slot name="content">
+                        <div class="header__user-modal" dir="rtl">
+                            <div class="header__user-modal-title">
+                                مرحباً 👋
+                            </div>
+                            <div class="header__user-modal-desc">
+                                سجل الدخول أو أنشئ حسابك للإستمتاع بعروض صنعت لك خصيصاً
+                            </div>
+                            <div>
+                                <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
+                                    class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
+                                    class="header__user-modal-link cursor-pointer">حساب جديد</a>
+                            </div>
+                        </div>
+                    </x-slot>
+                @endauth
+            </x-jet-dropdown>
+
+            <!-- Favourites -->
+
+            <x-jet-dropdown align="right" href="{{ route('favourites.index') }}" :active="request()->routeIs('favourites.index')"
+                width="48">
+                @auth
+                    <x-slot name="trigger">
+                        <button
+                            class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:opacity-0.8 transition mt-3">
+                            <div class="material-symbols-outlined">favorite</div>
+                        </button>
+                    </x-slot>
+                    <x-slot name="content">
+                        <x-jet-dropdown-link href="{{ route('favourites.index') }}">
+                            {{ __('المفضلة') }}
+                        </x-jet-dropdown-link>
+                    </x-slot>
+                @else
+                    <x-slot name="trigger">
+                        <button
+                            class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </button>
+                    </x-slot>
+                    <x-slot name="content">
+                        <!-- Favuorites menu -->
+                        <div class="header__user-modal" dir="rtl">
+                            <div class="header__user-modal-title">
+                                المفضلة ❤️
+                            </div>
+                            <div class="header__user-modal-desc">
+                                إستخدم قائمة المنتجات المفضلة لتتبع منتجاتك
+                            </div>
+                            <div>
+                                <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
+                                    class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
+                                    class="header__user-modal-link cursor-pointer">حساب جديد</a>
+                            </div>
+                        </div>
+                    </x-slot>
+                @endauth
+            </x-jet-dropdown>
+
+            <!-- cart -->
+            <x-jet-dropdown align="right" width="48">
+                @auth
+                    <x-slot name="trigger">
+                        <button
+                            class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:opacity-0.8 transition mt-3">
+                            <div class="material-symbols-outlined">shopping_cart</div>
+                        </button>
+                    </x-slot>
+                    <x-slot name="content">
+                        <x-jet-dropdown-link href="{{ route('cart.index') }}">
+                            {{ __('سلة الشراء') }}
+                        </x-jet-dropdown-link>
+                    </x-slot>
+                @else
+                    <x-slot name="trigger">
+                        <button
+                            class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition mt-3">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                        </button>
+                    </x-slot>
+
+                    <!-- Cart menu -->
+                    <x-slot name="content">
+                        <div class="header__user-modal" dir="rtl">
+                            <div class="header__user-modal-title">
+                                سلة المشتريات 🛒
+                            </div>
+                            <div class="header__user-modal-desc">
+                                أضف المنتجات إلي سلة المشتريات وأحصل علي خصومات فورية
+                            </div>
+                            <div>
+                                <a onclick="document.getElementById('id01').style.display='block';window.localStorage.setItem('form','login');"
+                                    class="header__user-modal-link cursor-pointer">تسجيل الدخول</a>
+                                <a onclick="document.getElementById('id02').style.display='block';window.localStorage.setItem('form','reg');"
+                                    class="header__user-modal-link cursor-pointer">حساب جديد</a>
+                            </div>
+                        </div>
+                    </x-slot>
+                @endauth
+            </x-jet-dropdown>
         </div>
     </div>
 
-            
 
-    {{-- <x-slot name="header"> --}}
     <!-- Navigation Links -->
     <div class="space-x-8 sm:-my-px sm:ml-10 sm:flex my-2 mx-5">
         <x-jet-nav-link href="{{ route('welcome') }}" class="mx-1 cursor-pointer" :active="request()->routeIs('welcome')">
             كل المنتجات
         </x-jet-nav-link>
 
-        @foreach (App\Models\Category::all() as $category)
+        @foreach (App\Models\Category::where('is_deleted',false)->get() as $category)
             <x-jet-dropdown class="mx-3" align="right" width="48">
                 <x-slot name="trigger">
                     <x-jet-nav-link class="mx-1 cursor-pointer">
@@ -870,7 +828,7 @@
                     </x-jet-nav-link>
                 </x-slot>
                 <x-slot name="content">
-                    @foreach (App\Models\Subcategory::where('category_id', $category->id)->get() as $subcategory)
+                    @foreach (App\Models\Subcategory::where('category_id', $category->id)->where('is_deleted',false)->get() as $subcategory)
                         <x-jet-dropdown-link
                             href="?category={{ $category->id }}&subcategory={{ $subcategory->name }}">
                             {{ $subcategory->name }}
