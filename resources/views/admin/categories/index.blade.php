@@ -33,7 +33,7 @@
                                  <tr class="cursor-pointer">
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->name }}</td>
-                                    <td>{{ $category->description ?? '' }}</td>
+                                    <td>{{ substr($category->description,0,10)."..." ?? '' }}</td>
                                     <td>{{ $category->is_deleted ? "ملغي" : "نشط" }}</td>
                                     <td>{{ $category->created_at }}</td>
                                     <td>{{ $category->updated_at }}</td>
@@ -50,7 +50,7 @@
                                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <x-jet-button style="background-color: rgb(255, 0, 0);">{{ $categories->first()->is_deleted ? 'حذف' : 'إلغاء'; }}</x-jet-button> 
+                                        <x-jet-button style="background-color: rgb(255, 0, 0);">حذف</x-jet-button> 
                                         </form>
                                     </td>
                                 </tr>

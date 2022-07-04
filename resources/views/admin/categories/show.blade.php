@@ -49,6 +49,7 @@
                                     <th>الحالة</th>
                                     <th>تاريخ الإنشاء</th>
                                     <th>تاريخ التعديل</th>
+                                    <th>عرض</th>
                                     <th>تعديل</th>
                                     <th>حذف</th>
                                 </tr>
@@ -58,10 +59,14 @@
                                 <tr>
                                     <td>{{ $subcategory->id }}</td>
                                     <td>{{ $subcategory->name }}</td>
-                                    <td>{{ $subcategory->description ?? '' }}</td>
+                                    <td>{{ substr($subcategory->description,0,10)."..." ?? ''  }}</td>
                                     <td>{{ $subcategory->is_deleted ? "ملغي" : "نشط" }}</td>
                                     <td>{{ $subcategory->created_at }}</td>
                                     <td>{{ $subcategory->updated_at }}</td>
+                                    <td><a href="{{ route('subcategories.show',['id'=>$subcategory->id]) }}">
+                                        <x-jet-button style="background-color: rgb(0, 83, 139);">عرض</x-jet-button>
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="{{ route('subcategories.edit', $subcategory->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
                                     </td>

@@ -57,16 +57,19 @@ class SubcategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
+    
     {
         //show subcategory
-        $subcategory = Subcategory::find($id);
-        $subcategory->products = Product::where('subcategory_id', $id)
+        $subcategory = Subcategory::find($request->id);
+        $subcategory->products = Product::where('subcategory_id', $request->id)
                                         ->where('is_deleted', 0)
-                                        ->get();
+                                        ->orderBy('created_at', 'desc')
+                                        ->paginate(15);
+                                  
         return view('admin.subcategories.show', ['subcategory' => $subcategory]);
     }
 
@@ -87,7 +90,7 @@ class SubcategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * 
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -106,7 +109,7 @@ class SubcategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * 
      * @return \Illuminate\Http\Response
      */
     public function destroy(Subcategory $subcategory)

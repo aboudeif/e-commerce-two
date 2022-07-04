@@ -31,7 +31,7 @@
                                 <tr>
                                     <td>{{ $subcategory->id }}</td>
                                     <td>{{ $subcategory->name }}</td>
-                                    <td>{{ $subcategory->description ?? '' }}</td>
+                                    <td>{{ substr($subcategory->description,0,10)."..." ?? '' }}</td>
                                     <td>{{ $subcategory->is_deleted ? "ملغي" : "نشط" }}</td>
                                     <td>{{ $subcategory->created_at }}</td>
                                     <td>{{ $subcategory->updated_at }}</td>

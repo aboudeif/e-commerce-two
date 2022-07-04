@@ -23,21 +23,17 @@ use App\Models\Order;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('welcome');
-Route::get('/products',[ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
+    Route::get('/', [HomeController::class, 'home'])->name('welcome');
+    Route::get('/products',[ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified'
+    ])->group(function () {
     Route::get('/home', [HomeController::class, 'redirect'])->name('home');
     Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/products/{product}/store', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
+
     Route::post('/favourites/{product_id}/store',[FavouriteController::class, 'store'])->name('favourites.store');
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
@@ -91,6 +87,14 @@ Route::middleware(Admin::class,
         Route::get('/admin/products', [ProductController::class, 'admin_index'])->name('admin.products');
         // Route::get('/admin/products/{product}/edit', [ProductController::class, 'adminEdit'])->name('admin.products.edit');
         // Route::post('/admin/products/{product}/update', [ProductController::class, 'adminUpdate'])->name('admin.products.update');
+
+        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/products/{product}/store', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+        Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('/products/show', [ProductController::class, 'showAdmin'])->name('admin.products.show');
+
         Route::get('/admin/categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('/admin/categories/api', [CategoryController::class, 'indexJson'])->name('categories.api');
         Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('categories.create');

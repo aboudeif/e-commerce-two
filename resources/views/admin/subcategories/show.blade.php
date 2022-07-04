@@ -53,28 +53,37 @@
                                 <tr>
                                     <th>الرقم التعريفي</th>
                                     <th>الإسم</th>
+                                    <th>السعر</th>
+                                    <th>الخصم</th>
                                     <th>الوصف</th>
                                     <th>الحالة</th>
                                     <th>تاريخ الإنشاء</th>
                                     <th>تاريخ التعديل</th>
+                                    <th>عرض</th>
                                     <th>تعديل</th>
                                     <th>حذف</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($subcategories->products as $products)
+                                @foreach ($subcategory->products as $product)
                                 <tr>
-                                    <td>{{ $products->id }}</td>
-                                    <td>{{ $products->name }}</td>
-                                    <td>{{ $products->description ?? '' }}</td>
-                                    <td>{{ $products->is_deleted ? "محذوف" : "نشط" }}</td>
-                                    <td>{{ $products->created_at }}</td>
-                                    <td>{{ $products->updated_at }}</td>
-                                    <td>
-                                        <a href="{{ route('subcategories.edit', $products->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
+                                    <td>{{ $product->id }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->price }}</td>
+                                    <td>{{ $product->discount }}</td>
+                                    <td>{{ substr($product->description,0,10)."..." ?? '' }}</td>
+                                    <td>{{ $product->is_deleted ? "ملغي" : "نشط" }}</td>
+                                    <td>{{ $product->created_at }}</td>
+                                    <td>{{ $product->updated_at }}</td>
+                                    <td><a href="{{ route('admin.products.show',['id'=>$product->id]) }}">
+                                        <x-jet-button style="background-color: rgb(0, 83, 139);">عرض</x-jet-button>
+                                        </a>
                                     </td>
                                     <td>
-                                        <form action="{{ route('subcategories.destroy', $products->id) }}" method="Post">
+                                        <a href="{{ route('subcategories.edit', $product->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('subcategories.destroy', $product->id) }}" method="Post">
                                             @csrf
                                             @method('DELETE')
                                             <x-jet-button style="background-color: rgb(255, 0, 0);">حذف</x-jet-button> 
@@ -86,12 +95,14 @@
                         </table>
                     </div>
                     {{-- links --}}
-                    {{-- <div class="card-footer clearfix">
+                    @isset($subcategory->links)
+                   
+                    <div class="card-footer clearfix">
                         <ul class="pagination m-0 float-right">
-                            {{ $subcategories->links() }}
+                            {{ $subcategory->links() }}
                         </ul>
-                    </div> --}}
-
+                    </div>
+                    @endisset
                     <!-- /.card-body -->
                 </div>
 
