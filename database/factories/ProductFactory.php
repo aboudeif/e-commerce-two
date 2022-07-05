@@ -33,7 +33,7 @@ class ProductFactory extends Factory
             'subcategory_id' => $subcategory,
             'name' => $type[array_rand($type)].' '.$name,
             'price' => $this->faker->randomFloat(2, 99, 5000),
-            'description' => $this->faker->text,
+            'description' => $this->faker->text(100),
             'created_at' =>  $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' =>  $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
