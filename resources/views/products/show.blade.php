@@ -53,7 +53,7 @@ grid-row-gap: 0px;
     <div class="div1">
         
         @foreach($product->product_media as $media)
-            <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-fluid">
+            <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-thumbnail inline" width="100" height="100">
         @endforeach
     </div>
     {{-- product main image --}}

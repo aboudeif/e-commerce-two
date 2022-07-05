@@ -10,6 +10,8 @@ use App\Models\Product_media;
 use App\Models\Product_variance;
 use App\Models\Subcategory;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,9 +58,7 @@ class ProductController extends Controller
                 return $query->where('name', $request->subcategory);
             });
         })
-        // ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
-        //     return $query->where('subcategory_id', $request->subcategory);
-        // })
+
         ->when($request->has('to'), function ($query) use ($request) {
             return $query->whereHas('product_variances', function ($query) use ($request) {
                 return $query->where('price', '<=', $request->to);
@@ -91,11 +91,6 @@ class ProductController extends Controller
                 return $query->where('size', $request->size);
             });
         })
-
-        // // filter by updated_at sort
-        // ->when($request->has('order'), function ($query) use ($request) {
-        //     return $query->order('updated_at', $request->order);
-        // })
         
 
         ->whereHas('product_variances')
@@ -114,49 +109,10 @@ class ProductController extends Controller
     public function admin_index()
     {
         //
-        $request = request();
+        $products = Product::orderBy('created_at', 'desc')
+                                    ->paginate(50);
 
-        $products = Product::with('product_variances:id,product_id,price,size,quantity,color,color_code,created_at,updated_at','product_media:id,product_id,media_url',
-                                  'Subcategory.Category:id,name')
-        ->when($request->has('keyword'), function ($query) use ($request) {
-            return $query->where('name', 'like', '%' . $request->keyword . '%');
-        })
-        ->when($request->has('category'), function ($query) use ($request) {
-            return $query->whereHas('Subcategory', function ($query) use ($request) {
-                return $query->where('category_id', $request->category);
-            });
-        })
-        ->when($request->has('subcategory'), function ($query) use ($request) {
-            return $query->whereHas('Subcategory', function ($query) use ($request) {
-                return $query->where('name', $request->subcategory);
-            });
-        })
-        ->when($request->has('category') && $request->has('subcategory'), function ($query) use ($request) {
-            return $query->where('subcategory_id', $request->subcategory);
-        })
-        ->when($request->has('price'), function ($query) use ($request) {
-            return $query->whereHas('product_variances', function ($query) use ($request) {
-                return $query->where('price', '<=', $request->price);
-            });
-        })
-        ->when($request->has('price_range'), function ($query) use ($request) {
-            return $query->whereHas('product_variances', function ($query) use ($request) {
-                return $query->whereBetween('price', explode('-', $request->price_range));
-            });
-        })
-        ->when($request->has('sort'), function ($query) use ($request) {
-            return $query->orderBy($request->sort, 'desc');
-        })
-
-
-        ->whereHas('product_variances')
-        ->whereHas('product_media')
-
-        ->paginate(50);
-
-        return view('admin.products.index', compact('products', 'request'));
-      
-
+        return view('admin.products.index', ['products' => $products]);
 
     }
 
@@ -187,7 +143,7 @@ class ProductController extends Controller
     public function create()
     {
         // create a new product
-        return view('products.create');
+        return view('admin.products.create');
     }
 
     /**
@@ -200,20 +156,37 @@ class ProductController extends Controller
     {
         // store a new product
         $product = new Product;
-        $product->insert($request->all());
+        $product->name = $request->prodName;
+        $product->description = $request->prodDescription;
+        $product->price = $request->prodPrice;
+        $product->discount = $request->prodDiscount;
+        $product->subcategory_id = $request->prodSubcat;
+        $product->is_deleted = $request->prodIs_deleted;
+        $product->save();
+        return redirect('/admin/products/index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Request $request)
     {
         // show a product
-        $product->color = $product->product_variances->pluck('color','color_code')->unique();
-        return view('products.show', ['product' => $product]);
+        $product = Product::find($request->id);
+        $subcategory_name = Subcategory::find($product->subcategory_id)->name;
+        $product->images = Product_media::where('product_id', $request->id)
+                                        ->where('media_type', 'image')
+                                        ->where('is_deleted', 0)
+                                        ->get();
+        $variances = Product_variance::where('product_id', $request->id)
+                                        ->where('is_deleted', 0)
+                                        ->orderBy('created_at', 'desc')
+                                        ->paginate(15);
+                                  
+        return view('admin.products.show', ['product' => $product, 'variances' => $variances, 'subcategory_name' => $subcategory_name]);
     }
 
     /**
@@ -225,7 +198,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         // edit a product
-        return view('products.edit', ['product' => $product]);
+        return view('admin.products.edit', ['product' => $product]);
     }
 
     /**
@@ -238,7 +211,15 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         // update a product
-        $product->update($request->all());
+        $product = Product::find($request->prodId);
+        $product->name = $request->prodName;
+        $product->description = $request->prodDescription;
+        $product->price = $request->prodPrice;
+        $product->discount = $request->prodDiscount;
+        $product->subcategory_id = $request->prodSubcat;
+        $product->is_deleted = $request->prodIs_deleted;
+        $product->save();
+        return redirect('/admin/products?id='.$product->subcategory_id);
     }
 
     /**
@@ -250,8 +231,184 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         // delete a product from products table
+        if(!Product_variance::where('product_id', $product->id)->exists() && 
+        !Product_media::where('product_id', $product->id)->exists() &&
+        !OrderItem::where('product_id', $product->id)->exists())
+        {
         $product->delete();
+        return redirect('/admin/products/index');
+        }
+        else
+        {
+        $product->is_deleted = 1;
+        $product->save();
+        return redirect('/admin/products/index');
+        }
+        }
 
-    }
+    
   
-}
+        /**
+         * store a new image for a product
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function store_image(Request $request)
+        {
+            // store a new image for a product
+            $product_media = new Product_media;
+            $product_media->product_id = $request->product_id;
+            $product_media->media_type = $request->media_type;
+            $product_media->media_url = $request->media_url;
+            $product_media->is_deleted = $request->is_deleted;
+            $product_media->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * store a new variant for a product
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function store_variance(Request $request)
+        {
+            // store a new variant for a product
+            $product_variance = new Product_variance;
+            $product_variance->product_id = $request->product_id;
+            $product_variance->variance_name = $request->variance_name;
+            $product_variance->variance_price = $request->variance_price;
+            $product_variance->is_deleted = $request->is_deleted;
+            $product_variance->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * delete a product image
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function delete_image(Request $request)
+        {
+            // delete a product image
+            $product_media = Product_media::find($request->id);
+            $product_media->is_deleted = 1;
+            $product_media->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * delete a product variant
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function delete_variance(Request $request)
+        {
+            // delete a product variant
+            $product_variance = Product_variance::find($request->id);
+            $product_variance->is_deleted = 1;
+            $product_variance->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * update a product image
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function update_image(Request $request)
+        {
+            // update a product image
+            $product_media = Product_media::find($request->id);
+            $product_media->media_type = $request->media_type;
+            $product_media->media_url = $request->media_url;
+            $product_media->is_deleted = $request->is_deleted;
+            $product_media->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * update a product variant
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function update_variance(Request $request)
+        {
+            // update a product variant
+            $product_variance = Product_variance::find($request->id);
+            $product_variance->variance_name = $request->variance_name;
+            $product_variance->variance_price = $request->variance_price;
+            $product_variance->is_deleted = $request->is_deleted;
+            $product_variance->save();
+            return redirect('/admin/products/show?id='.$request->product_id);
+        }
+
+        /**
+         * edit a product image
+         * @return \Illuminate\Http\Response
+         *
+         */
+        public function edit_image(Request $request)
+        {
+            // edit a product image
+            $product_media = Product_media::find($request->id);
+            return view('admin.products.edit_image', ['product_media' => $product_media]);
+        }
+
+        /**
+         * edit a product variant
+         * @return \Illuminate\Http\Response
+         *
+         */
+        public function edit_variance(Request $request)
+        {
+            // edit a product variant
+            $product_variance = Product_variance::find($request->id);
+            return view('admin.products.edit_variance', ['product_variance' => $product_variance]);
+        }
+
+        /**
+         * show a product image
+         * @return \Illuminate\Http\Response
+         *
+         */
+        public function show_image(Request $request)
+        {
+            // show a product image
+            $product_media = Product_media::find($request->id);
+            return view('admin.products.show_image', ['product_media' => $product_media]);
+        }
+
+        /**
+         * show a product variant
+         * @return \Illuminate\Http\Response
+         *
+         */
+        public function show_variance(Request $request)
+        {
+            // show a product variant
+            $product_variance = Product_variance::find($request->id);
+            return view('admin.products.show_variance', ['product_variance' => $product_variance]);
+        }
+
+        /**
+         * create a new product image
+         * @return \Illuminate\Http\Response
+         * 
+         */
+        public function create_image(Request $request)
+        {
+            // create a new product image
+            return view('admin.products.create_image', ['product_id' => $request->product_id]);
+        }
+
+        /**
+         * create a new product variant
+         * @return \Illuminate\Http\Response
+         * 
+         */
+        public function create_variance(Request $request)
+        {
+            // create a new product variant
+            return view('admin.products.create_variance', ['product_id' => $request->product_id]);
+        }
+    }

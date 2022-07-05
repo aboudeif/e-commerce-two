@@ -188,10 +188,15 @@
 <div class="card w-3/12 my-3 mx-3" dir="rtl">
     {{-- card header and close card using js --}}
     <div class="card-header pt-2">
-        <span class="card-title bg-success text-white py-1 px-2 absolute right-0">المنتجات</span>
         
-        <x-jet-button class=" mt-5">النشطة</x-jet-button>
-        <x-jet-button>المحذوفة</x-jet-button>
+            <span class="card-title bg-success text-white py-1 px-2 absolute right-0">المنتجات</span>
+        <a href="{{ route('products.indexAdmin') }}">
+            <x-jet-button class=" mt-5">كل المنتجات</x-jet-button>
+        </a>
+        <a href="{{ route('products.create') }}">
+            <x-jet-button class="">إضافة منتج</x-jet-button>
+        </a>
+
         {{-- bold span --}}
         <b class=" "> {{ __(' - [ ') }}</b>
         {{-- small size x-jet-buttons --}}

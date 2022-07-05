@@ -64,18 +64,6 @@ use App\Models\Order;
     
     Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
     
-  
-    //Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
-    // Route::post('/cart/{product_variance_id}/update',[CartController::class, 'update'])->name('cart.update');
-    // Route::get('/cart/{product_variance_id}/delete',[CartController::class, 'destroy'])->name('cart.destroy');
-    // Route::get('/cart/{product_variance_id}/checkout',[CartController::class, 'checkout'])->name('cart.checkout');
-    // Route::get('/cart/{product_variance_id}/checkout/{user_id}',[CartController::class, 'checkout'])->name('cart.checkout');
-    // if (Auth::user()->usertype == '1') {
-    //     Route::get('/admin', [HomeController::class, 'admin'])->name('admin');
-       
-    // }
-    // add middleware to protect admin routes
-    
 
   
 });
@@ -83,17 +71,15 @@ use App\Models\Order;
 Route::middleware(Admin::class, 
     config('jetstream.auth_session'),
     'verified')->group(function () {
-        // Route::get('/admin', [HomeController::class, 'admin'])->name('admin');
-        Route::get('/admin/products', [ProductController::class, 'admin_index'])->name('admin.products');
-        // Route::get('/admin/products/{product}/edit', [ProductController::class, 'adminEdit'])->name('admin.products.edit');
-        // Route::post('/admin/products/{product}/update', [ProductController::class, 'adminUpdate'])->name('admin.products.update');
 
-        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('/products/{product}/store', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::post('/products/{product}/update', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/products/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
-        Route::get('/products/show', [ProductController::class, 'showAdmin'])->name('admin.products.show');
+        Route::get('/admin/products/index', [ProductController::class, 'admin_index'])->name('products.indexAdmin');
+        
+        Route::get('/admin/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/admin/products/store', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+        Route::post('/admin/products/update', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/admin/products/{product}/delete', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('/admin/products/show', [ProductController::class, 'show'])->name('products.showAdmin');
 
         Route::get('/admin/categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('/admin/categories/api', [CategoryController::class, 'indexJson'])->name('categories.api');
@@ -105,6 +91,8 @@ Route::middleware(Admin::class,
         Route::get('/admin/categories/show', [CategoryController::class, 'show'])->name('categories.show');
         
         
+        Route::get('/admin/subcategories/addProduct', [SubcategoryController::class, 'addProduct'])->name('subcategories.addProduct');
+        Route::get('/admin/subcategories/link', [SubcategoryController::class, 'link'])->name('subcategories.link');
         Route::get('/admin/subcategories/show', [SubcategoryController::class, 'show'])->name('subcategories.show');
         Route::get('/admin/subcategories', [SubcategoryController::class, 'index'])->name('subcategories.index');
         Route::get('/admin/subcategories/create', [SubcategoryController::class, 'create'])->name('subcategories.create');
@@ -112,6 +100,14 @@ Route::middleware(Admin::class,
         Route::get('/admin/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('subcategories.edit');
         Route::post('/admin/subcategories/update', [SubcategoryController::class, 'update'])->name('subcategories.update');
         Route::delete('/admin/subcategories/{subcategory}/delete', [SubcategoryController::class, 'destroy'])->name('subcategories.destroy');
+        Route::get('/admin/subcategories/api', [SubcategoryController::class, 'indexJson'])->name('subcategories.api');
+
+ 
+
+        
+
+        Route::post('/admin/media/store', [ProductController::class, 'mediaStore'])->name('media.store');
+        Route::delete('/admin/media/{}/delete', [ProductController::class, 'mediaDestroy'])->name('media.destroy');
 
         
     });

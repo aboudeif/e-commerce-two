@@ -5,7 +5,7 @@
                 <div class="card" dir="rtl">
                     {{-- selected category information --}}
                     <div class="card-header w-full py-2 ">
-                        <h3 class="card-title inline text-center w-full bg-warning text-white px-5 rounded-2">بيانات التصنيف الفرعي</h3>
+                        <h3 class="card-title inline text-center w-full bg-warning text-white px-5 rounded-2">إضافة منتج للتصنيف الفرعي</h3>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">الرقم التعريفي</x-jet-label>
                             <x-jet-label class="inline" value="{{ $subcategory->id }}" />
@@ -40,12 +40,7 @@
 
 
 
-                    <div class="card-header w-full ">
-                        <h3 class="card-title inline float-right">المنتجات</h3>
-                        <a href="{{ route('subcategories.addProduct',['id'=>$subcategory->id]) }}" class="float-right">
-                            <x-jet-button style="background-color: darkgreen;">إضافة منتج للتصنيف</x-jet-button> 
-                        </a>
-                    </div>
+                    
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
@@ -59,13 +54,13 @@
                                     <th>الحالة</th>
                                     <th>تاريخ الإنشاء</th>
                                     <th>تاريخ التعديل</th>
-                                    <th>عرض</th>
-                                    <th>تعديل</th>
-                                    <th>حذف</th>
+                                    <th>إضافة</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($subcategory->products as $product)
+                                
+                                @foreach ($products as $product)
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $product->name }}</td>
@@ -75,19 +70,15 @@
                                     <td>{{ $product->is_deleted ? "ملغي" : "نشط" }}</td>
                                     <td>{{ $product->created_at }}</td>
                                     <td>{{ $product->updated_at }}</td>
-                                    <td><a href="{{ route('products.showAdmin',['id'=>$product->id]) }}">
-                                        <x-jet-button style="background-color: rgb(0, 83, 139);">عرض</x-jet-button>
+                                    <td>
+                                        @if($product->subcategory_id == $subcategory->id)
+                                            <x-jet-button style="background-color: darkgreen;" disabled>مضاف</x-jet-button>
+                                        @else
+                                        <a href="{{ route('subcategories.link',['product_id'=>$product->id,'id'=>$subcategory->id]) }}">
+                                            <x-jet-button style="background-color: darkgreen;">إضافة</x-jet-button>
                                         </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('products.edit', $product->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="Post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-jet-button style="background-color: rgb(255, 0, 0);">حذف</x-jet-button> 
-                                        </form>
+                                        @endif
+                                        
                                     </td>
                                 </tr>
                                 @endforeach

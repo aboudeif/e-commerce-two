@@ -23,6 +23,21 @@ class SubcategoryController extends Controller
         return view('admin.subcategories.index', ['subcategories' => $subcategories]);
     }
 
+    
+    /**
+     * index for products as json
+     * 
+     * @return json
+     */
+    public function indexJson()
+    {
+        //show all categories
+        $subcategories = Subcategory::orderBy('created_at', 'desc')
+                              ->get();
+       
+        return response()->json($subcategories);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,10 +62,11 @@ class SubcategoryController extends Controller
         //store new subcategory
         $subcategory = new Subcategory;
         $subcategory->name = $request->subcatName;
-        $subcategory->category_id = $request->category_id;
-        $subcategory->is_deleted = 0;
+        $subcategory->category_id = $request->subcatCat;
+        $subcategory->description = $request->subcatDescription;
+        $subcategory->is_deleted = $request->subcatIs_deleted;
         $subcategory->save();
-        return redirect('/admin/subcategories?id='.$request->category_id);
+        return redirect('/admin/subcategories?id='.$subcategory->category_id);
 
     }
 
@@ -65,12 +81,60 @@ class SubcategoryController extends Controller
     {
         //show subcategory
         $subcategory = Subcategory::find($request->id);
+        $subcategory->category_name = Category::find($subcategory->category_id)->name;
         $subcategory->products = Product::where('subcategory_id', $request->id)
                                         ->where('is_deleted', 0)
                                         ->orderBy('created_at', 'desc')
                                         ->paginate(15);
                                   
         return view('admin.subcategories.show', ['subcategory' => $subcategory]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function addProduct(Request $request)
+    
+    {
+        //show subcategory
+        $subcategory = Subcategory::find($request->id);
+        $subcategory->category_name = Category::find($subcategory->category_id)->name;
+        $subcategory->products = Product::where('subcategory_id', $request->id)
+                                        ->where('is_deleted', 0)
+                                        ->orderBy('created_at', 'desc')
+                                        ->paginate(15);
+                                  
+        return view('admin.subcategories.link', ['subcategory' => $subcategory, 'products' => Product::all()]);
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function link(Request $request)
+    
+    {
+        //
+
+        $product = Product::find($request->product_id);
+        
+        $product->subcategory_id = $request->id;
+        $product->save();
+
+        $subcategory = Subcategory::find($request->id);
+        $subcategory->category_name = Category::find($subcategory->category_id)->name;
+        $subcategory->products = Product::where('subcategory_id', $request->id)
+                                        ->where('is_deleted', 0)
+                                        ->orderBy('created_at', 'desc')
+                                        ->paginate(15);
+                                  
+        return view('admin.subcategories.link', ['subcategory' => $subcategory, 'products' => Product::all()]);
+        
     }
 
     /**
@@ -115,16 +179,16 @@ class SubcategoryController extends Controller
     public function destroy(Subcategory $subcategory)
     {
         //delete subcategory
-        if($subcategory->is_deleted == 1 && !Product::where('subcategory_id', $subcategory->id)->exists())
+        if(!Product::where('subcategory_id', $subcategory->id)->exists())
         {
         $subcategory->delete();
-        return redirect('/admin/subcategories?is_deleted=1');
+        return redirect('/admin/subcategories');
         }
         else
         {
         $subcategory->is_deleted = 1;
         $subcategory->save();
-        return redirect('/admin/subcategories?is_deleted=0');
+        return redirect('/admin/subcategories');
         }
 
     }
