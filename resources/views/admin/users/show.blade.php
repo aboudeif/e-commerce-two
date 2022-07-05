@@ -1,44 +1,44 @@
 <x-app-layout>
-{{-- index catygories --}}
 
+{{-- {{ dd($user) }} --}}
 
                 <div class="card" dir="rtl">
-                    {{-- selected category information --}}
+ 
                     <div class="card-header w-full py-2 ">
-                        <h3 class="card-title inline text-center w-full bg-warning text-white px-5 rounded-2">بيانات التصنيف الرئيسي</h3>
+                        <h3 class="card-title inline text-center w-full bg-warning text-white px-5 rounded-2">بيانات المستخدم</h3>
                         <div class="my-2">
-                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" for="catName">الإسم</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $category->name }}" />
+                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">الإسم</x-jet-label>
+                            <x-jet-label class="inline" value="{{ $user->name }}" />
                         </div>
                         <div class="my-2">
-                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" for="description">الوصف</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $category->description }}" />
+                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >البريد الالكتروني</x-jet-label>
+                            <x-jet-label class="inline" value="{{ $user->email }}" />
                         </div>
                         <div class="my-2">
-                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" for="is_deleted">الحالة</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $category->is_deleted  ? 'ملغي' : 'نشط' }}" />
+                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >الحالة</x-jet-label>
+                            <x-jet-label class="inline" value="{{ $user->is_deleted  ? 'ملغي' : 'نشط' }}" />
                         </div>
                         <div class="my-2">
-                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" for="created_at">تاريخ الإضافة</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $category->created_at }}" />
+                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">تاريخ الإضافة</x-jet-label>
+                            <x-jet-label class="inline" value="{{ $user->created_at }}" />
                         </div>
                         <div class="my-2">
-                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" for="updated_at">تاريخ التعديل</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $category->updated_at }}" />
+                            <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">تاريخ التعديل</x-jet-label>
+                            <x-jet-label class="inline" value="{{ $user->updated_at }}"/>
                         </div>
 
                     </div>
-                    <!-- /.card-header -->
+
 
 
 
                     <div class="card-header w-full ">
-                        <h3 class="card-title inline float-right">الأقسام الفرعية</h3>
+                        <h3 class="card-title inline float-right">طلبات الشراء</h3>
                         <a href="{{ route('subcategories.create') }}" class="float-right">
                             <x-jet-button style="background-color: darkgreen;">إضافة قسم فرعي</x-jet-button> 
                         </a>
                     </div>
-                    <!-- /.card-header -->
+
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <thead>
@@ -55,23 +55,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($category->subcategories as $subcategory)
+                                @foreach ($orders as $order)
                                 <tr>
-                                    <td>{{ $subcategory->id }}</td>
-                                    <td>{{ $subcategory->name }}</td>
-                                    <td>{{ substr($subcategory->description,0,10)."..." ?? ''  }}</td>
-                                    <td>{{ $subcategory->is_deleted ? "ملغي" : "نشط" }}</td>
-                                    <td>{{ $subcategory->created_at }}</td>
-                                    <td>{{ $subcategory->updated_at }}</td>
-                                    <td><a href="{{ route('subcategories.show',['id'=>$subcategory->id]) }}">
+                                    <td>{{ $order->id }}</td>
+                                    <td>{{ $order->name }}</td>
+                                    <td>{{ substr($order->description,0,10)."..." ?? ''  }}</td>
+                                    <td>{{ $order->is_deleted ? "ملغي" : "نشط" }}</td>
+                                    <td>{{ $order->created_at }}</td>
+                                    <td>{{ $order->updated_at }}</td>
+                                    <td><a href="{{ route('subcategories.show',['id'=>$order->id]) }}">
                                         <x-jet-button style="background-color: rgb(0, 83, 139);">عرض</x-jet-button>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('subcategories.edit', $subcategory->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
+                                        <a href="{{ route('subcategories.edit', $order->id) }}"><x-jet-button style="background-color: rgb(0, 55, 139);">تعديل</x-jet-button></a>
                                     </td>
                                     <td>
-                                        <form action="{{ route('subcategories.destroy', $subcategory->id) }}" method="POST">
+                                        <form action="{{ route('subcategories.destroy', $order->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <x-jet-button style="background-color: rgb(255, 0, 0);">حذف</x-jet-button> 
@@ -82,17 +82,8 @@
                             </tbody>
                         </table>
                     </div>
-                    {{-- links --}}
-                    {{-- <div class="card-footer clearfix">
-                        <ul class="pagination m-0 float-right">
-                            {{ $category->subcategories->links() }}
-                        </ul>
-                    </div> --}}
-
-                    <!-- /.card-body -->
+                    
                 </div>
 
-                <!-- /.card -->
-
-{{-- end index catygories --}}
+        
 </x-app-layout>

@@ -92,7 +92,9 @@
     {{-- card header and close card using js --}}
     <div class="card-header pt-2">
         <span class="card-title bg-success text-white py-1 px-2 absolute right-0">المستخدمين</span>
-        
+        <a href="{{ route('users.index') }}">
+        <x-jet-button class="card-title mt-5">كل المستخدمين</x-jet-button>
+        </a>
         <x-jet-button class="card-title mt-5">النشطين</x-jet-button>
         <x-jet-button class="card-title">المحظورين</x-jet-button>
     
@@ -228,10 +230,6 @@
     </div>
 </div>
 </div>
-
-
-
-
 
 </x-app-layout>
     

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\ProductVarianceController;
 use App\Http\Controllers\ShippingAddressController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -112,17 +113,9 @@ Route::middleware(Admin::class,
         Route::post('/admin/media/store', [ProductController::class, 'mediaStore'])->name('media.store');
         Route::delete('/admin/media/{}/delete', [ProductController::class, 'mediaDestroy'])->name('media.destroy');
 
+        Route::get('/admin/users/show', [UserController::class, 'show'])->name('users.show');
+        Route::get('/admin/users/index', [UserController::class, 'index'])->name('users.index');
         
     });
 
 
-//Route::get('/mypage',[HomeController::class,'redirect'])->middleware('auth','verified');
-// Route::get('/redirect',function(){
-//     return redirect('/dashboard');
-// })->middleware('auth','verified');
-
-//  Route::get('/profile',function(){
-//      return view('/profile/show');
-//  })->middleware('auth','verified')->name('profile');
-
-// Auth::user()->usertype == true ? 'admin' : 'web'
