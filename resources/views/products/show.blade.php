@@ -45,36 +45,40 @@ grid-row-gap: 0px;
 
 </style>
 
+<div id="cart-notification" class="alert alert-success text-center right-50% absolute" role="alert" 
+style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
+    
+</div>
 
+{{-- {{ dd($product); }} --}}
 
 <div class="parent">
     {{-- all product images --}}
     
     <div class="div1">
         
-        @foreach($product->product_media as $media)
+        @foreach($product_media as $media)
             <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-thumbnail inline" width="100" height="100">
         @endforeach
     </div>
     {{-- product main image --}}
-    <div class="div2">
-        <img src="{{ $product->product_media->first()->media_url }}" alt="{{ $product->name }}" class="img-fluid">
+    <div class="div2 mx-2 my-y">
+        <img src="{{ $product_media->first()->media_url }}" alt="{{ $product->name }}" class="img-fluid rounded-2">
     </div>
+
     {{-- product name --}}
-    <div class="div3" dir="rtl">
+    <div class="div3 mx-4" dir="rtl">
         <div class="font-bold text-xl my-2 text-right px-3  py-3">
-            <a href="{{ route('products.show', $product->id) }}">
                 {{ $product->name }}
-            </a>
         </div>
         {{-- product description --}}
-        <div class="text-gray-700 text-base my-3">
+        <div class="text-gray-700 text-base my-3 mx-3">
             {{ $product->description }}
         </div>
      
         {{-- product price - large font - blue color --}}
         <div class="text-green-700 text-xl font-bold my-2 py-3 text-right px-3">
-            {{ $product->price }} EGP
+            {{ $product->price }} ج.م
         </div>
        
         {{-- product size menu --}}
@@ -87,20 +91,21 @@ grid-row-gap: 0px;
         {{-- product colors selectable div preview --}}
         <div class="text-gray-600 text-sm my-2 px-3">
             <div class="flex flex-wrap">
-                <input id="selected_color" name="selected_color" type="text"/>
-              
-                @foreach($product->color as $color_code => $color_name)
+                <input type="hidden" id="selected_color" name="selected_color" type="text"/>
+              {{-- {{ dd($product->product_variances->first()) }} --}}
+                @foreach($product_variances as $variance)
                     
-                    <div class="rounded-full h-8 w-8" 
-                        style="background-color: {{ $color_code }};"
-                        onmousemove="$(this).css('opacity','0.8');"
-                        onmouseout="$(this).css('opacity','1');"
-                        
-                        onclick="chooseColor('{{ $color_name }}', '{{ $product->id }}');">
-
+                    <div class="rounded-full h-8 w-8 bg-gray-200 mr-2 mb-2 color_circle cursor-pointer"
+                        style="background-color: {{ $variance->color_code}}"
+                        onclick="chooseColor('{{ $variance->color }}', '{{ $product->id }}');">
                     </div>
                     {{-- </div> --}}
                 @endforeach
+                <style>
+                    .color_circle:hover{
+                        outline: 2px  solid gray;
+                    }
+                </style>
             </div>
         </div>
         
@@ -119,22 +124,14 @@ grid-row-gap: 0px;
                 //success and fail
                 success: function(data) {
                     console.log(data);
-                    
-                    // add sizes from data to selectpicker #size
-                    //clear selectpicker #size
-                    $('#selected_size').empty();
-                    
+                    $('#selected_size').empty();              
                     data.forEach(element => {
-                        //add every size to selectpicker
                         $('#selected_size').append('<option value="'+element+'">'+element+'</option>');
                         
                        
                     });
-                    
-                    // refresh #size
-                    
-                    
                     $('#selected_color').val(color);
+
                 },
                 error: function(data) {
                     console.log(data);
@@ -144,29 +141,17 @@ grid-row-gap: 0px;
         </script>
 
         {{-- share product and add to cart --}}
-        <div>
-            <span
+        <div class="ml-4 mr-2">
+            <x-jet-button type="submit" class="w-full text-center"
                 id="cart"
                 onclick="addToCart();"
                 onmousemove="$(this).css('opacity', '0.8');" 
                 onmouseout="$(this).css('opacity', '1');"
-                class= "text-gray-500 position-absolute mx-4 my-1 cursor-pointer material-symbols-outlined user-select-none "
-                style="font-family: 'Material Icons';z-index: 11;" 
+                ><span class= " my-1 cursor-pointer material-symbols-outlined user-select-none w-full text-center"
                 title='إضافة المنتج  إلي سلة المشتريات أو حذفه منها'>
                 shopping_cart
-            </span>
-
-            <span>
-                <input 
-                type="number"
-                name="quantity"
-                min="0" 
-                max="100" 
-                value="0" 
-                style="margin-left: 1.5rem ;margin-left: 1rem !important;outline: 0 none;border: 0 none;text-align: center;width: 7rem;height: 2rem;cursor: pointer;color: rgb(106, 106, 106);background-color: #fff;border-radius: 0.5rem;box-shadow: 0 0.01rem .01rem rgba(0, 0, 0, 0.2);"
-                id="quantity" 
-                onchange="">
-            </span>
+                </span>
+            </x-jet-button>
         </div>
     </div>
 </div>
@@ -176,33 +161,48 @@ grid-row-gap: 0px;
     function addToCart() {
 
         const quantity = $('#quantity').val()
-        if(quantity == 0) {
-            alert('الرجاء تحديد الكمية قبل الشراء');
-            return;
-        }
+        
         const color = $('#selected_color').val();
         const size = $('#selected_size').val();
+        if($('#selected_color').val() == ''){
+            $('#cart-notification').html('الرجاء تحديد اللون والمقاس');
+            $('#cart-notification').css('background-color', 'orange');
+            $('#cart-notification').css('display', 'block');
+            setTimeout(function() {
+                $('#cart-notification').css('display', 'none');
+            }, 3000);
+            return;
+        }
         $.ajax({
             url: "{{ route('carts.store') }}",
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                quantity: quantity,
+                quantity: 1,
                 color: color,
                 size: size
             },
             success: function(data) {
 
                 console.log(data);
-                    $('#cart').removeClass('text-gray-500');
-                    $('#cart').addClass('text-green-500');
-                    // $('#cart').attr('onclick', removeFromCart());
-                    $('#cart').attr('title', 'حذف المنتج من سلة المشتريات');
+                if(data.action == 'add'){
+                $('#cart-notification').html('تم إضافة المنتج إلي سلة المشتريات');
+                $('#cart-notification').css('background-color', 'green');
+                }
+                else{
+                $('#cart-notification').html('تم حذف المنتج من سلة المشتريات');
+                $('#cart-notification').css('background-color', 'red');
+                }
+                $('#cart-notification').css('display', 'block');
+                setTimeout(function() {
+                    $('#cart-notification').css('display', 'none');
+                }, 3000);
                     
                 
                 },
             error: function(data) {
                     console.log(data);
+                   
                 }  
             });
     }
@@ -225,6 +225,7 @@ grid-row-gap: 0px;
                     $('#cart').addClass('text-green-500');
                     $('#cart').attr('onclick', removeFromCart());
                     $('#cart').attr('title', 'حذف المنتج من سلة المشتريات');
+                    
                 }
                 },
             error: function(data) {
@@ -233,30 +234,6 @@ grid-row-gap: 0px;
             });
     }
 
-    // function removeFromCart() {
-    //     $.ajax({
-    //         url: '/cart/'+id+'/destroy',
-    //         type: 'POST',
-    //         data: {
-    //             _token: '{{ csrf_token() }}',
-    //             product_variance_id: id
-    //         },
-    //         success: function(data) {
-    //             if(data.status == 'success') {
-    //                 $('#quantity').val(0);
-    //                 $('#cart').removeClass('text-green-500');
-    //                 $('#cart').addClass('text-gray-500');
-    //                 $('#cart').attr('onclick', addToCart());
-    //                 $('#cart').attr('title', 'إضافة المنتج  إلي سلة المشتريات');
-                  
-    //             }
-    //         },
-
-    //         error: function(data) {
-    //                 alert('error');
-    //             }  
-    //         });
-    // }
     // when user change size, reload avilable color of selected size and price
     function changeSize(id) {
         $.ajax({
@@ -275,7 +252,6 @@ grid-row-gap: 0px;
                         $('#color').append('<option value="'+value.id+'">'+value.name+'</option>');
                     });
 
-                    // $('#color').html(data.colors);
                     // load price of selected size
                     $('#price').html(data.price);
                 }
@@ -292,47 +268,7 @@ grid-row-gap: 0px;
     }
 </script>
     
-    {{--
-        // function chooseColor(color) {
-    //     var color_code = $(color).css('background-color');
-    //     $('#color').childList.forEach(element => {
-    //         $(element).css('border', 'none');
-    //     });
-    //     $(color).css('border', '1px solid gray');
-    //     $('#color').val(color_code);
-    // }
-    // function chooseColor(color) {
-    //     document.getElementById('color').value = color;
-    // }
-
-//     function addenToCart(id) {
-
-// $.ajax({
-//     url: '/cart/'+id+'/store',
-//         type: 'POST',
-//         data: {
-//         '_token': $('meta[name="csrf-token"]').attr('content'),
-//         'product_variance_id': id
-//         },
-
-//     success: function(data) {
-//         var item = document.querySelector('#C_'+ data['id']);
-//         if(data['action'] == "add"){
-//             item.classList.remove('text-gray-500');
-//             item.classList.add('text-green-500');
-//         }
-//         else{
-//             item.classList.add('text-gray-500');
-//             item.classList.remove('text-green-500');
-//         }
-
-//     },
-//     error: function(data) {
-//         console.log(data);
-//         }
-//     });
-// } --}}
-
+  
 
                     
 </x-app-layout>

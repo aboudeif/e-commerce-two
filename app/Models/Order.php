@@ -25,4 +25,11 @@ class Order extends Model
     {
         return $this->hasMany(OrderProcess::class,'order_id');
     }
+    public function shippingAddress()
+    {
+        return $this->belongsTo(Address::class, 'shipping_address_id');
+    }
+
+    
+    
 }

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\Product_media;
 use Illuminate\Http\Request;
 use App\Models\Product_variance;
+use App\Models\Subcategory;
 
 class CartController extends Controller
 {
@@ -17,22 +19,26 @@ class CartController extends Controller
     public function index()
     {
         //
-        $request = request();
-    $user_id = auth()->user()->id;
+        $cart = Cart::where('user_id', auth()->user()->id)->get();
+        // add products
+        foreach ($cart as $item) {
+            $item->product = Product::find($item->product_id);
+            $item->product->media = Product_media::where('product_id', $item->product_id)->get();
+            $item->product->variance = Product_variance::find($item->product_variance_id);
+            $item->total = ($item->product->price - $item->discount) * $item->quantity;
+        }
+        // sum total of all cart items
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item->total;
+        }
 
-    $products = Product::with(
-        'product_variances:id,product_id',
-        'product_media:id,product_id,media_url',
-            )
-    ->whereHas('carts', function ($query) use ($user_id) {
-        return $query->where('user_id', $user_id);
-        })
-
-    ->whereHas('product_variances')
-    ->whereHas('product_media');
-    return view('user.cart',['cart' => $products]);
+        //   dd($cart);
+        return view('user.cart', ['cart' => $cart, 'total' => $total]);
 
     }
+
+
     public function is_in_cart()
     {
         $request = request();
@@ -134,9 +140,26 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request)
     {
-        //
+        $user = auth()->user()->id;
+        // return response()->json([
+        //     'action' => 'update',
+        //     'id' => $request->id,
+        //     'quantity' => $request->quantity,
+        //     'status' => 'success',
+        // ]);
+        //update cart
+        
+        // get cart by product_variance_id and user_id
+        $cart = Cart::where('user_id', $user)
+            ->where('product_variance_id', $request->id)
+            ->first();
+        // update quantity
+
+        $cart->quantity = $request->quantity;
+        $cart->save();
+        return response()->json(['status' => 'success', 'message' => 'Cart updated']);
     }
 
     /**
@@ -152,4 +175,9 @@ class CartController extends Controller
         Cart::where('user_id', $user)
             ->delete();
     }
+
+    /**
+     * 
+     */
+
 }

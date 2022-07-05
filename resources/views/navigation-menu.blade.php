@@ -60,7 +60,6 @@
     function filter() {
         const value = $('#search').val();
         if (value == '') {
-            // remove keyword from request then go to search page with request
             var request = window.location.href;
             if (request.indexOf('keyword') > -1) {
                 request = request.substring(0, request.indexOf('keyword') - 1);
@@ -68,7 +67,6 @@
             window.location.href = request;
 
         } else {
-            // add keyword = value to the request then redirect to search page with full request
             var request = window.location.href;
             var keyword = 'keyword=' + value;
             var sign = '?';
@@ -147,55 +145,31 @@
         padding-top: 16px;
     }
 
-    /* The Modal (background) */
     .modallogin {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1;
-        /* Sit on top */
-        left: 0;
-        top: calc(100vh - var(--nav-height));
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: #fff;
-        /* Fallback color */
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Black w/ opacity */
-        padding-top: 60px;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: calc(100vh - var(--nav-height));
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding-top: 60px;
     }
-
-    /* :root
-    {
-        --nav-height: 590px;
-    } */
 
     .modalfilter {
         display: none;
-        /* Hidden by default */
         position: fixed;
-        /* Stay in place */
         z-index: 999;
-        /* Sit on top */
         left: 0;
-        /* form top is  after navbar in all screens */
-        /* top:  calc(100vh - var(--nav-height)); */
         width: 100%;
-        /* Full width */
         height: max-content;
-        /* Full height */
         align-content: center;
         overflow: auto;
-        /* Enable scroll if needed */
         background-color: #fff;
-        /* Fallback color */
         background-color: rgba(255, 255, 255, 0.8);
-        /* Black w/ opacity */
         padding: 20px;
     }
 
@@ -203,10 +177,8 @@
     .modal-contentlogin {
         background-color: #fefefe;
         margin: 5% auto 15% auto;
-        /* 5% from the top, 15% from the bottom and centered */
         border: 1px solid #888;
         width: 80%;
-        /* Could be more or less, depending on screen size */
     }
 
     /* The Close Button (x) */
@@ -267,7 +239,6 @@
 <!-- -----------------------login form------------------------ -->
 <div id="id01" class="modallogin login-form" dir="rtl">
     <x-guest-layout>
-        {{-- <x-jet-authentication-card> --}}
 
         <div class="mx-3 my-3">
             {{ __('تسجيل الدخول') }}
@@ -330,9 +301,6 @@
 <script>
     const login_form = document.getElementById('id01');
     const logintext = document.getElementById('loginerror');
-    //alert(document.getElementById('loginerror').innerHTML);
-    // if there a div has the word "Whoops" in the login_form, then show the login_form
-    // if session('_status_') == 'login', then show the login_form
 
     if (logintext && window.localStorage.getItem('form') == "login") {
         login_form.style.display = "block";
@@ -343,8 +311,6 @@
 <!-- -----------------------register form------------------------ -->
 <div id="id02" class="modallogin login-form" dir="rtl">
     <x-guest-layout>
-        {{-- <x-jet-authentication-card> --}}
-
         <div class="mx-3 my-3">
             {{ __('إنشاء حساب جديد') }}
         </div>
@@ -419,16 +385,14 @@
 
             </div>
         </form>
-        {{-- </x-jet-authentication-card> --}}
     </x-guest-layout>
 
 </div>
 <script>
-    // Get the modal
+
     let reg_form = document.getElementById('id02');
     let regtext = document.getElementById('regerror');
 
-    // if there a div has the word "Whoops!" in the modal, then show the modal
     if (regtext && window.localStorage.getItem('form') == "reg") {
         reg_form.style.display = "block";
     }
@@ -845,8 +809,6 @@
     //top of filter-form after navbar
     $(document).ready(function() {
         $('#filter-form').css('top', $('#navbar').height() + 'px');
-        // if screen width is less than 768px, full-width filter-form
-
     });
     $(document).ready(function() {
         $('.modallogin').css('top', $('#navbar').height() + 'px');
@@ -860,3 +822,6 @@
         $('.modallogin').css('top', $('#navbar').height() + 'px');
     });
 </script>
+
+
+

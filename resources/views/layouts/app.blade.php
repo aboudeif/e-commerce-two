@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
+   
 .material-symbols-outlined {
     margin-top: 0.3rem;
     color: grey;
@@ -41,7 +42,7 @@
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" style="height: 100%;">
         <x-jet-banner />
 
         {{-- <div class="min-h-screen bg-red-100"> --}}
@@ -58,5 +59,7 @@
         @stack('modals')
 
         @livewireScripts
+        
+        @include('layouts.footer')
     </body>
 </html>

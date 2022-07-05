@@ -28,7 +28,8 @@ class ShippingAddressController extends Controller
     public function create()
     {
         //create shipping address
-        return view('user.shipping');
+        $shipping_address = ShippingAddress::where('user_id',auth()->user()->id)->get();
+        return view('user.shipping_info',['shippingAddresses' => $shipping_address]);
 
     }
 

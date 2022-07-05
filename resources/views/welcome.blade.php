@@ -149,13 +149,13 @@
                             @endauth
    
                             <img class="product-image" src="https://lcw.akinoncdn.com/products/2022/02/28/3229144/a24a1f92-db10-4a6a-9bdc-4af4fd842ee5_size265x353_cropCenter.jpg" 
-                            {{-- src="{{ $product->product_media->first()->media_url }}"  --}}
+       
                             alt="{{ $product->name }}">
                         </div>
                         
                         <div style="z-index:30;">
                             <div class="font-bold text-xl my-2 text-right px-3">
-                                <a href="{{ route('products.show', $product->id) }}">
+                                <a href="{{ route('products.show', ['id'=>$product->id]) }}">
                                     {{ $product->name }}
                                 </a>
                             </div>

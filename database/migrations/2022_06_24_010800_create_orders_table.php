@@ -24,12 +24,18 @@ return new class extends Migration
             $table->decimal('points',10,2)->default(0);
             $table->decimal('shipping',10,2)->default(0);
             $table->enum('payment_method', ['cash', 'credit_card'])->default('cash');
+            $table->foreignId('shipping_address_id')->nullable();
             $table->enum('payment_status', ['pending', 'paid', 'cancelled'])->default('pending');
             $table->timestamps();
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
+            $table->foreign('shipping_address_id')
+                    ->references('id')
+                    ->on('shipping_addresses')
+                    ->onDelete('cascade');
+
         });
     }
 
@@ -40,6 +46,8 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('shipping_addresses');
         Schema::dropIfExists('orders');
     }
 };

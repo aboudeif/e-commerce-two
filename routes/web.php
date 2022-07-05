@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\ProductVarianceController;
+use App\Http\Controllers\ShippingAddressController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -25,7 +26,7 @@ use App\Models\Order;
 
     Route::get('/', [HomeController::class, 'home'])->name('welcome');
     Route::get('/products',[ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/show', [ProductController::class, 'show_user'])->name('products.show');
     Route::middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
@@ -38,6 +39,9 @@ use App\Models\Order;
     Route::get('/favourites',[FavouriteController::class, 'index'])->name('favourites.index');
     Route::post('/favourites',[FavouriteController::class, 'indexApi'])->name('favourites.api');
     Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/delete', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::delete('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/cart/store',[CartController::class, 'store'])->name('carts.store');
     Route::post('/cart/check',[CartController::class, 'is_in_cart'])->name('cart.check');
     Route::post('/variances/size',[ProductVarianceController::class, 'getSize'])->name('variances.size');
@@ -48,9 +52,8 @@ use App\Models\Order;
     Route::get('/user/bayment',function(){
         return view('user.bayment');
     })->name('user.bayment');
-    Route::get('/user/shipping',function(){
-        return view('user.shipping');
-    })->name('user.shipping');
+    Route::get('/user/shipping',[ShippingAddressController::class,'create'])->name('shipping.create');
+    Route::get('/user/shipping/store',[ShippingAddressController::class,'store'])->name('shipping.store');
     Route::get('/user/success',function(){
         return view('user.success');
     })->name('user.success');

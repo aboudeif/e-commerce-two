@@ -190,6 +190,27 @@ class ProductController extends Controller
     }
 
     /**
+     * show a product for user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function show_user(Request $request){
+        // show a product
+        $product = Product::find($request->id);
+        $product_media = Product_media::where('product_id', $request->id)
+                                        ->where('media_type', 'image')
+                                        ->where('is_deleted', 0)
+                                        ->get();
+        $product_variances = Product_variance::where('product_id', $request->id)
+                                        ->where('is_deleted', 0)
+                                        ->orderBy('created_at', 'desc')
+                                        ->get();
+        
+        
+
+        return view('products.show', ['product' => $product, 'product_media' => $product_media, 'product_variances' => $product_variances]);
+    }
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Product  $product

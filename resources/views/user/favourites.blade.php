@@ -112,7 +112,7 @@
                         
                         <div style="z-index:30;">
                             <div class="font-bold text-xl my-2 text-right px-3">
-                                <a href="{{ route('products.show', $product->id) }}">
+                                <a href="{{ route('products.show', ['id'=>$product->id]) }}">
                                     {{ $product->name }}
                                 </a>
                             </div>

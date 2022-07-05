@@ -46,7 +46,7 @@
                             </div>
                             <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid">
                             <div class="font-bold text-xl mb-2 text-right px-3">
-                                <a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a>
+                                <a href="{{ route('products.show', ['id'=>$product->id]) }}">{{ $product->name }}</a>
                             </div>
                             <p class="text-gray-700 text-right px-3">
                                 {{ $product->price }} EGP
