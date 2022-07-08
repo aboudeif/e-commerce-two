@@ -237,11 +237,13 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
     // when user change size, reload avilable color of selected size and price
     function changeSize(id) {
         $.ajax({
-            url: '/product/'+id+'/changeSize',
+         
+            url: "{{ route('variances.size') }}",
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                size: $('#size').val()
+                size: $('#size').val(),
+                product_id: id
             },
             success: function(data) {
                 if(data.status == 'success') {
