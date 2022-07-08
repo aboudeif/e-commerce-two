@@ -296,10 +296,29 @@ class ProductController extends Controller
             // store a new variant for a product
             $product_variance = new Product_variance;
             $product_variance->product_id = $request->product_id;
-            $product_variance->variance_name = $request->variance_name;
-            $product_variance->variance_price = $request->variance_price;
-            $product_variance->is_deleted = $request->is_deleted;
+            $product_variance->quantity = $request->variance_quantity;
+
+            if(Product_variance::where('product_id', $request->product_id)
+                                    ->where('color', $request->variance_color) 
+                                    ->where('size', $request->variance_size)
+                                    ->exists())
+            {
+                $product_variance = Product_variance::where('product_id', $request->product_id)
+                                                        ->where('color', $request->variance_color) 
+                                                        ->where('size', $request->variance_size)
+                                                        ->first();
+                $product_variance->quantity += $request->variance_quantity;
+            }
+
+            
+            
+            $product_variance->points = $request->variance_points;
+            $product_variance->color = $request->variance_color;
+            $product_variance->color_code = $request->variance_color_code;
+            $product_variance->size = $request->variance_size;
+            $product_variance->is_deleted = $request->variance_is_deleted;
             $product_variance->save();
+
             return redirect('/admin/products/show?id='.$request->product_id);
         }
 

@@ -108,11 +108,13 @@ Route::middleware(Admin::class,
 
 
         Route::post('/admin/media/store', [ProductController::class, 'store_image'])->name('media.store');
+        Route::post('/admin/variances/store', [ProductController::class, 'store_variance'])->name('variances.store');
         Route::get('/admin/media/create', [ProductController::class, 'mediaCreate'])->name('media.create');
         Route::get('/admin/variances/create', [ProductController::class, 'variancesCreate'])->name('variances.create');
         Route::post('/admin/variances/edit', [ProductController::class, 'variancesEdit'])->name('variances.edit');
         Route::delete('/admin/variances/delete', [ProductController::class, 'variancesDestroy'])->name('variances.destroy');
         Route::delete('/admin/media/delete', [ProductController::class, 'delete_image'])->name('media.destroy');
+        Route::post('/admin/variances/update', [ProductController::class, 'variance_update'])->name('variances.update');
 
         Route::get('/admin/users/show', [UserController::class, 'show'])->name('users.show');
         Route::get('/admin/users/index', [UserController::class, 'index'])->name('users.index');
