@@ -278,12 +278,12 @@ class ProductController extends Controller
         {
             // store a new image for a product
             $product_media = new Product_media;
-            $product_media->product_id = $request->product_id;
-            $product_media->media_type = $request->media_type;
-            $product_media->media_url = $request->media_url;
-            $product_media->is_deleted = $request->is_deleted;
+            $product_media->product_id = $request->id;
+            $product_media->media_type = 'image';
+            $product_media->media_url = $request->image;
+            $product_media->is_deleted = 0;
             $product_media->save();
-            return redirect('/admin/products/show?id='.$request->product_id);
+            return redirect('/admin/products/show?id='.$request->id);
         }
 
         /**
@@ -314,7 +314,7 @@ class ProductController extends Controller
             $product_media = Product_media::find($request->id);
             $product_media->is_deleted = 1;
             $product_media->save();
-            return redirect('/admin/products/show?id='.$request->product_id);
+            return response()->json(['success'=>'Image deleted successfully.']);
         }
 
         /**

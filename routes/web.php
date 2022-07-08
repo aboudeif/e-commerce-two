@@ -106,12 +106,13 @@ Route::middleware(Admin::class,
         Route::delete('/admin/subcategories/{subcategory}/delete', [SubcategoryController::class, 'destroy'])->name('subcategories.destroy');
         Route::get('/admin/subcategories/api', [SubcategoryController::class, 'indexJson'])->name('subcategories.api');
 
- 
 
-        
-
-        Route::post('/admin/media/store', [ProductController::class, 'mediaStore'])->name('media.store');
-        Route::delete('/admin/media/{}/delete', [ProductController::class, 'mediaDestroy'])->name('media.destroy');
+        Route::post('/admin/media/store', [ProductController::class, 'store_image'])->name('media.store');
+        Route::get('/admin/media/create', [ProductController::class, 'mediaCreate'])->name('media.create');
+        Route::get('/admin/variances/create', [ProductController::class, 'variancesCreate'])->name('variances.create');
+        Route::post('/admin/variances/edit', [ProductController::class, 'variancesEdit'])->name('variances.edit');
+        Route::delete('/admin/variances/delete', [ProductController::class, 'variancesDestroy'])->name('variances.destroy');
+        Route::delete('/admin/media/delete', [ProductController::class, 'delete_image'])->name('media.destroy');
 
         Route::get('/admin/users/show', [UserController::class, 'show'])->name('users.show');
         Route::get('/admin/users/index', [UserController::class, 'index'])->name('users.index');

@@ -34,6 +34,15 @@ return new class extends Migration
      */
     public function down()
     {
+
+        Schema::dropIfExists('favorites');
+        Schema::dropIfExists('order_processes');
+        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('shipping_addresses');
+        Schema::dropIfExists('carts');
+        Schema::dropIfExists('user_actions');
+        Schema::dropIfExists('user_reports');
         Schema::dropIfExists('users');
     }
 };

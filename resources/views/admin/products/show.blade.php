@@ -47,13 +47,78 @@
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">الصور</x-jet-label>
                             @foreach ($product->images as $image)
                                 {{-- <img src="- asset('storage/' . $image->path) -" class="img-thumbnail" width="100" height="100"> --}}
-                                <img src="{{ $image->media_url }}" class="img-thumbnail inline" width="100" height="100">
+                            <div class="inline">
+                                <span 
+                                id="I_{{ $image->id }}"
+                                class="text-danger absolute cursor-pointer text-center" 
+                                onclick="deleteImage(this);" style="font-size: 16pt; z-index:200;">
+                                &times;
+                                </span>
+
+                                <img src="{{ $image->media_url }}"
+                                onmouseover="this.style.cursor='pointer'; 
+                                 this.style.opacity='0.5';
+                                 this.style.transition='all 0.5s ease-in-out';
+                                 this.style.transform='scale(1.1)';"
+                                onmouseout="this.style.opacity='1';
+                                    this.style.transform='scale(1)';"
+                                class="img-thumbnail inline" 
+                                width="100" height="100">
+                                
+                            </div>
                                 
                             @endforeach
-                            <a href="{{ route('media.create',['id', $product->id]) }}" class="float-right">
-                                <x-jet-button style="background-color: darkgreen;" class="material-symbols-outlined">add_circle</x-jet-button> 
-                            </a>
+                            
+                            <x-jet-button 
+                            style="background-color: darkgreen;" 
+                            class="material-symbols-outlined"
+                            onclick="showAddImageModal();"
+                            >
+                            add_circle
+                            </x-jet-button> 
+                            
+                            {{--  th to add new image url --}}
+                            <div id="image" class="w-full rounded-0.5 mx-3 my-2" style="display: none;" >
+                                <form 
+                                    id="image_form"
+                                    action="{{ route('media.store',['id'=> $product->id]) }}"
+                                    onsubmit="document.querySelector('#image').css('display', 'none');"
+                                    method="POST" 
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="text" name="image" class="">
+                                    <x-jet-button type="submit">إضافة صورة</x-jet-button>
+                                </form>
+                            </div>
+
+
                         </div>
+                        <script>
+                          
+                           
+                            function showAddImageModal() {
+                                document.querySelector('#image').style.display = 'block';
+                            }
+
+                            function deleteImage(el) {
+                               
+                                
+                                const id_num = el.id.split('_')[1];
+                                //alert();
+                                // ajax for delete image
+                                var xhr = new XMLHttpRequest();
+                             
+                                xhr.open('DELETE', '{{ route("media.destroy",["id"=>"id_num"]) }}'.replace("id_num", id_num));
+                                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                                xhr.onload = function() {
+                                    if (xhr.status === 200) {
+                                        el.nextElementSibling.remove();
+                                    }
+                                };
+                                xhr.send( );
+                            }
+                             
+                        </script>
 
 
                     </div>
