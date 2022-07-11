@@ -794,7 +794,7 @@
                 <x-slot name="content">
                     @foreach (App\Models\Subcategory::where('category_id', $category->id)->where('is_deleted',false)->get() as $subcategory)
                         <x-jet-dropdown-link
-                            href="?category={{ $category->id }}&subcategory={{ $subcategory->name }}">
+                            href="/products?category={{ $category->id }}&subcategory={{ $subcategory->name }}">
                             {{ $subcategory->name }}
                         </x-jet-dropdown-link>
                     @endforeach
