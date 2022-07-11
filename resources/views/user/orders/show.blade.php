@@ -1,7 +1,7 @@
 <x-app-layout>
 {{-- index catygories --}}
 
-
+{{-- {{ dd($order->OrderItems->first->id->id) }} --}}
                 <div class="card" dir="rtl">
                     {{-- selected category information --}}
                     <div class="card-header w-full py-2 ">
@@ -9,7 +9,7 @@
                        
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >تاريخ الطلب</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $order->created_at }}" />
+                            <x-jet-label class="inline" value="{{ $order->created_at->format('Y-m-d') }}" />
                         </div>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >حالة الطلب</x-jet-label>
@@ -63,21 +63,22 @@
                                     <th>السعر</th>
                                     <th>الخصم</th>
                                     <th>النقاط</th>
-                                    <th>مصاريف الشحن</th>
                                     <th>إجمالي السعر</th>
                                     
                                 </tr>
                             </thead>
+                           
                             <tbody>
-                                @foreach ($order_items as $order_item)
+                                @foreach ($order->OrderItems as $order_item)
                                 <tr>
-                                    <td>{{ $order_item->products->name }}</td>
+                                    
+                                    <td>{{ $order_item->id }}</td>
                                     <td>{{ $order_item->quantity }}</td>
                                     <td>{{ $order_item->price }}</td>
                                     <td>{{ $order_item->discount }}</td>
                                     <td>{{ $order_item->points }}</td>
-                                    <td>{{ $order_item->shipping }}</td>
                                     <td>{{ $order_item->total_price }}</td>
+
                                     
                                 </tr>
                                 @endforeach

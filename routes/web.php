@@ -65,9 +65,9 @@ use App\Models\Order;
     Route::get('/user/payment',function(){
         return view('user.payment');
     })->name('user.payment');
-    Route::get('/user/order',[OrderController::class, 'show'])->name('orders.show');
+    Route::get('/user/order/{order_id}',[OrderController::class, 'show'])->name('orders.show');
     
-    Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
+    // Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
     
 
   

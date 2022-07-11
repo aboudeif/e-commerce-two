@@ -27,10 +27,8 @@
                         </thead>
                         <tbody>
                             @foreach ($orders as $order)
-                            <a href="{{ route('orders.show', ['order_id'=>$order->id]) }}">
-                               
-                            <tr class="cursor-pointer">
-                               
+                            
+                            <tr class="cursor-pointer" onclick="showOrder('{{ $order->id }}')">                               
                                 <td>{{ $order->created_at }}</td>
                                 <td>{{ $order->OrderProcess[0]->order_process }}</td>
                                 <td>{{ $order->quantity }}</td>
@@ -40,12 +38,14 @@
                                 <td>{{ $order->points }}</td>
                                 <td>{{ $order->tax }}</td>
                                 <td>{{ $order->payment_method }}</td>
-                                
-
-
                             </tr>
-                            </a>
+                            
                             @endforeach
+                            <script>
+                                function showOrder(id){
+                                    window.location.href = "/user/order/" + id;
+                                }
+                            </script>
                         </tbody>
                     </table>
                 </div>

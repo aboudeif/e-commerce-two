@@ -104,9 +104,13 @@ class OrderController extends Controller
     {
         //
         $order = Order::where('id', $request->order_id)
-                        ->with('OrderProcess:id,order_id,order_process')
-                        ->first();
-        return view('orders.show', compact('order'));
+                      ->with('OrderItems:id,order_id,product_id,product_variance_id,price,quantity,total_price,points,discount')
+                    ->select('id','user_id','quantity','price','discount','tax','shipping','points','payment_method','shipping_address_id',
+                    'created_at','updated_at')
+                      ->get();
+                      //dd($order->first->OrderItems->OrderItems->first->product_variance_id->product_variance_id);
+                     
+        return view('user/orders/show', ['order'=>$order->first->created_at]);
 
     }
 

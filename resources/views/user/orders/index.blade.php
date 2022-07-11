@@ -26,6 +26,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
+                                    <a style="z-index: 999;" href="{{ route('orders.show', ['order_id'=>$order->id]) }}">
                                     <tr>
                                        
                                         <td>{{ $order->created_at }}</td>
@@ -37,10 +38,9 @@
                                         <td>{{ $order->points }}</td>
                                         <td>{{ $order->tax }}</td>
                                         <td>{{ $order->payment_method }}</td>
-                                        
-
-
+                            
                                     </tr>
+                                    </a>
                                     @endforeach
                                 </tbody>
                             </table>

@@ -806,7 +806,7 @@
 </nav>
 
 <script>
-    //top of filter-form after navbar
+  
     $(document).ready(function() {
         $('#filter-form').css('top', $('#navbar').height() + 'px');
     });
@@ -814,7 +814,6 @@
         $('.modallogin').css('top', $('#navbar').height() + 'px');
     });
 
-    // when window resize, change top of filter-form
     $(window).resize(function() {
         $('#filter-form').css('top', $('#navbar').height() + 'px');
     });
