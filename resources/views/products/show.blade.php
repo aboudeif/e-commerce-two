@@ -45,10 +45,7 @@ grid-row-gap: 0px;
 
 </style>
 
-<div id="cart-notification" class="alert alert-success text-center right-50% absolute" role="alert" 
-style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
-    
-</div>
+
 
 {{-- {{ dd($product); }} --}}
 
@@ -116,6 +113,8 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
                     url: "{{ route('variances.size') }}",
                     type: 'POST',
 
+                    
+
                     data: {
                         _token: '{{ csrf_token() }}',
                         color: color,
@@ -124,12 +123,18 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
                 //success and fail
                 success: function(data) {
                     console.log(data);
-                    $('#selected_size').empty();              
+                    $('#selected_size').empty();
+                    if(data.length > 0){
+                        
                     data.forEach(element => {
                         $('#selected_size').append('<option value="'+element+'">'+element+'</option>');
                         
                        
                     });
+                    }
+                    else{
+                        $('#selected_size').append('<option value="">لا يوجد مقاسات متاحة</option>');
+                    }
                     $('#selected_color').val(color);
 
                 },
@@ -155,7 +160,10 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
         </div>
     </div>
 </div>
-
+<div id="cart-notification" class="alert alert-success text-center absolute right-auto top-auto " role="alert" 
+style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
+    
+</div>
 <script>
 
     function addToCart() {
