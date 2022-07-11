@@ -106,11 +106,11 @@ class OrderController extends Controller
         //
         $order = Order::where('id', $request->order_id)
                       ->with('OrderItems:id,order_id,product_id,product_variance_id,price,quantity,total_price,points,discount','OrderProcess:id,order_id,order_process'
-                      ,'ShippingAddress:id,user_id,address,city,zip,phone,name')
+                      ,'ShippingAddress:id,user_id,address,city,zip,phone,name','OrderItems.Product:id,name')
                       ->select('id','user_id','quantity','price','discount','tax','shipping','points','payment_method','shipping_address_id',
                     'created_at','updated_at')
                       ->get();
-                      
+                 
         return view('user/orders/show', ['order'=>$order->first->created_at]);
 
     }

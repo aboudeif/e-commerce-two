@@ -13,7 +13,7 @@
                         </div>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >حالة الطلب</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $order->id  }}" />
+                            <x-jet-label class="inline" value="{{ $order->OrderProcess[0]->order_process }}" />
                         </div>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">عدد المنتجات</x-jet-label>
@@ -98,13 +98,12 @@
                                 @foreach ($order->OrderItems as $order_item)
                                 <tr class="cursor-pointer" onclick="showProduct('{{ $order_item->product_id }}')">
                                     
-                                    <td>{{ $order_item->id }}</td>
+                                    <td>{{ $order_item->Product->name }}</td>
                                     <td>{{ $order_item->quantity }}</td>
                                     <td>{{ $order_item->price }}</td>
                                     <td>{{ $order_item->discount }}</td>
                                     <td>{{ $order_item->points }}</td>
                                     <td>{{ $order_item->total_price }}</td>
-
                                     
                                 </tr>
                                 @endforeach
