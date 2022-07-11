@@ -44,6 +44,7 @@ use App\Models\Order;
     Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/delete', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::delete('/cart/remove', [CartController::class, 'remove_all'])->name('cart.remove');
     Route::delete('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/cart/store',[CartController::class, 'store'])->name('carts.store');
     Route::post('/cart/check',[CartController::class, 'is_in_cart'])->name('cart.check');

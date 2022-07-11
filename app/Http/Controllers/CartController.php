@@ -160,16 +160,22 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cart $cart)
+    public function destroy(Request $request)
     {
+    
         //delete cart
+        $user = auth()->user()->id;
+        Cart::where('user_id', $user)
+            ->where('product_variance_id', $request->id)
+            ->delete();
+            return redirect('/cart');
+    }
+
+    public function remove_all()
+    {
         $user = auth()->user()->id;
         Cart::where('user_id', $user)
             ->delete();
     }
-
-    /**
-     * 
-     */
 
 }

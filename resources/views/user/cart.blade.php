@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="col-sm-1 col-1">
-                        <form action="{{ route('cart.destroy', ['id'=>$product->id]) }}" method="POST">
+                        <form action="{{ route('cart.destroy', ['id'=>$product->product_variance_id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="material-symbols-outlined">
@@ -117,11 +117,14 @@
     </div>
     {{-- checkout button --}}
     <div class="flex justify-center">
-        <form action="{{ route('shipping.create') }}" method="get">
+        <form id="next-form" action="{{ count($cart) > 0 ? route('shipping.create') : null }}" method="get">
            
-            <x-jet-button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full">
+            <x-jet-button type="submit" class="text-white font-bold py-1 px-4 rounded-full">
                 المتابعة إلي الشراء
             </x-jet-button>
         </form>
+        {{-- form validation js --}}
+       
+
     </div>
 </x-app-layout>
