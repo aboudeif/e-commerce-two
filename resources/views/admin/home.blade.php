@@ -9,13 +9,24 @@
         {{-- card header and close card using js --}}
         <div class="card-header pt-2">
             <span class="card-title bg-success text-white py-1 px-2 absolute right-0">الطلبات</span>
-            
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title mt-5">الحالية</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title">قيد الإنتظار</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title">قيد الشحن</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title">قيد التوصيل</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title">قيد الإرتجاع</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title">الملغاة</x-jet-button>
+            </a>
       
         {{-- /.card-body --}}
   

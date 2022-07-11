@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\OrderProcess;
 use App\Models\Product;
 use App\Models\ShippingAddress;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Self_;
@@ -29,6 +30,37 @@ class OrderController extends Controller
         return view('user/orders/index', ['orders' => $orders]);
 
     }
+
+    /**
+     * display a listing of the resource for admin
+     * @return \Illuminate\Http\Response
+     *
+     */
+    public function admin_index()
+    {
+        //
+        $orders = Order::with('OrderProcess:id,order_id,order_process', 'User:id,name')
+                        ->get();
+        
+        return view('admin/orders/index', ['orders' => $orders]);
+
+    }
+
+    /**
+     * show the form for creating a new resource for admin
+     * @return \Illuminate\Http\Response
+     */
+    public function admin_show($id)
+    {
+        //
+        $order = Order::find($id);
+        $order->user = User::find($order->user_id);
+        $order->order_process = OrderProcess::where('order_id', $order->id)->get();
+        $order->order_items = OrderItem::where('order_id', $order->id)->get();
+        $order->shipping_address = ShippingAddress::where('order_id', $order->id)->first();
+        return view('admin/orders/show', ['order' => $order]);
+    }
+     
 
     /**
      * Show the form for creating a new resource.

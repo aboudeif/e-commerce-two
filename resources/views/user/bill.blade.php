@@ -1,24 +1,5 @@
-{{-- <style>
-    .parent {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-grid-template-rows: repeat(6, 1fr);
-grid-column-gap: 0px;
-grid-row-gap: 0px;
 
-}
-
-.div1 { grid-area: 1 / 3 / 2 / 5; }
-.div2 { grid-area: 1 / 1 / 2 / 3; }
-.div3 { grid-area: 2 / 3 / 3 / 5; }
-.div4 { grid-area: 2 / 1 / 3 / 3; }
-.div5 { grid-area: 3 / 1 / 4 / 5; }
-.div6 { grid-area: 4 / 1 / 5 / 5; }
-.div7 { grid-area: 5 / 1 / 6 / 5; }
-.div8 { grid-area: 6 / 1 / 7 / 5; }
-</style> --}}
 <x-app-layout>
-    {{-- php dummy values for each variable in page --}}
     <?php $customer = (object)[
         'name' => 'محمد',
         'phone' => '0123456789',
@@ -53,7 +34,6 @@ grid-row-gap: 0px;
 
     ]; ?>
 
-    {{-- a line to show e-commerce order stage  --}}
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -75,7 +55,6 @@ grid-row-gap: 0px;
 
 
 
-    {{-- customer final bill with products prices and tax and dates ,... --}}
     <x-slot name="header">
         <h2 class="text-xl font-semibold text-gray-800 flex items-center">
             <i class="fas fa-chart-bar text-gray-400 mr-1"></i>
@@ -173,37 +152,7 @@ grid-row-gap: 0px;
                 </div>
                 
                 
-                
-                {{-- <div class="flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('Customer Bill Total') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('Customer Bill Total') }}"
-                            value="{{ $customer->bill_total }}"
-                            readonly
-                        >
-                    </div>
-                </div> --}}
-                {{-- <div class="flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('Customer Bill Status') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('Customer Bill Status') }}"
-                            value="{{ $customer->bill_status }}"
-                            readonly
-                        >
-                    </div>
-                </div> --}}
+              
                 <div class="div7 flex flex-fill  -mx-3 mb-6">
                     <div class=" px-3">
                         <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
@@ -219,36 +168,6 @@ grid-row-gap: 0px;
                         >
                     </div>
                 </div>
-                {{-- <div class="flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('Customer Bill Created At') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('Customer Bill Created At') }}"
-                            value="{{ $customer->bill_created_at }}"
-                            readonly
-                        >
-                    </div>
-                </div> --}}
-                {{-- <div class="flex flex-fill  -mx-3 mb-6">
-                    <div class=" px-3">
-                        <label class="inline-block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                            {{ __('Customer Bill Updated At') }}
-                        </label>
-                        <input
-                            class="appearance-none inline-block  bg-gray-200 text-gray-700 border border-gray-200 rounded py-1/2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="grid-first-name"
-                            type="text"
-                            placeholder="{{ __('Customer Bill Updated At') }}"
-                            value="{{ $customer->bill_updated_at }}"
-                            readonly
-                        >
-                    </div>
-                </div> --}}
                 
 
                 <div class="flex flex-fill  -mx-3 mb-6">
@@ -282,15 +201,10 @@ grid-row-gap: 0px;
                         </div>
                     </div>
                 </div>
-                {{-- buttons to download as pdf and print --}}
+             
                 <div class="flex flex-fill  -mx-3 mb-6">
                     <div class="w-full px-3">
-                        {{-- <a href="{{ route('customer.bill.pdf', $customer->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            {{ __('Download as PDF') }}
-                        </a>
-                        <a href="{{ route('customer.bill.print', $customer->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            {{ __('Print') }}
-                        </a> --}}
+                        
                     </div>
                 </div>
             </div>
