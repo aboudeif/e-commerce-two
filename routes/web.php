@@ -27,6 +27,7 @@ use App\Models\Order;
 */
 
     Route::get('/', [HomeController::class, 'home'])->name('welcome');
+    Route::get('/login', [HomeController::class, 'home'])->name('login');
     Route::get('/products',[ProductController::class, 'index'])->name('products.index');
     Route::get('/products/show', [ProductController::class, 'show_user'])->name('products.show');
     Route::middleware([

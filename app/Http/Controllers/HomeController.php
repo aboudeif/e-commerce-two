@@ -18,7 +18,7 @@ class HomeController extends Controller
         return redirect('/products');
         
     }
-    // // redirect to dashboard if user is authenticated
+    // redirect to dashboard if user is authenticated
     public function redirect(){
 
         if(Auth::check()){

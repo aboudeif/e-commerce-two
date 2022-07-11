@@ -90,7 +90,8 @@ class OrderController extends Controller
         $order_proccess->order_process = 'review';
         $order_proccess->save();
         Cart::where('user_id', $request->user_id)->delete();
-        Self::index();
+        
+        return redirect('/home');
     }
 
     /**
@@ -104,9 +105,7 @@ class OrderController extends Controller
         //
         $order = Order::where('id', $request->order_id)
                         ->with('OrderProcess:id,order_id,order_process')
-                      
-       
-        ->first();
+                        ->first();
         return view('orders.show', compact('order'));
 
     }
@@ -123,7 +122,7 @@ class OrderController extends Controller
         $user_id = (Auth::check()) ? auth()->user()->id : 0;
         $products = Product::with('product_variances:id,product_id,price','product_media:id,product_id,media_url',
                                   'Subcategory.Category:id,name','favourites:user_id,product_id','carts:user_id,product_id')
-        ->get();
+                            ->get();
         return view('orders.edit', compact('order','products'));
 
     }
