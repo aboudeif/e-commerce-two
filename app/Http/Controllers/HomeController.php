@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderProcess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,16 +28,14 @@ class HomeController extends Controller
             return view('/admin/home');
 
         else
-
-            return view('/user/home');
+        $orders = Order::where('user_id', auth()->user()->id)
+                        ->with('OrderProcess:id,order_id,order_process')
+                        ->get();
+        
+        
+         
+            return view('/user/home', ['orders' => $orders]);
         }
     }
-     // redirect to profile if user or dashboard if admin
-    // public function mypage(){
-
-    //     if(Auth::user()->usertype == true)
-    //         return redirect ('/dashboard');
-    //     else
-    //         return redirect ('/profile/show');
-    // }
+    
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderProcess;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
+use phpDocumentor\Reflection\Types\Self_;
 
 class OrderController extends Controller
 {
@@ -20,32 +21,11 @@ class OrderController extends Controller
     public function index()
     {
         //
+        $orders = Order::where('user_id', auth()->user()->id)
+                        ->with('OrderProcess:id,order_id,order_process')
+                        ->get();
         
-        $request = request();
-        $user_id = (Auth::check()) ? auth()->user()->id : 0;
-        // index orders
-        $orders = Order::with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
-        ->when($request->has('keyword'), function ($query) use ($request) {
-            return $query->where('name', 'like', '%' . $request->keyword . '%');
-        })
-        ->when($request->has('sort'), function ($query) use ($request) {
-            return $query->orderBy($request->sort, 'desc');
-        })
-        ->when($request->has('status'), function ($query) use ($request) {
-            return $query->where('status', $request->status);
-        })
-        ->when($request->has('user_id'), function ($query) use ($request) {
-            return $query->where('user_id', $request->user_id);
-        })
-        ->when($request->has('date'), function ($query) use ($request) {
-            return $query->where('created_at', 'like', '%' . $request->date . '%');
-        })
-        ->when($request->has('date_range'), function ($query) use ($request) {
-            return $query->whereBetween('created_at', explode('-', $request->date_range));
-        })
-        ->paginate(10);
-
-        return view('orders.index', compact('orders'));
+        return view('user/orders/index', ['orders' => $orders]);
 
     }
 
@@ -75,26 +55,57 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //store new order
+        $order = new Order;
         $user_id = (Auth::check()) ? auth()->user()->id : 0;
-        $order = new Order();
         $order->user_id = $user_id;
-        $order->status = 'pending';
-        $order->save();
+        $order->quantity = Cart::where('user_id', $user_id)->sum('quantity');
+        $price = Cart::where('user_id', $user_id)->sum('price');
 
+        $order->price = Cart::where('user_id', $user_id)->sum('quantity') * $price;
+        $order->discount = Cart::where('user_id', $user_id)->sum('discount');
+        $order->tax = 0.14;
+        $order->shipping = Cart::where('user_id', $user_id)->sum('shipping_fees');
+        $order->points = Cart::where('user_id', $user_id)->sum('reward');
+        $order->payment_method = 'cash';
+        //$order->status = 'pending';
+        // dd();
+        $order->shipping_address_id = $request->request->get('shipping_id');
+
+        $order->save();
+        foreach (Cart::where('user_id', $user_id)
+                     ->get() as $cart) {
+            $order_item = new OrderItem;
+            $order_item->order_id = $order->id;
+            $order_item->product_id = $cart->product_id;
+            $order_item->product_variance_id = $cart->product_variance_id;
+            $order_item->points = $cart->reward;
+            $order->discount = $cart->discount;
+            $order_item->total_price = $cart->price * $cart->quantity;
+            $order_item->price = $cart->price;
+            $order_item->quantity = $cart->quantity;
+            $order_item->save();
+        }
+        $order_proccess = new OrderProcess;
+        $order_proccess->order_id = $order->id;
+        $order_proccess->order_process = 'review';
+        $order_proccess->save();
+        Cart::where('user_id', $request->user_id)->delete();
+        Self::index();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order  $order
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Request $request)
     {
-        // show order
-        $user_id = (Auth::check()) ? auth()->user()->id : 0;
-        $order = Order::with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
-        ->where('id', $order->id)
+        //
+        $order = Order::where('id', $request->order_id)
+                        ->with('OrderProcess:id,order_id,order_process')
+                      
+       
         ->first();
         return view('orders.show', compact('order'));
 
@@ -149,26 +160,7 @@ class OrderController extends Controller
 
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Order  $order
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show_order_items(Order $order)
-    // {
-    //     // show order items
-    //     $user_id = (Auth::check()) ? auth()->user()->id : 0;
-    //     $order = Order::with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
-    //     ->where('id', $order->id)
-    //     ->first();
-    //     return view('orders.show_order_items', compact('order'));
-
-    // }
-
-    /**
-     * Process the order.
-     */
+    
     public function process_order(Request $request)
     {
         // process order
@@ -256,60 +248,17 @@ class OrderController extends Controller
 
     }
 
-    // /**
-    //  * print invoice.
-    //  *
-    //  */
-    // public function print_invoice(Request $request)
-    // {
-    //     // send invoice to local printer using lpr
-
-    //     $user_id = (Auth::check()) ? auth()->user()->id : 0;
-    //     $order = Order::with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
-    //     ->where('id', $request->order_id)
-    //     ->first();
-    //     $order->status = 'processed';
-    //     $order->save();
+    /**
+     * invoice order.
+     *
+     */
+    public function invoice_order(Request $request)
+    {
+    
         
-    //     $order_items = OrderItem::with('product:id,name','product_variance:id,product_id,price')
-    //     ->where('order_id', $request->order_id)
-    //     ->get();
+        // return view('user.invoice', ['order' => $order->with('user:id,name','order_items:id,order_id,product_id,price,quantity','product:id,name','product_variance:id,product_id,price')
+        //                                               ->where('id', $order->id)
+        //                                               ->first()]);
 
-    //     $order_total = 0;
-    //     foreach ($order_items as $order_item) {
-    //         $order_total += $order_item->price * $order_item->quantity;
-    //     }
-    //     $order_total = number_format($order_total, 2);
-    //     $order_date = date('d/m/Y', strtotime($order->created_at));
-    //     $order_time = date('H:i:s', strtotime($order->created_at));
-    //     $order_id = $order->id;
-    //     $order_status = $order->status;
-    //     $order_user = $order->user->name;
-    //     $order_user_id = $order->user->id;
-    //     $order_user_email = $order->user->email;
-    //     $order_user_phone = $order->user->phone;
-    //     $order_user_address = $order->user->address;
-    //     $order_user_city = $order->user->city;
-    //     $order_user_state = $order->user->state;
-    //     $order_user_postcode = $order->user->postcode;
-    //     $order_user_country = $order->user->country;
-    //     // use PDF
-    //     $pdf = PDF::loadView('orders.print_invoice',
-    //                 compact('order_items',
-    //                         'order_total',
-    //                         'order_date',
-    //                         'order_time',
-    //                         'order_id',
-    //                         'order_status',
-    //                         'order_user',
-    //                         'order_user_id',
-    //                         'order_user_email',
-    //                         'order_user_phone',
-    //                         'order_user_address',
-    //                         'order_user_city',
-    //                         'order_user_state',
-    //                         'order_user_postcode',
-    //                         'order_user_country'));
-        
-    // }
+    }
 }

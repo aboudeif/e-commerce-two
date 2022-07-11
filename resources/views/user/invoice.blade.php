@@ -1,68 +1,19 @@
 <x-app-layout>
-    {{-- dummy data --}}
-    <?php
-   
-    $order = (object)[
-        'billing_name' => 'John Doe',
-        'billing_address' => '123 Main St',
-        'billing_city' => 'New York',
-        'billing_state' => 'NY',
-        'billing_zip' => '10001',
-        'shipping_name' => 'John Doe',
-        'shipping_address' => '123 Main St',
-        'shipping_city' => 'New York',
-        'shipping_state' => 'NY',
-        'shipping_zip' => '10001',
-        'total' => '100',
-        'tax' => '10',
-        'shipping' => '10',
-        'grand_total' => '110',
-        'products' => (object)[
-            (object)[
-            'id' => 1,
-            'name' => 'Product 1',
-            'price' => '100',
-            'pivot' => (object)[
-                'quantity' => 1,
-                'total' => '100'
-            ]   ],
-        (object)[
-            'id' => 2,
-            'name' => 'Product 2',
-            'price' => '200',
-            'pivot' => (object)[
-                'quantity' => 2,
-                'total' => '400'
-            ]   ],
-        (object)[
-            'id' => 3,
-            'name' => 'Product 3',
-            'price' => '300',
-            'pivot' => (object)[
-                'quantity' => 3,
-                'total' => '900'
-            ]   ],
+  
 
-        ]
-
-    ];
-
-    ?>
-
-    {{--  order detailed invoice --}}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Order Invoice</h3>
+                        <h3 class="card-title">الفاتورة</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">Billing Address</h3>
+                                        <h3 class="card-title">عنوان الشحن</h3>
                                     </div>
                                     <div class="card-body">
                                         <p>{{ $order->billing_name }}</p>

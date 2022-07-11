@@ -6,6 +6,7 @@ use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FavouriteController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductVarianceController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\UserController;
@@ -54,17 +55,16 @@ use App\Models\Order;
         return view('user.bayment');
     })->name('user.bayment');
     Route::get('/user/shipping',[ShippingAddressController::class,'create'])->name('shipping.create');
-    Route::get('/user/shipping/store',[ShippingAddressController::class,'store'])->name('shipping.store');
+    Route::POST('/user/shipping/store',[ShippingAddressController::class,'store'])->name('shipping.store');
     Route::get('/user/success',function(){
         return view('user.success');
     })->name('user.success');
-    Route::get('/user/invoice',function(){
-        return view('user.invoice');
-    })->name('user.invoice'); 
+    Route::POST('/user/order/store',[OrderController::class,'store'])->name('orders.store'); 
+    Route::get('/user/order/index',[OrderController::class,'index'])->name('orders.index'); 
     Route::get('/user/payment',function(){
         return view('user.payment');
     })->name('user.payment');
-    Route::get('/user/order',[OrderController::class, 'show'])->name('order.show');
+    Route::get('/user/order',[OrderController::class, 'show'])->name('orders.show');
     
     Route::get('/user/invoice/{id}/pdf',[Order::class,'print_invoice'])->name('user.invoice.pdf');
     

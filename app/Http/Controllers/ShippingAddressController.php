@@ -29,7 +29,7 @@ class ShippingAddressController extends Controller
     {
         //create shipping address
         $shipping_address = ShippingAddress::where('user_id',auth()->user()->id)->get();
-        return view('user.shipping_info',['shippingAddresses' => $shipping_address]);
+        return view('user.shipping_info',['shipping_address' => $shipping_address]);
 
     }
 
@@ -42,8 +42,16 @@ class ShippingAddressController extends Controller
     public function store(Request $request)
     {
         //store shipping address
-        $shipping_address = ShippingAddress::create(request()->all());
-        return response()->json($shipping_address);
+        $shipping_address = new ShippingAddress;
+        $shipping_address->user_id = auth()->user()->id;
+        $shipping_address->name = $request->name;
+        $shipping_address->address = $request->address;
+        $shipping_address->city = $request->city;
+        $shipping_address->zip = $request->zip;
+        $shipping_address->phone = $request->phone;
+        $shipping_address->save();
+        return response()->json(['status' => 'success', 'message' => 'Shipping address created']);
+        
     }
 
     /**
