@@ -55,12 +55,21 @@ grid-row-gap: 0px;
     <div class="div1">
         
         @foreach($product_media as $media)
-            <img src="{{ $media->media_url }}" alt="{{ $product->name }}" class="img-thumbnail inline" width="100" height="100">
+            <img src="{{ $media->media_url }}" 
+            style="hover:opacity:0.5; cursor:pointer;" 
+            onclick="$('#main-image').attr('src', '{{ $media->media_url }}');"
+            alt="{{ $product->name }}" 
+            class="img-thumbnail inline" 
+            width="100" 
+            height="100" />
         @endforeach
     </div>
     {{-- product main image --}}
     <div class="div2 mx-2 my-y">
-        <img src="{{ $product_media->first()->media_url }}" alt="{{ $product->name }}" class="img-fluid rounded-2">
+        <img id="main-image"
+        src="{{ $product_media->first()->media_url }}" 
+        alt="{{ $product->name }}" 
+        class="img-fluid rounded-2">
     </div>
 
     {{-- product name --}}
@@ -89,7 +98,7 @@ grid-row-gap: 0px;
         <div class="text-gray-600 text-sm my-2 px-3">
             <div class="flex flex-wrap">
                 <input type="hidden" id="selected_color" name="selected_color" type="text"/>
-              {{-- {{ dd($product->product_variances->first()) }} --}}
+  
                 @foreach($product_variances as $variance)
                     
                     <div class="rounded-full h-8 w-8 bg-gray-200 mr-2 mb-2 color_circle cursor-pointer"
