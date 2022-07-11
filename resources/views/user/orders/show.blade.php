@@ -4,8 +4,8 @@
 {{-- {{ dd($order->OrderItems->first->id->id) }} --}}
                 <div class="card" dir="rtl">
                     {{-- selected category information --}}
-                    <div class="card-header w-full py-2 ">
-                        <h3 class="card-title inline text-center w-full bg-warning text-white px-5 rounded-2">بيانات الطلب</h3>
+                    <div class="card-header w-full py-2">
+                        <h3 class="card-title inline text-center bg-warning text-white px-5 rounded-2">بيانات الطلب</h3>
                        
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >تاريخ الطلب</x-jet-label>
@@ -43,18 +43,44 @@
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">طريقة الدفع</x-jet-label>
                             <x-jet-label class="inline" value="{{ $order->payment_method }}" />
                         </div>
-
+                
+                       
+                            <span class="card-title w-auto text-center bg-gray-500 text-white px-5 rounded-2">عنوان التسليم</span>
+                            <div class="my-2">
+                                <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">الاسم</x-jet-label>
+                                <x-jet-label class="inline" value="{{ $order->ShippingAddress->name}}" />
+                            </div>
+                            <div class="my-2">
+                                <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">التليفون</x-jet-label>
+                                <x-jet-label class="inline" value="{{ $order->ShippingAddress->phone}}" />
+                            </div>
+                            <div class="my-2">
+                                <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">المدينة</x-jet-label>
+                                <x-jet-label class="inline" value="{{ $order->ShippingAddress->city}}" />
+                            </div>
+                            <div class="my-2">
+                                <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">الرمز البريدي</x-jet-label>
+                                <x-jet-label class="inline" value="{{ $order->ShippingAddress->zip}}" />
+                            </div>
+                            <div class="my-2">
+                                <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">العنوان</x-jet-label>
+                                <x-jet-label class="inline" value="{{ $order->ShippingAddress->address}}" />
+                            </div>
+                        
                     </div>
+                </div>
+
+                    
                     <!-- /.card-header -->
 
 
 
-                    <div class="card-header w-full ">
-                        <h3 class="card-title inline float-right">المنتجات</h3>
+                    <div class="card-header w-full text-center my-5">
+                        <h3 class="card-title inline rounded-2 mx-3 px-2 bg-gray-200">قائمة المنتجات</h3>
                         
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0">
+                    <div class="card-body table-responsive p-0 mx-5" dir="rtl">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -70,7 +96,7 @@
                            
                             <tbody>
                                 @foreach ($order->OrderItems as $order_item)
-                                <tr>
+                                <tr class="cursor-pointer" onclick="showProduct('{{ $order_item->product_id }}')">
                                     
                                     <td>{{ $order_item->id }}</td>
                                     <td>{{ $order_item->quantity }}</td>
@@ -82,6 +108,11 @@
                                     
                                 </tr>
                                 @endforeach
+                                <script>
+                                    function showProduct(id){
+                                        window.location.href = "/products/show?id=" + id;
+                                    }
+                                </script>
                             </tbody>
                         </table>
                     </div>

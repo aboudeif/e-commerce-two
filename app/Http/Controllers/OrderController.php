@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderProcess;
 use App\Models\Product;
+use App\Models\ShippingAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Self_;
@@ -104,12 +105,12 @@ class OrderController extends Controller
     {
         //
         $order = Order::where('id', $request->order_id)
-                      ->with('OrderItems:id,order_id,product_id,product_variance_id,price,quantity,total_price,points,discount')
-                    ->select('id','user_id','quantity','price','discount','tax','shipping','points','payment_method','shipping_address_id',
+                      ->with('OrderItems:id,order_id,product_id,product_variance_id,price,quantity,total_price,points,discount','OrderProcess:id,order_id,order_process'
+                      ,'ShippingAddress:id,user_id,address,city,zip,phone,name')
+                      ->select('id','user_id','quantity','price','discount','tax','shipping','points','payment_method','shipping_address_id',
                     'created_at','updated_at')
                       ->get();
-                      //dd($order->first->OrderItems->OrderItems->first->product_variance_id->product_variance_id);
-                     
+                      
         return view('user/orders/show', ['order'=>$order->first->created_at]);
 
     }
