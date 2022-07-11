@@ -27,6 +27,7 @@
                     {{-- decrease and increase product quantity --}}
                     <div class="row">
                         <div class="col-sm-2 col-3 my-auto mx-auto">
+                        
                             <button class="form-control block mt-1 w-full" onclick="increaseQuantity('{{ $product->product_variance_id }}');">
                                 +
                             </button>
@@ -63,6 +64,7 @@
                         updateCart(id, quantity);
                     }
                     function updateCart(id, quantity) {
+                       
                         $.ajax({
                             url: "{{ route('cart.update') }}",
                             type: 'POST',
@@ -74,7 +76,8 @@
                             },
                             success: function(data) {
                                 console.log(data);
-                                location.reload();
+                                $('#total-price#'+id).html(quantity +"* {{ $product->product->price }}");
+                                 location.reload();
                             },
                             error: function(data) {
                                 console.log(data);
@@ -84,7 +87,7 @@
                 </script>
 
                 <div class="col-sm-3 col-6 my-auto">
-                    <b style="font-size: 16pt;">{{ $product->product->price }} ج.م </b>
+                    <b id="total-price#{{ $product->product_variance_id }}" style="font-size: 16pt;">{{ $product->product->price * $product->quantity }} ج.م </b>
                 </div>
 
                 <div class="col-sm-1 col-1">

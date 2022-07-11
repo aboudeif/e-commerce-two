@@ -137,28 +137,20 @@ class CartController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
-        $user = auth()->user()->id;
-        // return response()->json([
-        //     'action' => 'update',
-        //     'id' => $request->id,
-        //     'quantity' => $request->quantity,
-        //     'status' => 'success',
-        // ]);
-        //update cart
-        
-        // get cart by product_variance_id and user_id
-        $cart = Cart::where('user_id', $user)
+        Product_variance::where('id', $request->product_variance_id)
+            ->update([
+                'quantity' => $request->quantity,
+            ]);
+        Cart::where('user_id', auth()->user()->id)
             ->where('product_variance_id', $request->id)
-            ->first();
+            ->update(['quantity' => $request->quantity]);
         // update quantity
 
-        $cart->quantity = $request->quantity;
-        $cart->save();
+        
         return response()->json(['status' => 'success', 'message' => 'Cart updated']);
     }
 

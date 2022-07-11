@@ -85,8 +85,8 @@
     nav {
         border-radius: 10px;
         z-index: 9999;
-        position: sticky;
-        top: 0;
+        /* position: sticky;
+        top: 0; */
 
         width: 100%;
     }
@@ -575,7 +575,7 @@
 
 <!-- /-----------------------filter form------------------------ -->
 
-<nav id="navbar" x-data="{ open: false }" class="bg-white border-b border-gray-100" style="height: max-content"
+<nav id="navbar" x-data="{ open: false }" class="sticky-top bg-white border-b border-gray-100" style="height: max-content"
     dir="rtl">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto my-4 px-4 sm:px-6 lg:px-8">

@@ -160,10 +160,7 @@ grid-row-gap: 0px;
         </div>
     </div>
 </div>
-<div id="cart-notification" class="alert alert-success text-center absolute right-auto top-auto " role="alert" 
-style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
-    
-</div>
+
 <script>
 
     function addToCart() {
@@ -196,12 +193,14 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
                 if(data.action == 'add'){
                 $('#cart-notification').html('تم إضافة المنتج إلي سلة المشتريات');
                 $('#cart-notification').css('background-color', 'green');
+                
                 }
                 else{
                 $('#cart-notification').html('تم حذف المنتج من سلة المشتريات');
                 $('#cart-notification').css('background-color', 'red');
                 }
                 $('#cart-notification').css('display', 'block');
+                $('#cart-notification').css('transition', 'display 5s ease-in-out');
                 setTimeout(function() {
                     $('#cart-notification').css('display', 'none');
                 }, 3000);
@@ -278,7 +277,9 @@ style="display:none;color:#fff;opacity:0.8;transition: display 2s; ">
     }
 </script>
     
-  
+<div id="cart-notification" class="alert alert-success text-center position-absolute sticky-top left-50%" role="alert" 
+style="display:none;color:#fff;opacity:0.8;z-index:9999">
+</div>
 
                     
 </x-app-layout>
