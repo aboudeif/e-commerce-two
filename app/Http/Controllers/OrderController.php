@@ -39,14 +39,8 @@ class OrderController extends Controller
     public function admin_index(Request $request)
     {
         //
-        $orders = Order::all();
-
-        $orders->order_proccess = OrderProcess::where('order_id', $request->order_id)
-        ->when($request->has('order_process'),function ($query) use ($request){
-            return $query->where('order_process',$request->order_process);
-        })
-        ->select('id','order_id','order_process')
-                                                ->get();
+        $orders = Order::with('OrderProcess:id,order_id,order_process')
+        ->get();
      
         return view('admin/orders/index', ['orders' => $orders]);
 

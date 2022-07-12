@@ -1,5 +1,5 @@
 <x-app-layout>
-    
+
     
                     <div class="card" dir="rtl">
                         <div class="card-header w-full py-2 ">
@@ -27,6 +27,11 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
+                                    @if (isset($_GET['order_proccess']))
+                                        @if ($_GET['order_proccess'] != $order->OrderProcess[0]->order_process)
+                                            @continue
+                                        @endif
+                                    @endif
                                     
                                     <tr style="z-index: 999; cursor:pointer;" onclick="showOrder('{{ $order->id }}');">
                                        
@@ -42,7 +47,7 @@
                                         <td>{{ $order->payment_method }}</td>
                             
                                     </tr>
-                                    
+                                
                                     
                                     @endforeach
                                     <script>

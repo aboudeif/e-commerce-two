@@ -12,20 +12,20 @@
             <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title mt-5">الحالية</x-jet-button>
             </a>
-            <a href="{{ route('ordersAdmin.index',[]) }}">
-            <x-jet-button class="card-title">قيد الإنتظار</x-jet-button>
+            <a href="{{ route('ordersAdmin.index',['order_proccess'=>'review']) }}">
+            <x-jet-button class="card-title">قيد المراجعة</x-jet-button>
             </a>
-            <a href="{{ route('ordersAdmin.index') }}">
+            <a href="{{ route('ordersAdmin.index',['order_proccess'=>'place_order']) }}">
+            <x-jet-button class="card-title">قيد التجهيز</x-jet-button>
+            </a>
+            <a href="{{ route('ordersAdmin.index',['order_proccess'=>'shipping']) }}">
             <x-jet-button class="card-title">قيد الشحن</x-jet-button>
             </a>
-            <a href="{{ route('ordersAdmin.index') }}">
+            <a href="{{ route('ordersAdmin.index',['order_proccess'=>'deliverey']) }}">
             <x-jet-button class="card-title">قيد التوصيل</x-jet-button>
             </a>
-            <a href="{{ route('ordersAdmin.index') }}">
-            <x-jet-button class="card-title">قيد الإرتجاع</x-jet-button>
-            </a>
-            <a href="{{ route('ordersAdmin.index') }}">
-            <x-jet-button class="card-title">الملغاة</x-jet-button>
+            <a href="{{ route('ordersAdmin.index',['order_proccess'=>'return']) }}">
+            <x-jet-button class="card-title">المرتجعة</x-jet-button>
             </a>
       
         {{-- /.card-body --}}
