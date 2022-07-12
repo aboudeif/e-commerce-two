@@ -13,7 +13,7 @@
                         </div>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline" >حالة الطلب</x-jet-label>
-                            <x-jet-label class="inline" value="{{ $order->id  }}" />
+                            <x-jet-label class="inline" value="{{ $order->OrderProcess[0]->order_process  }}" />
                         </div>
                         <div class="my-2">
                             <x-jet-label class="rounded-2 mx-3 px-2 bg-gray-200 inline">عدد المنتجات</x-jet-label>

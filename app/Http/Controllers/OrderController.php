@@ -36,12 +36,18 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      *
      */
-    public function admin_index()
+    public function admin_index(Request $request)
     {
         //
-        $orders = Order::with('OrderProcess:id,order_id,order_process', 'User:id,name')
-                        ->get();
-        
+        $orders = Order::all();
+
+        $orders->order_proccess = OrderProcess::where('order_id', $request->order_id)
+        ->when($request->has('order_process'),function ($query) use ($request){
+            return $query->where('order_process',$request->order_process);
+        })
+        ->select('id','order_id','order_process')
+                                                ->get();
+     
         return view('admin/orders/index', ['orders' => $orders]);
 
     }
@@ -60,7 +66,9 @@ class OrderController extends Controller
         ->select('id','user_id','quantity','price','discount','tax','shipping','points','payment_method','shipping_address_id',
       'created_at','updated_at')
         ->get();
-        return view('admin/orders/show', ['order' => $order]);
+
+        //dd($order);
+        return view('admin/orders/show', ['order'=>$order->first->created_at]);
     }
      
 

@@ -47,7 +47,7 @@
                                     @endforeach
                                     <script>
                                         function showOrder(id){
-                                            window.location.href = "/admin/order/show?id=" + id;
+                                            window.location.href = "/admin/order/show?order_id=" + id ;
                                         }
                                     </script>
                                 </tbody>

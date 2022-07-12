@@ -12,7 +12,7 @@
             <a href="{{ route('ordersAdmin.index') }}">
             <x-jet-button class="card-title mt-5">الحالية</x-jet-button>
             </a>
-            <a href="{{ route('ordersAdmin.index') }}">
+            <a href="{{ route('ordersAdmin.index',[]) }}">
             <x-jet-button class="card-title">قيد الإنتظار</x-jet-button>
             </a>
             <a href="{{ route('ordersAdmin.index') }}">
