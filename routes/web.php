@@ -121,6 +121,8 @@ Route::middleware(Admin::class,
         Route::get('/admin/users/show', [UserController::class, 'show'])->name('users.show');
         Route::get('/admin/users/index', [UserController::class, 'index'])->name('users.index');
         
+        Route::get('/admin/order/show',[OrderController::class,'admin_show'])->name('ordersAdmin.show'); 
+        Route::get('/admin/order/index',[OrderController::class,'admin_index'])->name('ordersAdmin.index'); 
     });
 
 
